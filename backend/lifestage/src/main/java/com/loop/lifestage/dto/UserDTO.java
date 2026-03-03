@@ -3,14 +3,14 @@ package com.loop.lifestage.dto;
 
 public class UserDTO {
     private String id;
-    private String name;
+    private String username;
 
     public UserDTO() {
     }
 
-    public UserDTO(String id, String name) {
+    public UserDTO(String id, String username) {
         this.id = id;
-        this.name = name;
+        this.username = username;
     }
 
     public String getId() {
@@ -21,11 +21,11 @@ public class UserDTO {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String username) {
+        this.username = username;
     }
 }
