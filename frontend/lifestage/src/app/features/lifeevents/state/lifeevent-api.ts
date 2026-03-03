@@ -18,8 +18,4 @@ export class LifeeventApi {
 	getLifeevents(): Observable<Lifeevent[]> {
 		return this.http.get<Lifeevent[]>(this.lifeeventsUrl);
 	}
-
-	getLifeeventById(id: number): Observable<Lifeevent> {
-		return this.http.get<Lifeevent>(`${this.lifeeventsUrl}/${id}`);
-	}
 }

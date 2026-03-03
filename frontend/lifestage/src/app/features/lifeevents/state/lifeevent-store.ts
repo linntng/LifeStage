@@ -1,18 +1,18 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { LifeeventApi } from './lifeevent-api';
+import { Lifeevent, LifeeventApi } from './lifeevent-api';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class LifeeventStore {
 	private lifeeventsApi = inject(LifeeventApi);
-	readonly lifeevents = signal<string[]>([]);
+	readonly lifeevents = signal<Lifeevent[]>([]);
 	readonly loading = signal(false);
 
 	getLifeevents() {
 		this.lifeeventsApi.getLifeevents().subscribe({
 			next: (lifeevents) => {
-				this.lifeevents.set(lifeevents.map((lifeevent) => lifeevent.name));
+				this.lifeevents.set(lifeevents);
 			},
 			error: () => {
 				console.error('Failed to fetch lifeevents');
@@ -24,6 +24,6 @@ export class LifeeventStore {
 	}
 
 	getLifeeventById(id: number) {
-		return this.lifeeventsApi.getLifeeventById(id);
+		return this.lifeevents().find((lifeevent: Lifeevent) => lifeevent.id === id);
 	}
 }
