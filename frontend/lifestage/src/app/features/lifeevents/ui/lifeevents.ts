@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
 export class Lifeevents {
 	private lifeeventStore = inject(LifeeventStore);
 
-	getLifeEvents() {
-		return this.lifeeventStore.getLifeevents();
-	}
+	
+	lifeevents = this.lifeeventStore.lifeevents;
+	
 }

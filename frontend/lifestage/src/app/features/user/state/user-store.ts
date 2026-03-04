@@ -63,7 +63,7 @@ export class UserStore {
 
 	private loadUserLifeEvents() {
 		this.userLifeEvents.set(
-			this.currentUser()?.lifeEvents.map((eventId) =>
+			this.currentUser()?.lifeEventIds.map((eventId) =>
 				this.lifeEventStore.getLifeeventById(eventId),
 			) || [],
 		);
