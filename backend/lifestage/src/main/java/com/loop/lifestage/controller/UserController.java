@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.loop.lifestage.dto.UserDTO;
-import com.loop.lifestage.model.User;
 import com.loop.lifestage.service.UserService;
 
 @RestController
