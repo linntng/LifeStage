@@ -24,10 +24,6 @@ export class LifeeventStore {
 		});
 	}
 
-	getLifeevents() {
-		return this.lifeevents();
-	}
-
 	getLifeeventById(id: number) {
 		return this.lifeevents().find((lifeevent: Lifeevent) => lifeevent.id === id);
 	}
