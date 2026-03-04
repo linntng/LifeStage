@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,5 +30,19 @@ public class UserController {
     @PostMapping
     public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
         return ResponseEntity.ok(userService.createUser(userDTO));
+    }
+
+    @PostMapping("/{id}/lifeevents")
+    public ResponseEntity<UserDTO> addLifeEventToUser(@PathVariable String id, @RequestBody Long lifeEventId) {
+        UserDTO userDTO = userService.getUserById(id);
+        userDTO.addLifeEvent(lifeEventId);
+        return ResponseEntity.ok(userService.updateUser(userDTO));
+    }
+
+    @PatchMapping("/{id}/lifeevents/{lifeEventId}")
+    public ResponseEntity<UserDTO> removeLifeEventForUser(@PathVariable String id, @PathVariable Long lifeEventId) {
+        UserDTO userDTO = userService.getUserById(id);
+        userDTO.removeLifeEvent(lifeEventId);
+        return ResponseEntity.ok(userService.updateUser(userDTO));
     }
 }
