@@ -1,9 +1,12 @@
 
 package com.loop.lifestage.dto;
 
+import java.util.List;
+
 public class UserDTO {
     private String id;
     private String username;
+    private List<Long> lifeEventIds;
 
     public UserDTO() {
     }
@@ -27,5 +30,13 @@ public class UserDTO {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public List<Long> getLifeEventIds() {
+        return lifeEventIds;
+    }
+
+    public void setLifeEventIds(List<Long> lifeEventIds) {
+        this.lifeEventIds = lifeEventIds;
     }
 }
