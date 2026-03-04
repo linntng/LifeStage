@@ -5,7 +5,7 @@ import { environment } from '../../../environments/environment';
 export interface User {
 	id: string;
 	username: string;
-	lifeEvents: number[]; // List of life event IDs associated with the user
+	lifeEventIds: number[]; // List of life event IDs associated with the user
 }
 
 @Injectable({
@@ -27,7 +27,7 @@ export class UserApi {
 		const headers = { 'Content-Type': 'application/json' };
 		return this.http.post(
 			`${this.userUrl}/${userId}/lifeevents/`,
-			{ id: lifeEventId },
+			lifeEventId,
 			{ headers },
 		);
 	}
