@@ -9,7 +9,8 @@ export class LifeeventStore {
 	readonly lifeevents = signal<Lifeevent[]>([]);
 	readonly loading = signal(false);
 
-	getLifeevents() {
+	loadLifeevents() {
+		this.loading.set(true);
 		this.lifeeventsApi.getLifeevents().subscribe({
 			next: (lifeevents) => {
 				this.lifeevents.set(lifeevents);
@@ -21,6 +22,10 @@ export class LifeeventStore {
 				this.loading.set(false);
 			},
 		});
+	}
+
+	getLifeevents() {
+		return this.lifeevents();
 	}
 
 	getLifeeventById(id: number) {
