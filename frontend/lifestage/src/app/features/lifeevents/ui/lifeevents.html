@@ -1,6 +1,8 @@
 <div>
 	<h2>Life Events</h2>
 	<ul>
-		<li *ngFor="let event of events()">{{ event }}</li>
+		@for (event of lifeeventStore.lifeevents(); track event) {
+			<li>{{ event }}</li>
+		}
 	</ul>
 </div>
