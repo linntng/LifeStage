@@ -1,4 +1,5 @@
 package com.loop.lifestage.exception;
+
 import java.time.Instant;
 
 public class ErrorResponse {
@@ -17,4 +18,23 @@ public class ErrorResponse {
         this.path = path;
     }
 
+    public Instant getTimestamp() {
+        return timestamp;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public String getError() {
+        return error;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public String getPath() {
+        return path;
+    }
 }
