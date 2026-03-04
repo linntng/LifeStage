@@ -1,8 +1,8 @@
 <div>
 	<h2>Life Events</h2>
 	<ul>
-		@for (event of lifeeventStore.lifeevents(); track event) {
-			<li>{{ event }}</li>
+		@for (event of getLifeEvents(); track event) {
+			<li>{{ event.name }}</li>
 		}
 	</ul>
 </div>

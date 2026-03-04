@@ -3,10 +3,10 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 
-export type Lifeevent = {
+export interface Lifeevent {
 	id: number;
 	name: string;
-};
+}
 
 @Injectable({
 	providedIn: 'root',

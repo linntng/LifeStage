@@ -2,11 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 
-export type User = {
+export interface User {
 	id: string;
 	username: string;
 	lifeEvents: number[]; // List of life event IDs associated with the user
-};
+}
 
 @Injectable({
 	providedIn: 'root',
