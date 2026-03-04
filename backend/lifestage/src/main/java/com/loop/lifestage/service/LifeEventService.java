@@ -8,6 +8,7 @@ import com.loop.lifestage.mapper.LifeEventMapper;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class LifeEventService {
@@ -20,6 +21,7 @@ public class LifeEventService {
         this.lifeEventMapper = lifeEventMapper;
     }
 
+    @Transactional(readOnly = true)
     public List<LifeEventDTO> getAllLifeEvents() {
         List<LifeEvent> lifeEvents = lifeEventRepository.findAll();
         return lifeEvents.stream()

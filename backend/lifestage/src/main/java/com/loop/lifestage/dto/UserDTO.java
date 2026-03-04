@@ -39,4 +39,12 @@ public class UserDTO {
     public void setLifeEventIds(List<Long> lifeEventIds) {
         this.lifeEventIds = lifeEventIds;
     }
+
+    public void addLifeEvent(Long lifeEventId) {
+        this.lifeEventIds.add(lifeEventId);
+    }
+
+    public void removeLifeEvent(Long lifeEventId) {
+        this.lifeEventIds.remove(lifeEventId);
+    }
 }
