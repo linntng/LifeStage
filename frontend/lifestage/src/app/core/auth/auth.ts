@@ -16,5 +16,4 @@ export class Auth {
 	}
 
 	readonly authenticated = signal(this.keycloak.authenticated);
-
 }

@@ -24,5 +24,4 @@ export class LoginButton {
 	toggleAuth() {
 		this.authenticated() ? this.logout() : this.login();
 	}
-
 }

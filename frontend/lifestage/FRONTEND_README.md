@@ -7,9 +7,8 @@ This project was generated using [Angular CLI](https://github.com/angular/angula
 First, run `npm install` to install the dependencies. Then, you can run the development server with `ng serve`. The application will be available at `http://localhost:4200/`.
 
 
-## For developers
 
-### Code formatting and linting
+## Code formatting and linting
 
 This project uses [Eslint](https://eslint.org/) for linting and [Prettier](https://prettier.io/) for code formatting.
 
@@ -25,7 +24,7 @@ This project uses [Eslint](https://eslint.org/) for linting and [Prettier](https
 3. Enable “Editor: Format On Save”.
 4. Set Prettier as the default formatter: Find "Default formatter" in settings and set it to _Prettier_
 
-### Code scaffolding
+## Code scaffolding
 
 Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
 
@@ -39,7 +38,7 @@ For a complete list of available schematics (such as `components`, `directives`,
 ng generate --help
 ```
 
-### Building
+## Building
 
 To build the project run:
 
@@ -49,7 +48,7 @@ ng build
 
 This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
 
-### Running unit tests
+## Testing
 
 To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
 
@@ -57,10 +56,11 @@ To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use th
 ng test
 ```
 
-### Running end-to-end tests (not implemented yet)
 
 For end-to-end (e2e) testing, run:
 
 ```bash
 ng e2e
 ```
+
+For more info on testing, see the [test guide](TEST_GUIDE.md).
