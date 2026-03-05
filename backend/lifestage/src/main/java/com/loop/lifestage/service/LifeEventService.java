@@ -14,24 +14,24 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class LifeEventService {
 
-private final LifeEventRepository lifeEventRepository;
-private final LifeEventMapper lifeEventMapper;
+  private final LifeEventRepository lifeEventRepository;
+  private final LifeEventMapper lifeEventMapper;
 
-public LifeEventService(
-	LifeEventRepository lifeEventRepository, LifeEventMapper lifeEventMapper) {
-	this.lifeEventRepository = lifeEventRepository;
-	this.lifeEventMapper = lifeEventMapper;
-}
+  public LifeEventService(
+      LifeEventRepository lifeEventRepository, LifeEventMapper lifeEventMapper) {
+    this.lifeEventRepository = lifeEventRepository;
+    this.lifeEventMapper = lifeEventMapper;
+  }
 
-@Transactional(readOnly = true)
-public List<LifeEventDTO> getAllLifeEvents() {
-	try {
-	List<LifeEvent> lifeEvents = lifeEventRepository.findAll();
-	return lifeEvents.stream().map(lifeEventMapper::toLifeEventDTO).collect(Collectors.toList());
-	} catch (EntityNotFoundException e) {
-	throw new ResourceNotFoundException("Life events not found");
-	} catch (Exception e) {
-	throw new RuntimeException("An error occurred while fetching life events", e);
-	}
-}
+  @Transactional(readOnly = true)
+  public List<LifeEventDTO> getAllLifeEvents() {
+    try {
+      List<LifeEvent> lifeEvents = lifeEventRepository.findAll();
+      return lifeEvents.stream().map(lifeEventMapper::toLifeEventDTO).collect(Collectors.toList());
+    } catch (EntityNotFoundException e) {
+      throw new ResourceNotFoundException("Life events not found");
+    } catch (Exception e) {
+      throw new RuntimeException("An error occurred while fetching life events", e);
+    }
+  }
 }

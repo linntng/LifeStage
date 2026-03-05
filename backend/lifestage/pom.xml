@@ -113,16 +113,9 @@
 
 				<configuration>
 					<java>
-					<!-- Use Google Java Format -->
 					<googleJavaFormat/>
-
-					<!-- Remove unused imports -->
 					<removeUnusedImports/>
-
-					<!-- Ensure newline at end -->
 					<endWithNewline/>
-
-					<!-- Optional: trim trailing whitespace -->
 					<trimTrailingWhitespace/>
 
 					</java>
