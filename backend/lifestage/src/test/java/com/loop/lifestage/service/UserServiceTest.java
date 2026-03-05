@@ -1,5 +1,8 @@
 package com.loop.lifestage.service;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 import com.loop.lifestage.dto.UserDTO;
 import com.loop.lifestage.exception.BadRequestException;
 import com.loop.lifestage.exception.ResourceAlreadyExistsException;
@@ -7,341 +10,312 @@ import com.loop.lifestage.exception.ResourceNotFoundException;
 import com.loop.lifestage.mapper.UserMapper;
 import com.loop.lifestage.model.User;
 import com.loop.lifestage.repository.UserRepository;
-
 import jakarta.persistence.EntityNotFoundException;
-
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import org.springframework.dao.DataIntegrityViolationException;
-
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
-    @Mock
-    private UserRepository userRepository;
+@Mock private UserRepository userRepository;
 
-    @Mock
-    private UserMapper userMapper;
+@Mock private UserMapper userMapper;
 
-    @InjectMocks
-    private UserService userService;
+@InjectMocks private UserService userService;
 
-    private User user;
-    private UserDTO userDTO;
+private User user;
+private UserDTO userDTO;
 
-    @BeforeEach
-    void setup() {
-        user = createUser();
-        userDTO = createUserDTO();
-    }
+@BeforeEach
+void setup() {
+	user = createUser();
+	userDTO = createUserDTO();
+}
 
-    // =========================
-    // CREATE USER
-    // =========================
-
-    @Nested
-    class CreateUser {
+// =========================
+// CREATE USER
+// =========================
 
-        @Test
-        void shouldCreateUserSuccessfully() {
+@Nested
+class CreateUser {
 
-            // Given
-            when(userMapper.toUser(userDTO)).thenReturn(user);
-            when(userRepository.save(user)).thenReturn(user);
-            when(userMapper.toUserDTO(user)).thenReturn(userDTO);
+	@Test
+	void shouldCreateUserSuccessfully() {
 
-            // When
-            UserDTO result = userService.createUser(userDTO);
+	// Given
+	when(userMapper.toUser(userDTO)).thenReturn(user);
+	when(userRepository.save(user)).thenReturn(user);
+	when(userMapper.toUserDTO(user)).thenReturn(userDTO);
 
-            // Then
-            assertEquals(userDTO, result);
-            verify(userRepository).save(user);
-        }
-
-        @Test
-        void shouldThrowResourceAlreadyExistsWhenConstraintViolation() {
-
-            // Given
-            when(userMapper.toUser(userDTO)).thenReturn(user);
-            when(userRepository.save(user))
-                    .thenThrow(new DataIntegrityViolationException("duplicate"));
+	// When
+	UserDTO result = userService.createUser(userDTO);
 
-            // Then
-            assertThrows(ResourceAlreadyExistsException.class,
-                    () -> userService.createUser(userDTO));
-        }
-
-        @Test
-        void shouldThrowBadRequestWhenMapperThrowsIllegalArgument() {
+	// Then
+	assertEquals(userDTO, result);
+	verify(userRepository).save(user);
+	}
 
-            // Given
-            when(userMapper.toUser(userDTO))
-                    .thenThrow(new IllegalArgumentException("invalid"));
+	@Test
+	void shouldThrowResourceAlreadyExistsWhenConstraintViolation() {
 
-            // Then
-            assertThrows(BadRequestException.class,
-                    () -> userService.createUser(userDTO));
-        }
-
-        @Test
-        void shouldThrowRuntimeExceptionWhenUnexpectedErrorOccurs() {
+	// Given
+	when(userMapper.toUser(userDTO)).thenReturn(user);
+	when(userRepository.save(user)).thenThrow(new DataIntegrityViolationException("duplicate"));
 
-            // Given
-            when(userMapper.toUser(userDTO))
-                    .thenThrow(new RuntimeException("unexpected"));
+	// Then
+	assertThrows(ResourceAlreadyExistsException.class, () -> userService.createUser(userDTO));
+	}
 
-            // Then
-            assertThrows(RuntimeException.class,
-                    () -> userService.createUser(userDTO));
-        }
-    }
+	@Test
+	void shouldThrowBadRequestWhenMapperThrowsIllegalArgument() {
 
-    // =========================
-    // UPDATE USER
-    // =========================
+	// Given
+	when(userMapper.toUser(userDTO)).thenThrow(new IllegalArgumentException("invalid"));
 
-    @Nested
-    class UpdateUser {
-
-        @Test
-        void shouldUpdateUserSuccessfully() {
+	// Then
+	assertThrows(BadRequestException.class, () -> userService.createUser(userDTO));
+	}
 
-            // Given
-            when(userMapper.toUser(userDTO)).thenReturn(user);
-            when(userRepository.save(user)).thenReturn(user);
-            when(userMapper.toUserDTO(user)).thenReturn(userDTO);
-
-            // When
-            UserDTO result = userService.updateUser(userDTO);
+	@Test
+	void shouldThrowRuntimeExceptionWhenUnexpectedErrorOccurs() {
 
-            // Then
-            assertEquals(userDTO, result);
-            verify(userRepository).save(user);
-        }
+	// Given
+	when(userMapper.toUser(userDTO)).thenThrow(new RuntimeException("unexpected"));
 
-        @Test
-        void shouldThrowBadRequestWhenMapperThrowsIllegalArgument() {
+	// Then
+	assertThrows(RuntimeException.class, () -> userService.createUser(userDTO));
+	}
+}
 
-            // Given
-            when(userMapper.toUser(userDTO))
-                    .thenThrow(new IllegalArgumentException());
+// =========================
+// UPDATE USER
+// =========================
 
-            // Then
-            assertThrows(BadRequestException.class,
-                    () -> userService.updateUser(userDTO));
-        }
+@Nested
+class UpdateUser {
 
-        @Test
-        void shouldThrowResourceNotFoundWhenRepositoryThrowsEntityNotFound() {
+	@Test
+	void shouldUpdateUserSuccessfully() {
 
-            // Given
-            when(userMapper.toUser(userDTO)).thenReturn(user);
-            when(userRepository.save(user))
-                    .thenThrow(new EntityNotFoundException());
-
-            // Then
-            assertThrows(ResourceNotFoundException.class,
-                    () -> userService.updateUser(userDTO));
-        }
-
-        @Test
-        void shouldThrowRuntimeExceptionWhenUnexpectedErrorOccurs() {
-
-            // Given
-            when(userMapper.toUser(userDTO)).thenReturn(user);
-            when(userRepository.save(user))
-                    .thenThrow(new RuntimeException());
+	// Given
+	when(userMapper.toUser(userDTO)).thenReturn(user);
+	when(userRepository.save(user)).thenReturn(user);
+	when(userMapper.toUserDTO(user)).thenReturn(userDTO);
 
-            // Then
-            assertThrows(RuntimeException.class,
-                    () -> userService.updateUser(userDTO));
-        }
-    }
+	// When
+	UserDTO result = userService.updateUser(userDTO);
 
-    // =========================
-    // GET USER BY ID
-    // =========================
+	// Then
+	assertEquals(userDTO, result);
+	verify(userRepository).save(user);
+	}
 
-    @Nested
-    class GetUserById {
+	@Test
+	void shouldThrowBadRequestWhenMapperThrowsIllegalArgument() {
 
-        @Test
-        void shouldReturnUserWhenFound() {
+	// Given
+	when(userMapper.toUser(userDTO)).thenThrow(new IllegalArgumentException());
 
-            // Given
-            when(userRepository.findById("1")).thenReturn(Optional.of(user));
-            when(userMapper.toUserDTO(user)).thenReturn(userDTO);
+	// Then
+	assertThrows(BadRequestException.class, () -> userService.updateUser(userDTO));
+	}
 
-            // When
-            UserDTO result = userService.getUserById("1");
+	@Test
+	void shouldThrowResourceNotFoundWhenRepositoryThrowsEntityNotFound() {
 
-            // Then
-            assertEquals(userDTO, result);
-            verify(userRepository).findById("1");
-        }
+	// Given
+	when(userMapper.toUser(userDTO)).thenReturn(user);
+	when(userRepository.save(user)).thenThrow(new EntityNotFoundException());
 
-        @Test
-        void shouldThrowResourceNotFoundWhenUserDoesNotExist() {
+	// Then
+	assertThrows(ResourceNotFoundException.class, () -> userService.updateUser(userDTO));
+	}
 
-            // Given
-            when(userRepository.findById("1")).thenReturn(Optional.empty());
+	@Test
+	void shouldThrowRuntimeExceptionWhenUnexpectedErrorOccurs() {
 
-            // Then
-            assertThrows(ResourceNotFoundException.class,
-                    () -> userService.getUserById("1"));
-        }
+	// Given
+	when(userMapper.toUser(userDTO)).thenReturn(user);
+	when(userRepository.save(user)).thenThrow(new RuntimeException());
 
-        @Test
-        void shouldThrowRuntimeExceptionWhenUnexpectedErrorOccurs() {
+	// Then
+	assertThrows(RuntimeException.class, () -> userService.updateUser(userDTO));
+	}
+}
 
-            // Given
-            when(userRepository.findById("1"))
-                    .thenThrow(new RuntimeException());
+// =========================
+// GET USER BY ID
+// =========================
 
-            // Then
-            assertThrows(RuntimeException.class,
-                    () -> userService.getUserById("1"));
-        }
-    }
+@Nested
+class GetUserById {
 
-    // =========================
-    // GET ALL USERS
-    // =========================
+	@Test
+	void shouldReturnUserWhenFound() {
 
-    @Nested
-    class GetAllUsers {
+	// Given
+	when(userRepository.findById("1")).thenReturn(Optional.of(user));
+	when(userMapper.toUserDTO(user)).thenReturn(userDTO);
 
-        @Test
-        void shouldReturnUserList() {
+	// When
+	UserDTO result = userService.getUserById("1");
 
-            // Given
-            when(userRepository.findAll()).thenReturn(java.util.List.of(user));
-            when(userMapper.toUserDTO(user)).thenReturn(userDTO);
+	// Then
+	assertEquals(userDTO, result);
+	verify(userRepository).findById("1");
+	}
 
-            // When
-            var result = userService.getAllUsers();
+	@Test
+	void shouldThrowResourceNotFoundWhenUserDoesNotExist() {
 
-            // Then
-            assertEquals(1, result.size());
-            assertEquals(userDTO, result.get(0));
-            verify(userRepository).findAll();
-        }
+	// Given
+	when(userRepository.findById("1")).thenReturn(Optional.empty());
 
-        @Test
-        void shouldThrowRuntimeExceptionWhenRepositoryFails() {
+	// Then
+	assertThrows(ResourceNotFoundException.class, () -> userService.getUserById("1"));
+	}
 
-            // Given
-            when(userRepository.findAll())
-                    .thenThrow(new RuntimeException());
+	@Test
+	void shouldThrowRuntimeExceptionWhenUnexpectedErrorOccurs() {
 
-            // Then
-            assertThrows(RuntimeException.class,
-                    () -> userService.getAllUsers());
-        }
-    }
+	// Given
+	when(userRepository.findById("1")).thenThrow(new RuntimeException());
 
-    // =========================
-    // DELETE USER
-    // =========================
+	// Then
+	assertThrows(RuntimeException.class, () -> userService.getUserById("1"));
+	}
+}
 
-    @Nested
-    class DeleteUser {
+// =========================
+// GET ALL USERS
+// =========================
 
-        @Test
-        void shouldDeleteUserSuccessfully() {
+@Nested
+class GetAllUsers {
 
-            // Given
-            when(userMapper.toUser(userDTO)).thenReturn(user);
+	@Test
+	void shouldReturnUserList() {
 
-            // When
-            userService.deleteUser(userDTO);
+	// Given
+	when(userRepository.findAll()).thenReturn(java.util.List.of(user));
+	when(userMapper.toUserDTO(user)).thenReturn(userDTO);
 
-            // Then
-            verify(userRepository).delete(user);
-        }
+	// When
+	var result = userService.getAllUsers();
 
-        @Test
-        void shouldThrowRuntimeExceptionWhenDeleteFails() {
+	// Then
+	assertEquals(1, result.size());
+	assertEquals(userDTO, result.get(0));
+	verify(userRepository).findAll();
+	}
 
-            // Given
-            when(userMapper.toUser(userDTO)).thenReturn(user);
-            doThrow(new RuntimeException()).when(userRepository).delete(user);
+	@Test
+	void shouldThrowRuntimeExceptionWhenRepositoryFails() {
 
-            // Then
-            assertThrows(RuntimeException.class,
-                    () -> userService.deleteUser(userDTO));
-        }
-    }
+	// Given
+	when(userRepository.findAll()).thenThrow(new RuntimeException());
 
-    @Nested
-    class ManageLifeEvents {
+	// Then
+	assertThrows(RuntimeException.class, () -> userService.getAllUsers());
+	}
+}
 
-        @Test
-        void addLifeEventToUser_shouldAddEventAndPersistUser() {
+// =========================
+// DELETE USER
+// =========================
 
-            // Given
-            Long eventId = 10L;
-            userDTO.setLifeEventIds(new java.util.ArrayList<>());
+@Nested
+class DeleteUser {
 
-            when(userMapper.toUser(userDTO)).thenReturn(user);
-            when(userRepository.save(user)).thenReturn(user);
-            when(userMapper.toUserDTO(user)).thenReturn(userDTO);
+	@Test
+	void shouldDeleteUserSuccessfully() {
 
-            // When
-            UserDTO result = userService.addLifeEventToUser(userDTO, eventId);
+	// Given
+	when(userMapper.toUser(userDTO)).thenReturn(user);
 
-            // Then
-            assertTrue(userDTO.getLifeEventIds().contains(eventId));
-            assertEquals(userDTO, result);
+	// When
+	userService.deleteUser(userDTO);
 
-            verify(userRepository).save(user);
-        }
+	// Then
+	verify(userRepository).delete(user);
+	}
 
-        @Test
-        void removeLifeEventForUser_shouldRemoveEventAndPersistUser() {
+	@Test
+	void shouldThrowRuntimeExceptionWhenDeleteFails() {
 
-            // Given
-            Long eventId = 5L;
-            userDTO.setLifeEventIds(new java.util.ArrayList<>(java.util.List.of(eventId)));
+	// Given
+	when(userMapper.toUser(userDTO)).thenReturn(user);
+	doThrow(new RuntimeException()).when(userRepository).delete(user);
 
-            when(userMapper.toUser(userDTO)).thenReturn(user);
-            when(userRepository.save(user)).thenReturn(user);
-            when(userMapper.toUserDTO(user)).thenReturn(userDTO);
+	// Then
+	assertThrows(RuntimeException.class, () -> userService.deleteUser(userDTO));
+	}
+}
 
-            // When
-            UserDTO result = userService.removeLifeEventForUser(userDTO, eventId);
+@Nested
+class ManageLifeEvents {
 
-            // Then
-            assertFalse(userDTO.getLifeEventIds().contains(eventId));
-            assertEquals(userDTO, result);
+	@Test
+	void addLifeEventToUser_shouldAddEventAndPersistUser() {
 
-            verify(userRepository).save(user);
-        }
-    }
+	// Given
+	Long eventId = 10L;
+	userDTO.setLifeEventIds(new java.util.ArrayList<>());
 
-    // =========================
-    // TEST DATA FACTORIES
-    // =========================
+	when(userMapper.toUser(userDTO)).thenReturn(user);
+	when(userRepository.save(user)).thenReturn(user);
+	when(userMapper.toUserDTO(user)).thenReturn(userDTO);
 
-    private User createUser() {
-        User u = new User();
-        u.setId("1");
-        return u;
-    }
+	// When
+	UserDTO result = userService.addLifeEventToUser(userDTO, eventId);
 
-    private UserDTO createUserDTO() {
-        return new UserDTO("1", "testuser");
-    }
+	// Then
+	assertTrue(userDTO.getLifeEventIds().contains(eventId));
+	assertEquals(userDTO, result);
+
+	verify(userRepository).save(user);
+	}
+
+	@Test
+	void removeLifeEventForUser_shouldRemoveEventAndPersistUser() {
+
+	// Given
+	Long eventId = 5L;
+	userDTO.setLifeEventIds(new java.util.ArrayList<>(java.util.List.of(eventId)));
+
+	when(userMapper.toUser(userDTO)).thenReturn(user);
+	when(userRepository.save(user)).thenReturn(user);
+	when(userMapper.toUserDTO(user)).thenReturn(userDTO);
+
+	// When
+	UserDTO result = userService.removeLifeEventForUser(userDTO, eventId);
+
+	// Then
+	assertFalse(userDTO.getLifeEventIds().contains(eventId));
+	assertEquals(userDTO, result);
+
+	verify(userRepository).save(user);
+	}
+}
+
+// =========================
+// TEST DATA FACTORIES
+// =========================
+
+private User createUser() {
+	User u = new User();
+	u.setId("1");
+	return u;
+}
+
+private UserDTO createUserDTO() {
+	return new UserDTO("1", "testuser");
+}
 }
