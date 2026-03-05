@@ -1,29 +1,15 @@
 import { computed, effect, inject, Injectable } from '@angular/core';
 import Keycloak, { KeycloakUserInfo } from 'keycloak-js';
-import { UserStore } from '../../features/user/state/user-store';
 import { User } from '../../features/user/state/user-api';
-import { KEYCLOAK_EVENT_SIGNAL, KeycloakEventType } from 'keycloak-angular';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class Auth {
 	private keycloak = inject(Keycloak);
-	private userStore = inject(UserStore);
-	private readonly keycloakSignal = inject(KEYCLOAK_EVENT_SIGNAL);
 
 	readonly authenticated = computed(() => this.keycloak.authenticated ?? false);
 	readonly token = computed(() => this.keycloak.token);
-
-	constructor() {
-		effect(() => {
-			const keycloakEvent = this.keycloakSignal();
-
-			if (keycloakEvent.type === KeycloakEventType.Ready) {
-				this.connectUser();
-			}
-		});
-	}
 
 	login() {
 		this.keycloak.login();
@@ -33,8 +19,8 @@ export class Auth {
 		this.keycloak.logout();
 	}
 
-	connectUser() {
-		this.keycloak
+	getUser() {
+		return this.keycloak
 			.loadUserInfo()
 			.then((userInfo) => {
 				if (!userInfo || !userInfo['sub']) {
@@ -44,10 +30,10 @@ export class Auth {
 
 				// Add user to db or find existing user
 				const user = this.createUser(userInfo);
-				this.userStore.loadOrCreateCurrentUser(user);
+				return user;
 			})
 			.catch(() => {
-				console.error("Couldn't connect user to backend");
+				console.error("Couldn't get user info from Keycloak");
 			});
 	}
 
