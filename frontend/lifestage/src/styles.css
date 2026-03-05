@@ -1,3 +1,62 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import "tailwindcss";
+
+@theme {
+	--color-primary: #adcbff;
+	--color-primary-hover: #adcbff;
+	--color-primary-active: #e0ebff;
+
+	--color-secondary: #ddf6d2;
+	--color-secondary-hover: #cae8bd;
+	--color-secondary-active: #b0db9c;
+
+	--color-glow: #0000004f;
+}
+
+@layer base {
+	body {
+		font-family: 'Pally', sans-serif;
+		@apply bg-white text-gray-900;
+	}
+
+	section {
+		@apply p-10 m-4  shadow-xl rounded-2xl flex flex-col items-center;
+	}
+    article {
+        @apply p-6 m-4 bg-primary rounded-xl flex flex-col items-center;
+    }
+
+	h1 {
+		@apply text-4xl md:text-5xl font-bold mb-2 tracking-tight;
+	}
+
+	h2 {
+		@apply text-2xl md:text-3xl font-bold mb-2;
+	}
+
+	button {
+		@apply px-4 py-2 bg-secondary hover:bg-secondary-hover active:bg-secondary-active disabled:bg-gray-400 
+        rounded-full transition-all duration-300;
+	}
+
+	strong {
+		@apply font-bold;
+	}
+
+	a {
+		@apply  text-black font-semibold hover:text-blue-600 active:text-blue-400
+        transition-all duration-300 cursor-pointer;
+	}
+}
+
+/* ----------- Custom classes ------------- */
+.main {
+	@apply m-auto flex max-w-5xl items-center justify-center;
+}
+
+.book-grid {
+	@apply grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 
+    items-stretch justify-items-center
+    text-xs sm:text-sm md:text-base;
+}
