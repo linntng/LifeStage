@@ -1,6 +1,6 @@
-import { Component, inject, effect } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Auth } from '../../../core/auth/auth';
-import { KEYCLOAK_EVENT_SIGNAL, KeycloakEventType } from 'keycloak-angular';
+import { UserStore } from '../../user/state/user-store';
 
 @Component({
 	selector: 'app-login-button',
@@ -9,21 +9,9 @@ import { KEYCLOAK_EVENT_SIGNAL, KeycloakEventType } from 'keycloak-angular';
 })
 export class LoginButton {
 	private auth = inject(Auth);
-	private readonly keycloakSignal = inject(KEYCLOAK_EVENT_SIGNAL);
+	protected userStore = inject(UserStore);
 
-	constructor() {
-		effect(() => {
-			const keycloakEvent = this.keycloakSignal();
-
-			if (keycloakEvent.type === KeycloakEventType.Ready) {
-				this.auth.connectUser();
-			}
-		});
-	}
-
-	authenticated() {
-		return this.auth.authenticated();
-	}
+	authenticated = this.auth.authenticated;
 
 	login() {
 		this.auth.login();
