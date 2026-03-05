@@ -1,0 +1,8 @@
+<div>
+	<h2>Life Events</h2>
+	<ul>
+		@for (event of lifeevents(); track event) {
+			<li>{{ event.name }}</li>
+		}
+	</ul>
+</div>
