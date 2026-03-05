@@ -34,3 +34,14 @@ From the root of the repository, run:
 ```bash
 docker compose up -d
 ```
+
+## Code formatting
+
+This project uses [Spotless](https://github.com/diffplug/spotless) with [Google Java Format](https://github.com/google/google-java-format) to enforce consistent code formatting.
+
+- To check formatting, run: `mvn spotless:check`
+- To automatically format the code, run: `mvn spotless:apply`
+
+> Remember to run formatting before committing your code!
+
+The build will fail if formatting violations are detected.
