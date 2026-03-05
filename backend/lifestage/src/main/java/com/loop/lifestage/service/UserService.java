@@ -82,8 +82,6 @@ public class UserService {
             return users.stream()
                     .map(userMapper::toUserDTO)
                     .collect(Collectors.toList());
-        } catch (EntityNotFoundException e) {
-            throw new ResourceNotFoundException("No users found");
         } catch (Exception e) {
             throw new RuntimeException("An error occurred while retrieving users", e);
         }
@@ -96,6 +94,26 @@ public class UserService {
             userRepository.delete(user);
         } catch (Exception e) {
             throw new RuntimeException("An error occurred while deleting the user", e);
+        }
+    }
+
+    @Transactional
+    public UserDTO addLifeEventToUser(UserDTO userDTO, Long lifeEventId) {
+        try {
+            userDTO.addLifeEvent(lifeEventId);
+            return updateUser(userDTO);
+        } catch (Exception e) {
+            throw new RuntimeException("An error occurred while adding life event to the user", e);
+        }
+    }
+
+    @Transactional
+    public UserDTO removeLifeEventForUser(UserDTO userDTO, Long lifeEventId) {
+        try {
+            userDTO.removeLifeEvent(lifeEventId);
+            return updateUser(userDTO);
+        } catch (Exception e) {
+            throw new RuntimeException("An error occurred while removing life event from the user", e);
         }
     }
 }
