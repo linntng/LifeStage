@@ -13,7 +13,7 @@ export interface User {
 })
 export class UserApi {
 	private http = inject(HttpClient);
-	private userUrl = `${environment.apiUrl}/user`;
+	private userUrl = `${environment.apiUrl}/users`;
 
 	getUserById(id: string) {
 		return this.http.get<User>(`${this.userUrl}/${id}`);

@@ -12,7 +12,7 @@ export class UserStore {
 
 	readonly currentUser = signal<User | null>(null);
 	readonly currentUserLoading = signal(false);
-	readonly userLifeEvents = signal<(Lifeevent | undefined)[] | null>(null);
+	readonly userLifeevents = signal<(Lifeevent | undefined)[] | null>(null);
 
 	private setCurrentUser(user: User | null) {
 		this.currentUser.set(user);
@@ -51,21 +51,36 @@ export class UserStore {
 				}
 			},
 			complete: () => {
-				this.loadUserLifeEvents();
+				this.loadUserLifeevents();
 			},
 		});
 	}
 
 	clearCurrentUser() {
 		this.setCurrentUser(null);
-		this.userLifeEvents.set(null);
+		this.userLifeevents.set(null);
 	}
 
-	private loadUserLifeEvents() {
-		this.userLifeEvents.set(
+	private loadUserLifeevents() {
+		this.userLifeevents.set(
 			this.currentUser()?.lifeEventIds.map((eventId) =>
 				this.lifeEventStore.getLifeeventById(eventId),
 			) || [],
 		);
+	}
+
+	addLifeEventToUser(lifeEventId: number) {
+		if (!this.currentUser()) {
+			console.error('No current user to add life event to');
+			return;
+		}
+		this.userApi.addLifeEventToUser(this.currentUser()!.id, lifeEventId).subscribe({
+			next: () => {
+				this.loadUserLifeevents();
+			},
+			error: (err) => {
+				console.error('Error adding life event to user', err);
+			},
+		});
 	}
 }
