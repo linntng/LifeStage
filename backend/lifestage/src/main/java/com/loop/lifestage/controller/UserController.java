@@ -35,14 +35,12 @@ public class UserController {
     @PostMapping("/{id}/lifeevents")
     public ResponseEntity<UserDTO> addLifeEventToUser(@PathVariable String id, @RequestBody Long lifeEventId) {
         UserDTO userDTO = userService.getUserById(id);
-        userDTO.addLifeEvent(lifeEventId);
-        return ResponseEntity.ok(userService.updateUser(userDTO));
+        return ResponseEntity.ok(userService.addLifeEventToUser(userDTO, lifeEventId));
     }
 
     @PatchMapping("/{id}/lifeevents/{lifeEventId}")
     public ResponseEntity<UserDTO> removeLifeEventForUser(@PathVariable String id, @PathVariable Long lifeEventId) {
         UserDTO userDTO = userService.getUserById(id);
-        userDTO.removeLifeEvent(lifeEventId);
-        return ResponseEntity.ok(userService.updateUser(userDTO));
+        return ResponseEntity.ok(userService.removeLifeEventForUser(userDTO, lifeEventId));
     }
 }
