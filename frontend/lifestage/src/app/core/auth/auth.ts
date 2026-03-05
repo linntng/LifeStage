@@ -13,6 +13,7 @@ export class Auth {
 	private readonly keycloakSignal = inject(KEYCLOAK_EVENT_SIGNAL);
 
 	readonly authenticated = computed(() => this.keycloak.authenticated ?? false);
+	readonly token = computed(() => this.keycloak.token);
 
 	constructor() {
 		effect(() => {
