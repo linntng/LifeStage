@@ -1,4 +1,4 @@
-
+DELETE FROM life_events;
 INSERT INTO life_events (name)
 VALUES
     ('marriage'),
