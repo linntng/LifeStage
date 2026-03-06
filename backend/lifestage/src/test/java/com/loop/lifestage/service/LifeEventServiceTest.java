@@ -20,77 +20,77 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class LifeEventServiceTest {
 
-@Mock private LifeEventRepository lifeEventRepository;
+  @Mock private LifeEventRepository lifeEventRepository;
 
-@Mock private LifeEventMapper lifeEventMapper;
+  @Mock private LifeEventMapper lifeEventMapper;
 
-@InjectMocks private LifeEventService lifeEventService;
+  @InjectMocks private LifeEventService lifeEventService;
 
-private LifeEvent lifeEvent;
-private LifeEventDTO lifeEventDTO;
+  private LifeEvent lifeEvent;
+  private LifeEventDTO lifeEventDTO;
 
-@BeforeEach
-void setUp() {
-	lifeEvent = createLifeEvent();
-	lifeEventDTO = createLifeEventDTO();
-}
+  @BeforeEach
+  void setUp() {
+    lifeEvent = createLifeEvent();
+    lifeEventDTO = createLifeEventDTO();
+  }
 
-// =========================
-// GET ALL LIFE EVENTS
-// =========================
+  // =========================
+  // GET ALL LIFE EVENTS
+  // =========================
 
-@Test
-void getAllLifeEvents_shouldReturnMappedLifeEvents() {
+  @Test
+  void getAllLifeEvents_shouldReturnMappedLifeEvents() {
 
-	// Given
-	when(lifeEventRepository.findAll()).thenReturn(List.of(lifeEvent));
-	when(lifeEventMapper.toLifeEventDTO(lifeEvent)).thenReturn(lifeEventDTO);
+    // Given
+    when(lifeEventRepository.findAll()).thenReturn(List.of(lifeEvent));
+    when(lifeEventMapper.toLifeEventDTO(lifeEvent)).thenReturn(lifeEventDTO);
 
-	// When
-	List<LifeEventDTO> result = lifeEventService.getAllLifeEvents();
+    // When
+    List<LifeEventDTO> result = lifeEventService.getAllLifeEvents();
 
-	// Then
-	assertEquals(1, result.size());
-	assertEquals(lifeEventDTO.getId(), result.get(0).getId());
-	assertEquals(lifeEventDTO.getName(), result.get(0).getName());
+    // Then
+    assertEquals(1, result.size());
+    assertEquals(lifeEventDTO.getId(), result.get(0).getId());
+    assertEquals(lifeEventDTO.getName(), result.get(0).getName());
 
-	verify(lifeEventRepository).findAll();
-	verify(lifeEventMapper).toLifeEventDTO(lifeEvent);
-}
+    verify(lifeEventRepository).findAll();
+    verify(lifeEventMapper).toLifeEventDTO(lifeEvent);
+  }
 
-@Test
-void getAllLifeEvents_shouldThrowResourceNotFound_whenEntityNotFoundExceptionOccurs() {
+  @Test
+  void getAllLifeEvents_shouldThrowResourceNotFound_whenEntityNotFoundExceptionOccurs() {
 
-	// Given
-	when(lifeEventRepository.findAll()).thenThrow(new EntityNotFoundException());
+    // Given
+    when(lifeEventRepository.findAll()).thenThrow(new EntityNotFoundException());
 
-	// Then
-	assertThrows(ResourceNotFoundException.class, () -> lifeEventService.getAllLifeEvents());
-}
+    // Then
+    assertThrows(ResourceNotFoundException.class, () -> lifeEventService.getAllLifeEvents());
+  }
 
-@Test
-void getAllLifeEvents_shouldThrowRuntimeException_whenUnexpectedExceptionOccurs() {
+  @Test
+  void getAllLifeEvents_shouldThrowRuntimeException_whenUnexpectedExceptionOccurs() {
 
-	// Given
-	when(lifeEventRepository.findAll()).thenThrow(new RuntimeException("database error"));
+    // Given
+    when(lifeEventRepository.findAll()).thenThrow(new RuntimeException("database error"));
 
-	// Then
-	assertThrows(RuntimeException.class, () -> lifeEventService.getAllLifeEvents());
-}
+    // Then
+    assertThrows(RuntimeException.class, () -> lifeEventService.getAllLifeEvents());
+  }
 
-// =========================
-// TEST DATA FACTORIES
-// =========================
+  // =========================
+  // TEST DATA FACTORIES
+  // =========================
 
-private LifeEvent createLifeEvent() {
-	LifeEvent event = new LifeEvent();
-	event.setId(1L);
-	event.setName("Graduation");
-	event.setUsers(java.util.Collections.emptyList());
-	return event;
-}
+  private LifeEvent createLifeEvent() {
+    LifeEvent event = new LifeEvent();
+    event.setId(1L);
+    event.setName("Graduation");
+    event.setUsers(java.util.Collections.emptyList());
+    return event;
+  }
 
-private LifeEventDTO createLifeEventDTO() {
-	return new LifeEventDTO(1L, "Graduation");
-}
+  private LifeEventDTO createLifeEventDTO() {
+    return new LifeEventDTO(1L, "Graduation");
+  }
 }

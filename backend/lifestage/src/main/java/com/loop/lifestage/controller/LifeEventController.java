@@ -11,14 +11,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/lifeevents")
 public class LifeEventController {
-private final LifeEventService lifeEventService;
+  private final LifeEventService lifeEventService;
 
-public LifeEventController(LifeEventService lifeEventService) {
-	this.lifeEventService = lifeEventService;
-}
+  public LifeEventController(LifeEventService lifeEventService) {
+    this.lifeEventService = lifeEventService;
+  }
 
-@GetMapping("")
-public ResponseEntity<List<LifeEventDTO>> getAllLifeEvents() {
-	return ResponseEntity.ok(lifeEventService.getAllLifeEvents());
-}
+  @GetMapping("")
+  public ResponseEntity<List<LifeEventDTO>> getAllLifeEvents() {
+    return ResponseEntity.ok(lifeEventService.getAllLifeEvents());
+  }
 }
