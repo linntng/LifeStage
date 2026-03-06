@@ -9,8 +9,5 @@ import { CommonModule } from '@angular/common';
 })
 export class Lifeevents {
 	private lifeeventStore = inject(LifeeventStore);
-
-	
 	lifeevents = this.lifeeventStore.lifeevents;
-	
 }
