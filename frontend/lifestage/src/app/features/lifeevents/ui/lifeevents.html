@@ -1,14 +1,26 @@
 <div>
 	<h2>Life Events</h2>
-	<ul>
+	<section>
 		@for (event of lifeevents(); track event) {
-			<li>{{ event.name }}</li>
+			<button 
+			(click)="toggleEvent(event)"
+			class="w-full"
+			[class]="userLifeevents()?.some(e => e?.id === event.id) ? 'bg-primary': ''"
+			>{{ event?.name }}</button>
+			
 		}
-	</ul>
+	</section>
+
 	<h2>User life Events</h2>
 	<ul>
 		@for (event of userLifeevents(); track event) {
-			<li>{{ event?.name }}</li>
+			<button>{{ event?.name }}</button>
 		}
 	</ul>
+</div>
+
+<div
+	[class]="true ? 'block' : 'hidden'"
+>
+
 </div>
