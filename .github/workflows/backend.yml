@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: cicd
+        working-directory: backend
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
