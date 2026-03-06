@@ -1,3 +1,59 @@
 /* You can add global styles to this file, and also import other style files */
 
-@import "tailwindcss";
+@import 'tailwindcss';
+
+@theme {
+	--color-primary: #9fc1fd;
+	--color-primary-hover: #b9d2fd;
+	--color-primary-active: #d7e5ff;
+
+	--color-secondary: #ddf6d2;
+	--color-secondary-hover: #cae8bd;
+	--color-secondary-active: #b0db9c;
+
+	--color-dark-glow: #0000002d;
+}
+
+@layer base {
+	body {
+		font-family: sans-serif;
+		@apply bg-white text-gray-900 m-auto;
+	}
+
+	main {
+		@apply max-w-5xl mx-auto px-4;
+	}
+
+	section {
+		@apply p-10 m-4  shadow-xl rounded-2xl flex flex-col items-center;
+	}
+	article {
+		@apply p-6 m-4 bg-primary rounded-xl flex flex-col items-center;
+	}
+
+	h1 {
+		@apply text-4xl md:text-5xl font-bold mb-2 tracking-tight;
+	}
+
+	h2 {
+		@apply text-2xl md:text-3xl font-bold mb-2;
+	}
+
+	button {
+		@apply px-4 py-2 
+		bg-secondary hover:bg-secondary-hover active:bg-secondary-active  disabled:bg-gray-400 
+		shadow-md/30
+		active:shadow-none active:translate-y-0.25
+        rounded-2xl transition-all ease-linear duration-150;
+	}
+
+	strong {
+		@apply font-bold;
+	}
+
+	a {
+		@apply text-black font-semibold rounded-full p-2 cursor-pointer
+        hover:bg-primary-hover active:bg-primary-active transition-all duration-150;
+	}
+}
+}
