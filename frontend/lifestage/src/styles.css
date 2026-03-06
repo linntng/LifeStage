@@ -41,7 +41,7 @@
 
 	button {
 		@apply px-4 py-2 
-		bg-secondary hover:bg-secondary-hover active:bg-secondary-active  disabled:bg-gray-400 
+		bg-secondary/40 hover:bg-secondary-hover active:bg-secondary-active  disabled:bg-gray-400 
 		shadow-md/30
 		active:shadow-none active:translate-y-0.25
         rounded-2xl transition-all ease-linear duration-150;
@@ -53,7 +53,6 @@
 
 	a {
 		@apply text-black font-semibold rounded-full p-2 cursor-pointer
-        hover:bg-primary-hover active:bg-primary-active transition-all duration-150;
+        hover:bg-primary-hover/30 active:bg-primary-active transition-all duration-150;
 	}
-}
 }
