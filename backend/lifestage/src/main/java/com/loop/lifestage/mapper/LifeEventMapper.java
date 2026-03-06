@@ -6,7 +6,7 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface LifeEventMapper {
-LifeEventDTO toLifeEventDTO(LifeEvent lifeEvent);
+  LifeEventDTO toLifeEventDTO(LifeEvent lifeEvent);
 
-LifeEvent toLifeEvent(LifeEventDTO lifeEventDTO);
+  LifeEvent toLifeEvent(LifeEventDTO lifeEventDTO);
 }

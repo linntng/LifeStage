@@ -5,4 +5,10 @@
 			<li>{{ event.name }}</li>
 		}
 	</ul>
+	<h2>User life Events</h2>
+	<ul>
+		@for (event of userLifeevents(); track event) {
+			<li>{{ event?.name }}</li>
+		}
+	</ul>
 </div>

@@ -74,7 +74,14 @@
 			<version>1.5.5.Final</version>
 			<scope>provided</scope>
 		</dependency>
-
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -106,22 +113,11 @@
 
 				<configuration>
 					<java>
-					<!-- Use Google Java Format -->
 					<googleJavaFormat/>
-
-					<!-- Remove unused imports -->
 					<removeUnusedImports/>
-
-					<!-- Ensure newline at end -->
 					<endWithNewline/>
-
-					<!-- Optional: trim trailing whitespace -->
 					<trimTrailingWhitespace/>
 
-					<indent>
-						<tabs>true</tabs>
-						<spacesPerTab>4</spacesPerTab>
-					</indent>
 					</java>
 				</configuration>
 

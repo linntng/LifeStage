@@ -1,0 +1,12 @@
+<!-- With this feature (silent sso-check) enabled, your browser avoids 
+ a full redirect to the Keycloak server and back to your application. 
+ Instead, this action is performed in a hidden iframe, allowing your application
+ resources to be loaded and parsed only once during initialization, 
+ rather than reloading after a redirect. -->
+<html>
+	<body>
+		<script>
+			parent.postMessage(location.href, location.origin);
+		</script>
+	</body>
+</html>
