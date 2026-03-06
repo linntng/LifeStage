@@ -2,6 +2,7 @@ package com.loop.lifestage.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,9 +15,15 @@ public class RequestFilter {
   @Bean
   SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-    http.csrf(csrf -> csrf.disable())
+    http.cors(Customizer.withDefaults())
+        .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(
-            auth -> auth.requestMatchers("/lifeevents").permitAll().anyRequest().authenticated())
+            auth -> auth.requestMatchers(HttpMethod.OPTIONS, "/**")
+                .permitAll()
+                .requestMatchers("/lifeevents")
+                .permitAll()
+                .anyRequest()
+                .authenticated())
         .oauth2ResourceServer(oauth -> oauth.jwt(Customizer.withDefaults()));
 
     return http.build();
