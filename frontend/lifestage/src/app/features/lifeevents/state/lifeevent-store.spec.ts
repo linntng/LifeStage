@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-
+import { vi } from 'vitest';
 import { LifeeventStore } from './lifeevent-store';
 import { LifeeventApi } from './lifeevent-api';
 import { of } from 'rxjs';
@@ -7,9 +7,9 @@ import { of } from 'rxjs';
 describe('LifeeventStore', () => {
 	let service: LifeeventStore;
 	let lifeeventApi: LifeeventApi;
-	let lifeeventApiSpy: any;
+	let lifeeventApiSpy: ReturnType<typeof vi.spyOn>;
 
-	let mockLifeevents = [
+	const mockLifeevents = [
 		{ id: 1, name: 'Graduation' },
 		{ id: 2, name: 'Marriage' },
 		{ id: 3, name: 'Retirement' },
