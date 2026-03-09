@@ -12,6 +12,10 @@ permissions:
   id-token: write
   contents: read
 
+env:
+  IMAGE_NAME: lifestage-api
+  IMAGE_TAG: ${{ github.sha }}
+
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
@@ -70,10 +74,6 @@ jobs:
   deploy:
     needs: build-and-push
     runs-on: ubuntu-latest
-
-    env:
-      IMAGE_NAME: lifestage-api
-      IMAGE_TAG: ${{ github.sha }}
 
     steps:
       - name: Log in to Azure
