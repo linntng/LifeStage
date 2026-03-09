@@ -2,8 +2,10 @@ package com.loop.lifestage.mapper;
 
 import com.loop.lifestage.dto.UserDTO;
 import com.loop.lifestage.model.LifeEvent;
+import com.loop.lifestage.model.policy.Policy;
 import com.loop.lifestage.model.User;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -12,9 +14,11 @@ import org.mapstruct.Named;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
   @Mapping(source = "lifeEvents", target = "lifeEventIds", qualifiedByName = "lifeEventsToIds")
+  @Mapping(source = "policies", target = "policyIds", qualifiedByName = "policiesToIds")
   UserDTO toUserDTO(User user);
 
   @Mapping(source = "lifeEventIds", target = "lifeEvents", qualifiedByName = "idsToLifeEvents")
+  @Mapping(source = "policyIds", target = "policies", qualifiedByName = "idsToPolicies")
   User toUser(UserDTO userDTO);
 
   @Named("lifeEventsToIds")
@@ -38,5 +42,28 @@ public interface UserMapper {
               return lifeEvent;
             })
         .collect(Collectors.toList());
+  }
+
+  @Named("policiesToIds")
+  default Set<Long> policiesToIds(Set<Policy> policies) {
+    if (policies == null) {
+      return null;
+    }
+    return policies.stream().map(Policy::getId).collect(Collectors.toSet());
+  }
+
+  @Named("idsToPolicies")
+  default Set<Policy> idsToLifeEvents(Set<Long> ids) {
+    if (ids == null) {
+      return null;
+    }
+    return ids.stream()
+        .map(
+            id -> {
+              Policy lifeEvent = new Policy();
+              lifeEvent.setId(id);
+              return lifeEvent;
+            })
+        .collect(Collectors.toSet());
   }
 }
