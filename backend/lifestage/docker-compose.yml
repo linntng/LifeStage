@@ -8,11 +8,7 @@ services:
     ports:
       - "5432:5432"
   backend:
-    image: lifestageregistry.azurecr.io/lifestage:v1
-    platform: linux/amd64
-    build:
-      context: ./backend/lifestage
-      dockerfile: Dockerfile
+    build: .
     container_name: lifestage-backend
     ports:
       - "8080:8080"
