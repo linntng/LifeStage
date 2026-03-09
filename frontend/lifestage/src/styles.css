@@ -21,14 +21,14 @@
 	}
 
 	main {
-		@apply max-w-5xl mx-auto px-4;
+		@apply max-w-5xl mx-auto mt-10 px-4;
 	}
 
 	section {
 		@apply p-10 m-4  shadow-xl rounded-2xl flex flex-col items-center;
 	}
 	article {
-		@apply p-6 m-4 bg-primary rounded-xl flex flex-col items-center;
+		@apply p-6 m-4 rounded-xl flex flex-col items-center;
 	}
 
 	h1 {
@@ -54,5 +54,11 @@
 	a {
 		@apply text-black font-semibold rounded-full p-2 cursor-pointer
         hover:bg-primary-hover/30 active:bg-primary-active transition-all duration-150;
+	}
+}
+
+@layer components {
+	.info-bar {
+		@apply p-6 m-4 w-full bg-primary/50 rounded-xl flex flex-row justify-between;
 	}
 }

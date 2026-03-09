@@ -12,7 +12,7 @@ export class UserStore {
 
 	readonly currentUser = signal<User | null>(null);
 	readonly currentUserLoading = signal(false);
-	readonly userLifeevents = signal<(Lifeevent | undefined)[] | null>(null);
+	readonly userLifeevents = signal<Lifeevent[] | null>(null);
 
 	private setCurrentUser(user: User | null) {
 		this.currentUser.set(user);
@@ -63,23 +63,62 @@ export class UserStore {
 
 	private loadUserLifeevents() {
 		this.userLifeevents.set(
-			this.currentUser()?.lifeEventIds.map((eventId) =>
-				this.lifeEventStore.getLifeeventById(eventId),
-			) || [],
+			this.currentUser()
+				?.lifeEventIds.map((eventId) => this.lifeEventStore.getLifeeventById(eventId))
+				.filter((event): event is Lifeevent => event !== undefined) || [],
 		);
 	}
 
-	addLifeEventToUser(lifeEventId: number) {
+	addLifeEventToCurrentUser(lifeEventId: number) {
 		if (!this.currentUser()) {
 			console.error('No current user to add life event to');
 			return;
 		}
 		this.userApi.addLifeEventToUser(this.currentUser()!.id, lifeEventId).subscribe({
 			next: () => {
+				// Add life event ID to current user signal
+				this.currentUser.update((user) => {
+					if (!user) {
+						console.error('No current user');
+						return null;
+					}
+					return {
+						...user,
+						lifeEventIds: [...user.lifeEventIds, lifeEventId],
+					};
+				});
+
 				this.loadUserLifeevents();
 			},
 			error: (err) => {
 				console.error('Error adding life event to user', err);
+			},
+		});
+	}
+
+	removeLifeEventFromCurrentUser(lifeEventId: number) {
+		if (!this.currentUser()) {
+			console.error('No current user to remove life event from');
+			return;
+		}
+		this.userApi.removeLifeEventFromUser(this.currentUser()!.id, lifeEventId).subscribe({
+			next: () => {
+				// Remove the life event ID from the user signal
+				this.currentUser.update((user) => {
+					if (!user) {
+						console.error('No current user');
+						return null;
+					}
+					return {
+						...user,
+						lifeEventIds: user.lifeEventIds.filter((id) => id !== lifeEventId),
+					};
+				});
+
+				this.loadUserLifeevents();
+			},
+			error: (err) => {
+				console.error('Error removing life event from user', err);
 			},
 		});
 	}
