@@ -1,11 +1,13 @@
 package com.loop.lifestage.dto;
 
 import java.util.List;
+import java.util.Set;
 
 public class UserDTO {
   private String id;
   private String username;
   private List<Long> lifeEventIds;
+  private Set<Long> policyIds;
 
   public UserDTO() {}
 
@@ -44,5 +46,17 @@ public class UserDTO {
 
   public void removeLifeEvent(Long lifeEventId) {
     this.lifeEventIds.remove(lifeEventId);
+  }
+
+  public Set<Long> getPolicyIds() {
+    return this.policyIds;
+  }
+
+  public void setPolicyIds(Set<Long> policyIds) {
+    this.policyIds = policyIds;
+  }
+
+  public void addPolicyById(Long policyId) {
+    this.policyIds.add(policyId);
   }
 }
