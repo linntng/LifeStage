@@ -38,7 +38,7 @@ export class Lifeevents {
 		return str.charAt(0).toUpperCase() + str.slice(1);
 	}
 
-	toggleEventInfoBar(id : number) {
+	toggleEventInfoBar(id: number) {
 		if (this.selectedEventInfoBar() === id) {
 			this.selectedEventInfoBar.set(null);
 		} else {

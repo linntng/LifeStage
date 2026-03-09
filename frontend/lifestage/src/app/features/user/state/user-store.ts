@@ -63,9 +63,9 @@ export class UserStore {
 
 	private loadUserLifeevents() {
 		this.userLifeevents.set(
-			this.currentUser()?.lifeEventIds.map((eventId) =>
-				this.lifeEventStore.getLifeeventById(eventId),
-			).filter((event): event is Lifeevent => event !== undefined) || [],
+			this.currentUser()
+				?.lifeEventIds.map((eventId) => this.lifeEventStore.getLifeeventById(eventId))
+				.filter((event): event is Lifeevent => event !== undefined) || [],
 		);
 	}
 
