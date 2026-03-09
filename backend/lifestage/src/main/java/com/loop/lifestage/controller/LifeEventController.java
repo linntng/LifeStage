@@ -1,12 +1,14 @@
 package com.loop.lifestage.controller;
 
-import com.loop.lifestage.dto.LifeEventDTO;
-import com.loop.lifestage.service.LifeEventService;
 import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.loop.lifestage.dto.LifeEventDTO;
+import com.loop.lifestage.service.LifeEventService;
 
 @RestController
 @RequestMapping("/lifeevents")
@@ -17,7 +19,7 @@ public class LifeEventController {
     this.lifeEventService = lifeEventService;
   }
 
-  @GetMapping("")
+  @GetMapping
   public ResponseEntity<List<LifeEventDTO>> getAllLifeEvents() {
     return ResponseEntity.ok(lifeEventService.getAllLifeEvents());
   }

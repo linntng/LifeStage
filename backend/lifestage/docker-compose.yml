@@ -7,3 +7,17 @@ services:
       POSTGRES_PASSWORD: lifestage_pw
     ports:
       - "5432:5432"
+  backend:
+    build: .
+    container_name: lifestage-backend
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/lifestage
+      SPRING_DATASOURCE_USERNAME: lifestage
+      SPRING_DATASOURCE_PASSWORD: lifestage_pw
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
