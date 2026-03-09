@@ -1,7 +1,5 @@
 package com.loop.lifestage.controller;
 
-import com.loop.lifestage.dto.UserDTO;
-import com.loop.lifestage.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +9,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.loop.lifestage.dto.UserDTO;
+import com.loop.lifestage.service.UserService;
 
 @RestController
 @RequestMapping("/users")
@@ -23,18 +24,19 @@ public class UserController {
   }
 
   @GetMapping("/{id}")
-  @PreAuthorize("id == authentication.token.claims['sub']")
+  @PreAuthorize("#id == authentication.token.claims['sub']")
   public ResponseEntity<UserDTO> getUserById(@PathVariable String id) {
     return ResponseEntity.ok(userService.getUserById(id));
   }
 
   @PostMapping
   public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
+    
     return ResponseEntity.ok(userService.createUser(userDTO));
   }
 
   @PostMapping("/{id}/lifeevents")
-  @PreAuthorize("id == authentication.token.claims['sub']")
+  @PreAuthorize("#id == authentication.token.claims['sub']")
   public ResponseEntity<UserDTO> addLifeEventToUser(
       @PathVariable String id, @RequestBody Long lifeEventId) {
     UserDTO userDTO = userService.getUserById(id);
@@ -42,7 +44,7 @@ public class UserController {
   }
 
   @PatchMapping("/{id}/lifeevents/{lifeEventId}")
-  @PreAuthorize("id == authentication.token.claims['sub']")
+  @PreAuthorize("#id == authentication.token.claims['sub']")
   public ResponseEntity<UserDTO> removeLifeEventForUser(
       @PathVariable String id, @PathVariable Long lifeEventId) {
     UserDTO userDTO = userService.getUserById(id);

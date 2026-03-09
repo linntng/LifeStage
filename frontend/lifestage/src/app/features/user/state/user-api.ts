@@ -18,21 +18,37 @@ export class UserApi {
 
 	private userUrl = `${environment.apiUrl}/users`;
 
+	private getAuthHeaders() {
+		const token = this.auth.token();
+		if (!token) {
+			throw new Error('Missing access token for authenticated user request');
+		}
+		return {
+			Authorization: `Bearer ${token}`,
+		};
+	}
+
 	getUserById(id: string) {
-		return this.http.get<User>(`${this.userUrl}/${id}`);
+		return this.http.get<User>(`${this.userUrl}/${id}`, {
+			headers: this.getAuthHeaders(),
+		});
 	}
 
 	addUser(user: User) {
-		return this.http.post<User>(this.userUrl, user);
+		return this.http.post<User>(this.userUrl, user, {
+			headers: this.getAuthHeaders(),
+		});
 	}
 
 	addLifeEventToUser(userId: string, lifeEventId: number) {
-		const headers = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${this.auth.token()}` };
-		return this.http.post(`${this.userUrl}/${userId}/lifeevents/`, lifeEventId, { headers });
+		return this.http.post(`${this.userUrl}/${userId}/lifeevents`, lifeEventId, {
+			headers: this.getAuthHeaders(),
+		});
 	}
 
 	removeLifeEventFromUser(userId: string, lifeEventId: number) {
-		const headers = { Authorization: `Bearer ${this.auth.token()}` };
-		return this.http.delete(`${this.userUrl}/${userId}/lifeevents/${lifeEventId}`, { headers });
+		return this.http.patch(`${this.userUrl}/${userId}/lifeevents/${lifeEventId}`, null, {
+			headers: this.getAuthHeaders(),
+		});
 	}
 }

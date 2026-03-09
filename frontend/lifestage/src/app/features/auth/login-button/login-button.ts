@@ -2,7 +2,6 @@ import { Component, effect, inject } from '@angular/core';
 import { Auth } from '../../../core/auth/auth';
 import { UserStore } from '../../user/state/user-store';
 import { KEYCLOAK_EVENT_SIGNAL, KeycloakEventType } from 'keycloak-angular';
-import { User } from '../../user/ui/user';
 
 @Component({
 	selector: 'app-login-button',
