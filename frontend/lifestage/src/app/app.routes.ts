@@ -16,6 +16,11 @@ export const routes: Routes = [
 		canActivate: [authGuard],
 	},
 	{
+		path: 'policies',
+		loadComponent: () => import('./features/policies/ui/policies').then((p) => p.Policies),
+		canActivate: [authGuard],
+	},
+	{
 		path: '**',
 		component: NotFound,
 	},

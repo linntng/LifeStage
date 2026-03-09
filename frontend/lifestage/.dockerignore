@@ -1,7 +1,0 @@
-### uten dette sender Docker hele node_modules til build som gjør build veldig treg
-target
-.git
-.gitignore
-node_modules
-*.log
-.env
