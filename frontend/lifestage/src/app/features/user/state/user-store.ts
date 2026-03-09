@@ -12,7 +12,7 @@ export class UserStore {
 
 	readonly currentUser = signal<User | null>(null);
 	readonly currentUserLoading = signal(false);
-	readonly userLifeevents = signal<(Lifeevent | undefined)[] | null>(null);
+	readonly userLifeevents = signal<Lifeevent[] | null>(null);
 
 	private setCurrentUser(user: User | null) {
 		this.currentUser.set(user);
@@ -65,7 +65,7 @@ export class UserStore {
 		this.userLifeevents.set(
 			this.currentUser()?.lifeEventIds.map((eventId) =>
 				this.lifeEventStore.getLifeeventById(eventId),
-			) || [],
+			).filter((event): event is Lifeevent => event !== undefined) || [],
 		);
 	}
 

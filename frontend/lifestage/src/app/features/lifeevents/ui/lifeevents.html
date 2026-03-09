@@ -1,26 +1,64 @@
-<div>
-	<h2>Life Events</h2>
-	<section>
-		@for (event of lifeevents(); track event) {
-			<button 
-			(click)="toggleEvent(event)"
-			class="w-full"
-			[class]="userLifeevents()?.some(e => e?.id === event.id) ? 'bg-primary': ''"
-			>{{ event?.name }}</button>
-			
-		}
-	</section>
+<section>
+	<h2>Your life events</h2>
+	@if (userLifeevents()?.length === 0) {
+		<p class="p-5">You haven't added any life events yet.</p>
+	}
+	@for (event of userLifeevents(); track event) {
+		<article class="info-bar">
+			<img
+				(click)="toggleEventInfoBar(event.id)"
+				(keydown.enter)="toggleEventInfoBar(event.id)"
+				(keydown.space)="toggleEventInfoBar(event.id)"
+				tabindex="0"
+				[src]="
+					selectedEventInfoBar() === event.id
+						? 'svg/info-circle-fill.svg'
+						: 'svg/info-circle.svg'
+				"
+				alt="info"
+				width="24"
+				height="24"
+			/>
+			{{ firstToUppercase(event?.name || '') }}
+			<button
+				(click)="removeEvent(event)"
+				(keydown.enter)="removeEvent(event)"
+				(keydown.space)="removeEvent(event)"
+				class="font-bold bg-red-200"
+			>
+				Remove
+			</button>
+		</article>
+	}
+</section>
 
-	<h2>User life Events</h2>
-	<ul>
-		@for (event of userLifeevents(); track event) {
-			<button>{{ event?.name }}</button>
-		}
-	</ul>
-</div>
-
-<div
-	[class]="true ? 'block' : 'hidden'"
->
-
-</div>
+<section>
+	<h2>Add a life event</h2>
+	@for (event of remainingLifeevents(); track event) {
+		<article class="info-bar">
+			<img
+				(click)="toggleEventInfoBar(event.id)"
+				(keydown.enter)="toggleEventInfoBar(event.id)"
+				(keydown.space)="toggleEventInfoBar(event.id)"
+				tabindex="0"
+				[src]="
+					selectedEventInfoBar() === event.id
+						? 'svg/info-circle-fill.svg'
+						: 'svg/info-circle.svg'
+				"
+				alt="info"
+				width="24"
+				height="24"
+			/>
+			{{ firstToUppercase(event?.name || '') }}
+			<button
+				(click)="addEvent(event)"
+				(keydown.enter)="addEvent(event)"
+				(keydown.space)="addEvent(event)"
+				class="font-bold"
+			>
+				Add
+			</button>
+		</article>
+	}
+</section>
