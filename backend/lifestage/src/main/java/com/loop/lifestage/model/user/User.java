@@ -3,6 +3,8 @@ package com.loop.lifestage.model.user;
 import com.loop.lifestage.model.policy.Policy;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
@@ -22,6 +24,7 @@ public class User {
   @Column(nullable = false)
   private String username;
 
+  @Enumerated(EnumType.STRING)
   @Column(nullable = false)
   private UserRole role;
 

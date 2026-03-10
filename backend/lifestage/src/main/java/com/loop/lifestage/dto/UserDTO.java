@@ -1,12 +1,14 @@
 package com.loop.lifestage.dto;
 
 import java.util.Set;
+import com.loop.lifestage.model.user.UserRole;
 
 public class UserDTO {
   private String id;
   private String username;
   private Set<Long> lifeEventIds;
   private Set<Long> policyIds;
+  private UserRole role;
 
   public UserDTO() {}
 
