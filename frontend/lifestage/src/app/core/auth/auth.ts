@@ -1,4 +1,4 @@
-import { computed, effect, inject, Injectable } from '@angular/core';
+import { computed, inject, Injectable } from '@angular/core';
 import Keycloak, { KeycloakUserInfo } from 'keycloak-js';
 import { User } from '../../features/user/state/user-api';
 
