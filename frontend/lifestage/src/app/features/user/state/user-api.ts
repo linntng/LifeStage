@@ -7,6 +7,7 @@ export interface User {
 	id: string;
 	username: string;
 	lifeEventIds: number[]; // List of life event IDs associated with the user
+	role: 'ADMIN' | 'USER' | 'CASE_HANDLER' | 'RISK_ANALYST' | null;
 }
 
 @Injectable({
