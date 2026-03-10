@@ -16,7 +16,11 @@ public class RequestFilter {
 
     http.csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(
-            auth -> auth.requestMatchers("/lifeevents", "/policies").permitAll().anyRequest().authenticated())
+            auth ->
+                auth.requestMatchers("/lifeevents", "/policies")
+                    .permitAll()
+                    .anyRequest()
+                    .authenticated())
         .oauth2ResourceServer(oauth -> oauth.jwt(Customizer.withDefaults()));
 
     return http.build();

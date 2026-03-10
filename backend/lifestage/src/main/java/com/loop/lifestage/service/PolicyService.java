@@ -26,9 +26,7 @@ public class PolicyService {
   public List<PolicyDTO> getAllPolicies() {
     try {
       List<Policy> policies = policyRepository.findAll();
-      return policies.stream()
-          .map(policyMapper::toPolicyDTO)
-          .collect(Collectors.toList());
+      return policies.stream().map(policyMapper::toPolicyDTO).collect(Collectors.toList());
     } catch (EntityNotFoundException e) {
       throw new ResourceNotFoundException("Policies not found");
     } catch (Exception e) {
