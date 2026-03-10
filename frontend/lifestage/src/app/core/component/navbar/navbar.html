@@ -9,10 +9,13 @@
 	</div>
 
 	<!-- Navigation Links -->
-	<div class="m-4 hidden md:flex">
+	<div *ngIf="userStore.currentUser()?.role === 'USER'" class="m-4 hidden md:flex">
 		<a routerLink="/lifeevents">Life events</a>
 	</div>
 
+	<div *ngIf="userStore.currentUser()?.role === 'ADMIN'" class="m-4 hidden md:flex">
+		<a routerLink="/admin">Admin</a>
+	</div>
 	<!-- Optional CTA -->
 	<div class="m-4 hidden md:flex">
 		<app-login-button></app-login-button>
@@ -27,6 +30,10 @@
 	[class.translate-x-full]="!menuOpen"
 	[class.opacity-0]="!menuOpen"
 >
-	<a class="m-1" routerLink="/lifeevents">Life events</a>
+	<a *ngIf="userStore.currentUser()?.role === 'USER'" class="m-1" routerLink="/lifeevents"
+		>Life events</a
+	>
+	<a *ngIf="userStore.currentUser()?.role === 'ADMIN'" class="m-1" routerLink="/admin">Admin</a>
+
 	<app-login-button class="m-2"></app-login-button>
 </div>
