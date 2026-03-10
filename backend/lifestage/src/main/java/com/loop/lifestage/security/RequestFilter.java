@@ -20,7 +20,7 @@ public class RequestFilter {
         .authorizeHttpRequests(
             auth -> auth.requestMatchers(HttpMethod.OPTIONS, "/**")
                 .permitAll()
-                .requestMatchers("/lifeevents", "/actuator/health")
+                .requestMatchers("/lifeevents", "/actuator/health", "/policies")
                 .permitAll()
                 .anyRequest()
                 .authenticated())

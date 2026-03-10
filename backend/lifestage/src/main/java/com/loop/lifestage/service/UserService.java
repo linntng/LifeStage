@@ -109,4 +109,24 @@ public class UserService {
       throw new RuntimeException("An error occurred while removing life event from the user", e);
     }
   }
+
+  @Transactional
+  public UserDTO addPolicyToUser(UserDTO userDTO, Long policyId) {
+    try {
+      userDTO.addPolicyById(policyId);
+      return updateUser(userDTO);
+    } catch (Exception e) {
+      throw new RuntimeException("An error occurred while adding policy to the user", e);
+    }
+  }
+
+  @Transactional
+  public UserDTO removePolicyForUser(UserDTO userDTO, Long policyId) {
+    try {
+      userDTO.removePolicyById(policyId);
+      return updateUser(userDTO);
+    } catch (Exception e) {
+      throw new RuntimeException("An error occurred while removing policy from the user", e);
+    }
+  }
 }
