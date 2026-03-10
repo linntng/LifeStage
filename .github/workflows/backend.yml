@@ -35,6 +35,9 @@ jobs:
       - name: Grant execute permissions to Maven Wrapper
         run: chmod +x mvnw
 
+      - name: Run tests
+        run: ./mvnw test
+
       - name: Build JAR file
         run: |
           ./mvnw clean package -DskipTests
