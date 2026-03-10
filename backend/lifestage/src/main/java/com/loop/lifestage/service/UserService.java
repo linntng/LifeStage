@@ -6,6 +6,7 @@ import com.loop.lifestage.exception.ResourceAlreadyExistsException;
 import com.loop.lifestage.exception.ResourceNotFoundException;
 import com.loop.lifestage.mapper.UserMapper;
 import com.loop.lifestage.model.user.User;
+import com.loop.lifestage.model.user.UserRole;
 import com.loop.lifestage.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
@@ -29,6 +30,7 @@ public class UserService {
   public UserDTO createUser(UserDTO userDTO) {
     try {
       User user = userMapper.toUser(userDTO);
+      if (user.getRole() == null) {user.setRole(UserRole.USER);}
       User savedUser = userRepository.save(user);
       return userMapper.toUserDTO(savedUser);
     } catch (DataIntegrityViolationException e) {
