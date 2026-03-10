@@ -303,6 +303,85 @@ class UserServiceTest {
 
       verify(userRepository).save(user);
     }
+
+    // =========================
+    // MANAGE POLICIES
+    // =========================
+
+    @Nested
+    class ManagePolicies {
+
+      @Test
+      void addPolicyToUser_shouldAddPolicyAndPersistUser() {
+
+        // Given
+        Long policyId = 20L;
+        userDTO.setPolicyIds(new java.util.HashSet<>());
+
+        when(userMapper.toUser(userDTO)).thenReturn(user);
+        when(userRepository.save(user)).thenReturn(user);
+        when(userMapper.toUserDTO(user)).thenReturn(userDTO);
+
+        // When
+        UserDTO result = userService.addPolicyToUser(userDTO, policyId);
+
+        // Then
+        assertTrue(userDTO.getPolicyIds().contains(policyId));
+        assertEquals(userDTO, result);
+
+        verify(userRepository).save(user);
+      }
+
+      @Test
+      void removePolicyForUser_shouldRemovePolicyAndPersistUser() {
+
+        // Given
+        Long policyId = 30L;
+        userDTO.setPolicyIds(new java.util.HashSet<>(java.util.List.of(policyId)));
+
+        when(userMapper.toUser(userDTO)).thenReturn(user);
+        when(userRepository.save(user)).thenReturn(user);
+        when(userMapper.toUserDTO(user)).thenReturn(userDTO);
+
+        // When
+        UserDTO result = userService.removePolicyForUser(userDTO, policyId);
+
+        // Then
+        assertFalse(userDTO.getPolicyIds().contains(policyId));
+        assertEquals(userDTO, result);
+
+        verify(userRepository).save(user);
+      }
+
+      @Test
+      void addPolicyToUser_shouldThrowRuntimeException_whenUpdateFails() {
+
+        // Given
+        Long policyId = 40L;
+        userDTO.setPolicyIds(new java.util.HashSet<>());
+
+        when(userMapper.toUser(userDTO)).thenReturn(user);
+        when(userRepository.save(user)).thenThrow(new RuntimeException());
+
+        // Then
+        assertThrows(RuntimeException.class, () -> userService.addPolicyToUser(userDTO, policyId));
+      }
+
+      @Test
+      void removePolicyForUser_shouldThrowRuntimeException_whenUpdateFails() {
+
+        // Given
+        Long policyId = 50L;
+        userDTO.setPolicyIds(new java.util.HashSet<>(java.util.List.of(policyId)));
+
+        when(userMapper.toUser(userDTO)).thenReturn(user);
+        when(userRepository.save(user)).thenThrow(new RuntimeException());
+
+        // Then
+        assertThrows(
+            RuntimeException.class, () -> userService.removePolicyForUser(userDTO, policyId));
+      }
+    }
   }
 
   // =========================
