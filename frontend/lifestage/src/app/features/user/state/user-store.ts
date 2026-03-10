@@ -38,6 +38,7 @@ export class UserStore {
 		this.userApi.getUserById(user.id).subscribe({
 			next: (user) => {
 				this.setCurrentUser(user);
+				console.log(user);
 				this.currentUserLoading.set(false);
 			},
 			error: (err) => {

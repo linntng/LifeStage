@@ -24,6 +24,7 @@ export class Lifeevents {
 
 	addEvent(event: Lifeevent) {
 		this.userStore.addLifeEventToCurrentUser(event.id);
+		console.log(this.userStore.currentUser());
 	}
 
 	removeEvent(event: Lifeevent) {
