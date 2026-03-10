@@ -77,8 +77,10 @@ public class UserService {
   @Transactional(readOnly = true)
   public List<UserDTO> getAllUsers(String adminId) {
     try {
-      User admin = userRepository.findById(adminId)
-        .orElseThrow(() -> new RuntimeException("Admin not found"));
+      User admin =
+          userRepository
+              .findById(adminId)
+              .orElseThrow(() -> new RuntimeException("Admin not found"));
       if (admin.getRole() == UserRole.ADMIN) {
         List<User> users = userRepository.findAll();
         return users.stream().map(userMapper::toUserDTO).collect(Collectors.toList());
@@ -143,10 +145,15 @@ public class UserService {
   @Transactional
   public UserDTO changeRoleOfUser(String userId, String adminId, UserRole role) {
     try {
-      User user = userRepository.findById(userId)
-          .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
-      User admin = userRepository.findById(adminId)
-          .orElseThrow(() -> new EntityNotFoundException("Admin not found with id: " + adminId));
+      User user =
+          userRepository
+              .findById(userId)
+              .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
+      User admin =
+          userRepository
+              .findById(adminId)
+              .orElseThrow(
+                  () -> new EntityNotFoundException("Admin not found with id: " + adminId));
       if (admin.getRole() == UserRole.ADMIN) {
         user.setRole(role);
         userRepository.save(user);
@@ -155,7 +162,7 @@ public class UserService {
         throw new RuntimeException("Could not change role of user: " + userId);
       }
     } catch (Exception e) {
-      throw new RuntimeException(e.getMessage(),e);
+      throw new RuntimeException(e.getMessage(), e);
     }
   }
 }

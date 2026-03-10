@@ -1,5 +1,6 @@
 package com.loop.lifestage.model.user;
 
+import com.loop.lifestage.model.LifeEvent;
 import com.loop.lifestage.model.policy.Policy;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,7 +12,6 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import java.util.Set;
-import com.loop.lifestage.model.LifeEvent;
 
 @Entity
 @Table(name = "users")

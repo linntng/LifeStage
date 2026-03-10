@@ -6,6 +6,7 @@ import com.loop.lifestage.service.UserService;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -26,7 +27,7 @@ public class UserController {
   }
 
   @GetMapping
-  public ResponseEntity<List<UserDTO>> getAllUsers(Jwt jwt) {
+  public ResponseEntity<List<UserDTO>> getAllUsers(@AuthenticationPrincipal Jwt jwt) {
     String sub = jwt.getSubject();
     return ResponseEntity.ok(userService.getAllUsers(sub));
   }
@@ -79,7 +80,7 @@ public class UserController {
 
   @PatchMapping("/{id}/role")
   public ResponseEntity<UserDTO> changeRoleOfUser(
-      @PathVariable String id, @RequestBody String role, Jwt jwt) {
+      @PathVariable String id, @RequestBody String role, @AuthenticationPrincipal Jwt jwt) {
     String sub = jwt.getSubject();
     return ResponseEntity.ok(userService.changeRoleOfUser(id, sub, UserRole.valueOf(role)));
   }

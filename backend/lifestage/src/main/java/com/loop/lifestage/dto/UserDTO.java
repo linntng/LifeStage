@@ -1,7 +1,7 @@
 package com.loop.lifestage.dto;
 
-import java.util.Set;
 import com.loop.lifestage.model.user.UserRole;
+import java.util.Set;
 
 public class UserDTO {
   private String id;

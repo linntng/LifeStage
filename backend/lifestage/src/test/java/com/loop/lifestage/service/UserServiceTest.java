@@ -194,73 +194,73 @@ class UserServiceTest {
     }
   }
 
-// =========================
-// GET ALL USERS
-// =========================
+  // =========================
+  // GET ALL USERS
+  // =========================
 
-@Nested
-class GetAllUsers {
+  @Nested
+  class GetAllUsers {
 
-  @Test
-  void shouldReturnAllUsersWhenAdminRequests() {
+    @Test
+    void shouldReturnAllUsersWhenAdminRequests() {
 
-    // Given
-    User admin = createUser();
-    admin.setRole(UserRole.ADMIN);
+      // Given
+      User admin = createUser();
+      admin.setRole(UserRole.ADMIN);
 
-    when(userRepository.findById("1")).thenReturn(Optional.of(admin));
-    when(userRepository.findAll()).thenReturn(java.util.List.of(user));
-    when(userMapper.toUserDTO(user)).thenReturn(userDTO);
+      when(userRepository.findById("1")).thenReturn(Optional.of(admin));
+      when(userRepository.findAll()).thenReturn(java.util.List.of(user));
+      when(userMapper.toUserDTO(user)).thenReturn(userDTO);
 
-    // When
-    var result = userService.getAllUsers("1");
+      // When
+      var result = userService.getAllUsers("1");
 
-    // Then
-    assertEquals(1, result.size());
-    assertEquals(userDTO, result.get(0));
+      // Then
+      assertEquals(1, result.size());
+      assertEquals(userDTO, result.get(0));
 
-    verify(userRepository).findById("1");
-    verify(userRepository).findAll();
+      verify(userRepository).findById("1");
+      verify(userRepository).findAll();
+    }
+
+    @Test
+    void shouldThrowRuntimeExceptionWhenAdminNotFound() {
+
+      // Given
+      when(userRepository.findById("1")).thenReturn(Optional.empty());
+
+      // Then
+      assertThrows(RuntimeException.class, () -> userService.getAllUsers("1"));
+
+      verify(userRepository).findById("1");
+    }
+
+    @Test
+    void shouldThrowRuntimeExceptionWhenUserIsNotAdmin() {
+
+      // Given
+      User normalUser = createUser();
+      normalUser.setRole(UserRole.USER);
+
+      when(userRepository.findById("1")).thenReturn(Optional.of(normalUser));
+
+      // Then
+      assertThrows(RuntimeException.class, () -> userService.getAllUsers("1"));
+
+      verify(userRepository).findById("1");
+      verify(userRepository, never()).findAll();
+    }
+
+    @Test
+    void shouldThrowRuntimeExceptionWhenRepositoryFails() {
+
+      // Given
+      when(userRepository.findById("1")).thenThrow(new RuntimeException());
+
+      // Then
+      assertThrows(RuntimeException.class, () -> userService.getAllUsers("1"));
+    }
   }
-
-  @Test
-  void shouldThrowRuntimeExceptionWhenAdminNotFound() {
-
-    // Given
-    when(userRepository.findById("1")).thenReturn(Optional.empty());
-
-    // Then
-    assertThrows(RuntimeException.class, () -> userService.getAllUsers("1"));
-
-    verify(userRepository).findById("1");
-  }
-
-  @Test
-  void shouldThrowRuntimeExceptionWhenUserIsNotAdmin() {
-
-    // Given
-    User normalUser = createUser();
-    normalUser.setRole(UserRole.USER);
-
-    when(userRepository.findById("1")).thenReturn(Optional.of(normalUser));
-
-    // Then
-    assertThrows(RuntimeException.class, () -> userService.getAllUsers("1"));
-
-    verify(userRepository).findById("1");
-    verify(userRepository, never()).findAll();
-  }
-
-  @Test
-  void shouldThrowRuntimeExceptionWhenRepositoryFails() {
-
-    // Given
-    when(userRepository.findById("1")).thenThrow(new RuntimeException());
-
-    // Then
-    assertThrows(RuntimeException.class, () -> userService.getAllUsers("1"));
-  }
-}
 
   // =========================
   // DELETE USER
@@ -419,85 +419,89 @@ class GetAllUsers {
     }
 
     // =========================
-// CHANGE USER ROLE
-// =========================
+    // CHANGE USER ROLE
+    // =========================
 
-@Nested
-class ChangeRoleOfUser {
+    @Nested
+    class ChangeRoleOfUser {
 
-  @Test
-  void shouldChangeUserRoleWhenAdminRequests() {
+      @Test
+      void shouldChangeUserRoleWhenAdminRequests() {
 
-    // Given
-    User admin = createUser();
-    admin.setRole(UserRole.ADMIN);
+        // Given
+        User admin = createUser();
+        admin.setRole(UserRole.ADMIN);
 
-    when(userRepository.findById("user1")).thenReturn(Optional.of(user));
-    when(userRepository.findById("admin1")).thenReturn(Optional.of(admin));
-    when(userRepository.save(user)).thenReturn(user);
-    when(userMapper.toUserDTO(user)).thenReturn(userDTO);
+        when(userRepository.findById("user1")).thenReturn(Optional.of(user));
+        when(userRepository.findById("admin1")).thenReturn(Optional.of(admin));
+        when(userRepository.save(user)).thenReturn(user);
+        when(userMapper.toUserDTO(user)).thenReturn(userDTO);
 
-    // When
-    UserDTO result = userService.changeRoleOfUser("user1", "admin1", UserRole.ADMIN);
+        // When
+        UserDTO result = userService.changeRoleOfUser("user1", "admin1", UserRole.ADMIN);
 
-    // Then
-    assertEquals(userDTO, result);
-    assertEquals(UserRole.ADMIN, user.getRole());
+        // Then
+        assertEquals(userDTO, result);
+        assertEquals(UserRole.ADMIN, user.getRole());
 
-    verify(userRepository).save(user);
-  }
+        verify(userRepository).save(user);
+      }
 
-  @Test
-  void shouldThrowRuntimeExceptionWhenUserNotFound() {
+      @Test
+      void shouldThrowRuntimeExceptionWhenUserNotFound() {
 
-    // Given
-    when(userRepository.findById("user1")).thenReturn(Optional.empty());
+        // Given
+        when(userRepository.findById("user1")).thenReturn(Optional.empty());
 
-    // Then
-    assertThrows(RuntimeException.class,
-        () -> userService.changeRoleOfUser("user1", "admin1", UserRole.ADMIN));
-  }
+        // Then
+        assertThrows(
+            RuntimeException.class,
+            () -> userService.changeRoleOfUser("user1", "admin1", UserRole.ADMIN));
+      }
 
-  @Test
-  void shouldThrowRuntimeExceptionWhenAdminNotFound() {
+      @Test
+      void shouldThrowRuntimeExceptionWhenAdminNotFound() {
 
-    // Given
-    when(userRepository.findById("user1")).thenReturn(Optional.of(user));
-    when(userRepository.findById("admin1")).thenReturn(Optional.empty());
+        // Given
+        when(userRepository.findById("user1")).thenReturn(Optional.of(user));
+        when(userRepository.findById("admin1")).thenReturn(Optional.empty());
 
-    // Then
-    assertThrows(RuntimeException.class,
-        () -> userService.changeRoleOfUser("user1", "admin1", UserRole.ADMIN));
-  }
+        // Then
+        assertThrows(
+            RuntimeException.class,
+            () -> userService.changeRoleOfUser("user1", "admin1", UserRole.ADMIN));
+      }
 
-  @Test
-  void shouldThrowRuntimeExceptionWhenRequesterIsNotAdmin() {
+      @Test
+      void shouldThrowRuntimeExceptionWhenRequesterIsNotAdmin() {
 
-    // Given
-    User normalUser = createUser();
-    normalUser.setRole(UserRole.USER);
+        // Given
+        User normalUser = createUser();
+        normalUser.setRole(UserRole.USER);
 
-    when(userRepository.findById("user1")).thenReturn(Optional.of(user));
-    when(userRepository.findById("admin1")).thenReturn(Optional.of(normalUser));
+        when(userRepository.findById("user1")).thenReturn(Optional.of(user));
+        when(userRepository.findById("admin1")).thenReturn(Optional.of(normalUser));
 
-    // Then
-    assertThrows(RuntimeException.class,
-        () -> userService.changeRoleOfUser("user1", "admin1", UserRole.ADMIN));
+        // Then
+        assertThrows(
+            RuntimeException.class,
+            () -> userService.changeRoleOfUser("user1", "admin1", UserRole.ADMIN));
 
-    verify(userRepository, never()).save(user);
-  }
+        verify(userRepository, never()).save(user);
+      }
 
-  @Test
-  void shouldThrowRuntimeExceptionWhenRepositoryFails() {
+      @Test
+      void shouldThrowRuntimeExceptionWhenRepositoryFails() {
 
-    // Given
-    when(userRepository.findById("user1")).thenThrow(new RuntimeException());
+        // Given
+        when(userRepository.findById("user1")).thenThrow(new RuntimeException());
 
-    // Then
-    assertThrows(RuntimeException.class,
-        () -> userService.changeRoleOfUser("user1", "admin1", UserRole.ADMIN));
-  }
-}
+        // Then
+        assertThrows(
+            RuntimeException.class,
+            () -> userService.changeRoleOfUser("user1", "admin1", UserRole.ADMIN));
+      }
+    }
   }
 
   // =========================
