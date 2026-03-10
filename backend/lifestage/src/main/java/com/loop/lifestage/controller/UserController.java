@@ -1,5 +1,7 @@
 package com.loop.lifestage.controller;
 
+import com.loop.lifestage.dto.UserDTO;
+import com.loop.lifestage.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,9 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.loop.lifestage.dto.UserDTO;
-import com.loop.lifestage.service.UserService;
+import org.springframework.security.oauth2.jwt.Jwt;
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -23,6 +24,12 @@ public class UserController {
     this.userService = userService;
   }
 
+  @GetMapping
+  public ResponseEntity<List<UserDTO>> getAllUsers(Jwt jwt) {
+    String sub = jwt.getSubject();
+    return ResponseEntity.ok(userService.getAllUsers(sub));
+  }
+
   @GetMapping("/{id}")
   @PreAuthorize("#id == authentication.token.claims['sub']")
   public ResponseEntity<UserDTO> getUserById(@PathVariable String id) {
@@ -31,7 +38,7 @@ public class UserController {
 
   @PostMapping
   public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
-    
+
     return ResponseEntity.ok(userService.createUser(userDTO));
   }
 
@@ -67,5 +74,11 @@ public class UserController {
 
     UserDTO userDTO = userService.getUserById(id);
     return ResponseEntity.ok(userService.removePolicyForUser(userDTO, policyId));
+  }
+
+  @PatchMapping("/{id}/role")
+  public ResponseEntity<UserDTO> changeRoleOfUser(@PathVariable String id, @RequestBody UserDTO user, Jwt jwt) {
+    String sub = jwt.getSubject();
+    return ResponseEntity.ok(userService.changeRoleOfUser(id, sub, user.getRole()));
   }
 }
