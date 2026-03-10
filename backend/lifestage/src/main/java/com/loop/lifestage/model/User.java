@@ -8,7 +8,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -27,7 +26,7 @@ public class User {
       name = "user_life_events",
       joinColumns = @JoinColumn(name = "user_id"),
       inverseJoinColumns = @JoinColumn(name = "life_event_id"))
-  private List<LifeEvent> lifeEvents;
+  private Set<LifeEvent> lifeEvents;
 
   @ManyToMany
   @JoinTable(
@@ -38,7 +37,7 @@ public class User {
 
   public User() {}
 
-  public User(String id, String username, List<LifeEvent> lifeEvents) {
+  public User(String id, String username, Set<LifeEvent> lifeEvents) {
     this.id = id;
     this.username = username;
     this.lifeEvents = lifeEvents;
@@ -60,11 +59,11 @@ public class User {
     this.username = username;
   }
 
-  public List<LifeEvent> getLifeEvents() {
+  public Set<LifeEvent> getLifeEvents() {
     return lifeEvents;
   }
 
-  public void setLifeEvents(List<LifeEvent> lifeEvents) {
+  public void setLifeEvents(Set<LifeEvent> lifeEvents) {
     this.lifeEvents = lifeEvents;
   }
 

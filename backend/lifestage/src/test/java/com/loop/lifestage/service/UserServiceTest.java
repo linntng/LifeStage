@@ -267,7 +267,7 @@ class UserServiceTest {
 
       // Given
       Long eventId = 10L;
-      userDTO.setLifeEventIds(new java.util.ArrayList<>());
+      userDTO.setLifeEventIds(new java.util.HashSet<>());
 
       when(userMapper.toUser(userDTO)).thenReturn(user);
       when(userRepository.save(user)).thenReturn(user);
@@ -288,7 +288,7 @@ class UserServiceTest {
 
       // Given
       Long eventId = 5L;
-      userDTO.setLifeEventIds(new java.util.ArrayList<>(java.util.List.of(eventId)));
+      userDTO.setLifeEventIds(new java.util.HashSet<>(java.util.List.of(eventId)));
 
       when(userMapper.toUser(userDTO)).thenReturn(user);
       when(userRepository.save(user)).thenReturn(user);
