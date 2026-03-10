@@ -1,5 +1,6 @@
 package com.loop.lifestage.model;
 
+import com.loop.lifestage.model.policy.Policy;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -7,7 +8,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -25,11 +26,18 @@ public class User {
       name = "user_life_events",
       joinColumns = @JoinColumn(name = "user_id"),
       inverseJoinColumns = @JoinColumn(name = "life_event_id"))
-  private List<LifeEvent> lifeEvents;
+  private Set<LifeEvent> lifeEvents;
+
+  @ManyToMany
+  @JoinTable(
+      name = "user_policies",
+      joinColumns = @JoinColumn(name = "user_id"),
+      inverseJoinColumns = @JoinColumn(name = "policy_id"))
+  private Set<Policy> policies;
 
   public User() {}
 
-  public User(String id, String username, List<LifeEvent> lifeEvents) {
+  public User(String id, String username, Set<LifeEvent> lifeEvents) {
     this.id = id;
     this.username = username;
     this.lifeEvents = lifeEvents;
@@ -51,15 +59,27 @@ public class User {
     this.username = username;
   }
 
-  public List<LifeEvent> getLifeEvents() {
+  public Set<LifeEvent> getLifeEvents() {
     return lifeEvents;
   }
 
-  public void setLifeEvents(List<LifeEvent> lifeEvents) {
+  public void setLifeEvents(Set<LifeEvent> lifeEvents) {
     this.lifeEvents = lifeEvents;
   }
 
   public void addLifeEvent(LifeEvent lifeEvent) {
     this.lifeEvents.add(lifeEvent);
+  }
+
+  public Set<Policy> getPolicies() {
+    return this.policies;
+  }
+
+  public void setPolicies(Set<Policy> policies) {
+    this.policies = policies;
+  }
+
+  public void addPolicy(Policy policy) {
+    this.policies.add(policy);
   }
 }

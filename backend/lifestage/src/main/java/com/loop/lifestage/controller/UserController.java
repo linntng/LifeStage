@@ -50,4 +50,22 @@ public class UserController {
     UserDTO userDTO = userService.getUserById(id);
     return ResponseEntity.ok(userService.removeLifeEventForUser(userDTO, lifeEventId));
   }
+
+  @PostMapping("/{id}/policies")
+  @PreAuthorize("#id == authentication.token.claims['sub']")
+  public ResponseEntity<UserDTO> addPolicyToUser(
+      @PathVariable String id, @RequestBody Long policyId) {
+
+    UserDTO userDTO = userService.getUserById(id);
+    return ResponseEntity.ok(userService.addPolicyToUser(userDTO, policyId));
+  }
+
+  @PatchMapping("/{id}/policies/{policyId}")
+  @PreAuthorize("#id == authentication.token.claims['sub']")
+  public ResponseEntity<UserDTO> removePolicyForUser(
+      @PathVariable String id, @PathVariable Long policyId) {
+
+    UserDTO userDTO = userService.getUserById(id);
+    return ResponseEntity.ok(userService.removePolicyForUser(userDTO, policyId));
+  }
 }
