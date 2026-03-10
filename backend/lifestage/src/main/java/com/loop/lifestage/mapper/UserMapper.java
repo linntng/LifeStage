@@ -2,7 +2,7 @@ package com.loop.lifestage.mapper;
 
 import com.loop.lifestage.dto.UserDTO;
 import com.loop.lifestage.model.LifeEvent;
-import com.loop.lifestage.model.User;
+import com.loop.lifestage.model.user.User;
 import com.loop.lifestage.model.policy.Policy;
 import java.util.Set;
 import java.util.stream.Collectors;

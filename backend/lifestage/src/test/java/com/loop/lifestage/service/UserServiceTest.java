@@ -8,7 +8,7 @@ import com.loop.lifestage.exception.BadRequestException;
 import com.loop.lifestage.exception.ResourceAlreadyExistsException;
 import com.loop.lifestage.exception.ResourceNotFoundException;
 import com.loop.lifestage.mapper.UserMapper;
-import com.loop.lifestage.model.User;
+import com.loop.lifestage.model.user.User;
 import com.loop.lifestage.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.Optional;

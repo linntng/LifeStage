@@ -10,6 +10,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import java.util.List;
 import java.util.Set;
+import com.loop.lifestage.model.user.User;
 
 @Entity
 @Table(name = "life_events")
