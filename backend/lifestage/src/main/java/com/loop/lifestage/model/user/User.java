@@ -89,4 +89,12 @@ public class User {
   public void addPolicy(Policy policy) {
     this.policies.add(policy);
   }
+
+  public UserRole getRole() {
+    return this.role;
+  }
+
+  public void setRole(UserRole role) {
+    this.role = role;
+  }
 }

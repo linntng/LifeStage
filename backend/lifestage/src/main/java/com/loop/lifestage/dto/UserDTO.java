@@ -64,4 +64,12 @@ public class UserDTO {
   public void removePolicyById(Long policyId) {
     this.policyIds.remove(policyId);
   }
+
+  public UserRole getRole() {
+    return this.role;
+  }
+
+  public void setRole(UserRole role) {
+    this.role = role;
+  }
 }
