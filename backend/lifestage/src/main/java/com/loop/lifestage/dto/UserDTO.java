@@ -59,4 +59,8 @@ public class UserDTO {
   public void addPolicyById(Long policyId) {
     this.policyIds.add(policyId);
   }
+
+  public void removePolicyById(Long policyId) {
+    this.policyIds.remove(policyId);
+  }
 }
