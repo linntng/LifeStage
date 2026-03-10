@@ -1,9 +1,12 @@
 package com.loop.lifestage.controller;
 
 import com.loop.lifestage.dto.UserDTO;
+import com.loop.lifestage.model.user.UserRole;
 import com.loop.lifestage.service.UserService;
+import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,8 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.security.oauth2.jwt.Jwt;
-import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -77,8 +78,9 @@ public class UserController {
   }
 
   @PatchMapping("/{id}/role")
-  public ResponseEntity<UserDTO> changeRoleOfUser(@PathVariable String id, @RequestBody UserDTO user, Jwt jwt) {
+  public ResponseEntity<UserDTO> changeRoleOfUser(
+      @PathVariable String id, @RequestBody String role, Jwt jwt) {
     String sub = jwt.getSubject();
-    return ResponseEntity.ok(userService.changeRoleOfUser(id, sub, user.getRole()));
+    return ResponseEntity.ok(userService.changeRoleOfUser(id, sub, UserRole.valueOf(role)));
   }
 }
