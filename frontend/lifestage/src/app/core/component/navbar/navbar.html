@@ -9,13 +9,17 @@
 	</div>
 
 	<!-- Navigation Links -->
-	<div *ngIf="userStore.currentUser()?.role === 'USER'" class="m-4 hidden md:flex">
-		<a routerLink="/lifeevents">Life events</a>
-	</div>
+	@if (userStore.currentUser()?.role === 'USER') {
+		<div class="m-4 hidden md:flex">
+			<a routerLink="/lifeevents">Life events</a>
+		</div>
+	}
 
-	<div *ngIf="userStore.currentUser()?.role === 'ADMIN'" class="m-4 hidden md:flex">
-		<a routerLink="/admin">Admin</a>
-	</div>
+	@if (userStore.currentUser()?.role === 'ADMIN') {
+		<div class="m-4 hidden md:flex">
+			<a routerLink="/admin">Admin</a>
+		</div>
+	}
 	<!-- Optional CTA -->
 	<div class="m-4 hidden md:flex">
 		<app-login-button></app-login-button>
@@ -30,10 +34,13 @@
 	[class.translate-x-full]="!menuOpen"
 	[class.opacity-0]="!menuOpen"
 >
-	<a *ngIf="userStore.currentUser()?.role === 'USER'" class="m-1" routerLink="/lifeevents"
-		>Life events</a
-	>
-	<a *ngIf="userStore.currentUser()?.role === 'ADMIN'" class="m-1" routerLink="/admin">Admin</a>
+	@if (userStore.currentUser()?.role === 'USER') {
+		<a class="m-1" routerLink="/lifeevents">Life events</a>
+	}
+
+	@if (userStore.currentUser()?.role === 'ADMIN') {
+		<a class="m-1" routerLink="/admin">Admin</a>
+	}
 
 	<app-login-button class="m-2"></app-login-button>
 </div>
