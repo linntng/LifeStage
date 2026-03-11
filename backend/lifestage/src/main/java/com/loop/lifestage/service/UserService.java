@@ -5,7 +5,8 @@ import com.loop.lifestage.exception.BadRequestException;
 import com.loop.lifestage.exception.ResourceAlreadyExistsException;
 import com.loop.lifestage.exception.ResourceNotFoundException;
 import com.loop.lifestage.mapper.UserMapper;
-import com.loop.lifestage.model.User;
+import com.loop.lifestage.model.user.User;
+import com.loop.lifestage.model.user.UserRole;
 import com.loop.lifestage.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
@@ -29,6 +30,9 @@ public class UserService {
   public UserDTO createUser(UserDTO userDTO) {
     try {
       User user = userMapper.toUser(userDTO);
+      if (user.getRole() == null) {
+        user.setRole(UserRole.USER);
+      }
       User savedUser = userRepository.save(user);
       return userMapper.toUserDTO(savedUser);
     } catch (DataIntegrityViolationException e) {
@@ -71,12 +75,20 @@ public class UserService {
   }
 
   @Transactional(readOnly = true)
-  public List<UserDTO> getAllUsers() {
+  public List<UserDTO> getAllUsers(String adminId) {
     try {
-      List<User> users = userRepository.findAll();
-      return users.stream().map(userMapper::toUserDTO).collect(Collectors.toList());
+      User admin =
+          userRepository
+              .findById(adminId)
+              .orElseThrow(() -> new RuntimeException("Admin not found"));
+      if (admin.getRole() == UserRole.ADMIN) {
+        List<User> users = userRepository.findAll();
+        return users.stream().map(userMapper::toUserDTO).collect(Collectors.toList());
+      } else {
+        throw new RuntimeException("Only admins can access all users");
+      }
     } catch (Exception e) {
-      throw new RuntimeException("An error occurred while retrieving users", e);
+      throw new RuntimeException(e.getMessage(), e);
     }
   }
 
@@ -127,6 +139,30 @@ public class UserService {
       return updateUser(userDTO);
     } catch (Exception e) {
       throw new RuntimeException("An error occurred while removing policy from the user", e);
+    }
+  }
+
+  @Transactional
+  public UserDTO changeRoleOfUser(String userId, String adminId, UserRole role) {
+    try {
+      User user =
+          userRepository
+              .findById(userId)
+              .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
+      User admin =
+          userRepository
+              .findById(adminId)
+              .orElseThrow(
+                  () -> new EntityNotFoundException("Admin not found with id: " + adminId));
+      if (admin.getRole() == UserRole.ADMIN) {
+        user.setRole(role);
+        userRepository.save(user);
+        return userMapper.toUserDTO(user);
+      } else {
+        throw new RuntimeException("Could not change role of user: " + userId);
+      }
+    } catch (Exception e) {
+      throw new RuntimeException(e.getMessage(), e);
     }
   }
 }

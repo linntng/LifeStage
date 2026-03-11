@@ -71,6 +71,8 @@ export class Auth {
 			username: userInfo!['preferred_username'],
 			lifeEventIds: [],
 			policyIds: [],
+			role: 'USER',
+      
 		};
 		return user;
 	}

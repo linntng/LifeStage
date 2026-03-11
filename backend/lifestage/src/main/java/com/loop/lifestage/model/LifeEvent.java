@@ -1,6 +1,7 @@
 package com.loop.lifestage.model;
 
 import com.loop.lifestage.model.policy.Policy;
+import com.loop.lifestage.model.user.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
