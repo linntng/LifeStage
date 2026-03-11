@@ -20,9 +20,7 @@
 				width="24"
 				height="24"
 			/>
-
-			{{ firstToUppercase(event?.name || '') }}
-
+			{{ (event?.name | capitalize) || '' }}
 			<button
 				(click)="removeEvent(event)"
 				(keydown.enter)="removeEvent(event)"
@@ -60,9 +58,7 @@
 				width="24"
 				height="24"
 			/>
-
-			{{ firstToUppercase(event?.name || '') }}
-
+			{{ (event?.name | capitalize) || '' }}
 			<button
 				(click)="addEvent(event)"
 				(keydown.enter)="addEvent(event)"

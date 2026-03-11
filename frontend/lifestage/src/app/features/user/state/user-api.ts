@@ -7,6 +7,7 @@ export interface User {
 	id: string;
 	username: string;
 	lifeEventIds: number[]; // List of life event IDs associated with the user
+	policyIds: number[];
 	role: 'ADMIN' | 'USER' | 'CASE_HANDLER' | 'RISK_ANALYST' | null;
 }
 
@@ -53,8 +54,20 @@ export class UserApi {
 		});
 	}
 
+	addPolicyToUser(userId: string, policyId: number) {
+		return this.http.post(`${this.userUrl}/${userId}/policies`, policyId, {
+			headers: this.getAuthHeaders(),
+		});
+	}
+
 	getAllUsers() {
 		return this.http.get<User[]>(`${this.userUrl}`, {
+			headers: this.getAuthHeaders(),
+		});
+	}
+
+	removePolicyFromUser(userId: string, policyId: number) {
+		return this.http.patch(`${this.userUrl}/${userId}/policies/${policyId}`, null, {
 			headers: this.getAuthHeaders(),
 		});
 	}

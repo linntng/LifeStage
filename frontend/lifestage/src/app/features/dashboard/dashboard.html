@@ -1,0 +1,13 @@
+<h1 class="mt-5 mb-20">{{ 'Hello, ' + auth.keycloakName() + '!' }}</h1>
+<div class="mb-30">
+	<h2>Life events</h2>
+	<section>
+		@for (event of userLifeevents(); track event) {
+			<li>{{ event.name }}</li>
+		}
+	</section>
+</div>
+<div>
+	<h2>Policies</h2>
+	<section></section>
+</div>

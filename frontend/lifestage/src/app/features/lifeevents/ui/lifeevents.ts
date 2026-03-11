@@ -3,10 +3,11 @@ import { LifeeventStore } from '../state/lifeevent-store';
 import { CommonModule } from '@angular/common';
 import { UserStore } from '../../user/state/user-store';
 import { Lifeevent } from '../state/lifeevent-api';
+import { CapitalizePipe } from '../../../shared/capitalize-pipe';
 
 @Component({
 	selector: 'app-lifeevents',
-	imports: [CommonModule],
+	imports: [CommonModule, CapitalizePipe],
 	templateUrl: './lifeevents.html',
 })
 export class Lifeevents {
@@ -24,6 +25,7 @@ export class Lifeevents {
 
 	addEvent(event: Lifeevent) {
 		this.userStore.addLifeEventToCurrentUser(event.id);
+		console.log(this.userStore.currentUser());
 	}
 
 	removeEvent(event: Lifeevent) {
@@ -32,10 +34,6 @@ export class Lifeevents {
 
 	addMarriage() {
 		this.userStore.addLifeEventToCurrentUser(286);
-	}
-
-	firstToUppercase(str: string) {
-		return str.charAt(0).toUpperCase() + str.slice(1);
 	}
 
 	toggleEventInfoBar(id: number) {
