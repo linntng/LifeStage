@@ -5,66 +5,86 @@
 	</header>
 
 	<!-- Search / Filters -->
-	<section class="w-full max-w-md">
+	<section class="max-w-md w-full">
 		<input
 			type="text"
 			placeholder="Search users..."
 			[(ngModel)]="searchTerm"
 			(input)="filterUsers()"
-			class="w-full border rounded-md"
+			class="w-full pl-10 pr-3 py-2 border rounded-md bg-no-repeat bg-[length:20px] bg-[position:8px_center] bg-[url('/svg/search.svg')]"
 		/>
 	</section>
 
 	<!-- USER LIST PAGE -->
-	<section *ngIf="!editingUser" class="w-full max-w-xl">
-		<h2>User List</h2>
+	<section *ngIf="!editingUser" class="w-full max-w-xl mx-auto bg-white shadow rounded-lg p-6">
+		<h2 class="text-xl font-semibold mb-4">User List</h2>
 
-		<table>
+		<table class="w-full border-collapse">
 			<thead>
-				<tr>
-					<th>ID</th>
-					<th>Name</th>
-					<th>Role</th>
-					<th></th>
+				<tr class="text-left border-b text-gray-600">
+					<th class="py-2 px-4">ID</th>
+					<th class="py-2 px-4">Name</th>
+					<th class="py-2 px-4">Role</th>
+					<th class="py-2 px-4"></th>
 				</tr>
 			</thead>
 
 			<tbody>
-				<tr *ngFor="let user of filteredUsers">
-					<td>{{ user.id }}</td>
-					<td>{{ user.username }}</td>
-					<td>{{ user.role }}</td>
-					<td>
-						<button (click)="editingUser = user">Edit</button>
+				<tr *ngFor="let user of filteredUsers" class="border-b hover:bg-gray-50">
+					<td class="py-2 px-4">{{ user.id }}</td>
+					<td class="py-2 px-4">{{ user.username }}</td>
+					<td class="py-2 px-4">
+						<span class="px-2 py-1 text-sm bg-gray-100 rounded">
+							{{ user.role }}
+						</span>
+					</td>
+					<td class="py-2 px-4 text-right">
+						<button
+							(click)="editingUser = user"
+							class="px-3 py-1 text-sm bg-secondary text-gray-700 rounded hover:bg-secondary-hover transition"
+						>
+							Edit
+						</button>
 					</td>
 				</tr>
 
 				<tr *ngIf="filteredUsers.length === 0">
-					<td colspan="4">No users found</td>
+					<td colspan="4" class="py-4 text-center text-gray-500">No users found</td>
 				</tr>
 			</tbody>
 		</table>
 	</section>
 
 	<!-- EDIT USER PAGE -->
-	<section *ngIf="editingUser">
-		<h2>Edit User</h2>
+	<section *ngIf="editingUser" class="w-full max-w-md mx-auto bg-white shadow rounded-lg p-6">
+		<h2 class="text-xl font-semibold mb-4">Edit User</h2>
 
-		<div>
-			<p>ID: {{ editingUser.id }}</p>
-			<p>Name: {{ editingUser.username }}</p>
+		<div class="mb-4 text-sm text-gray-700 space-y-1">
+			<p><span class="font-medium">ID:</span> {{ editingUser.id }}</p>
+			<p><span class="font-medium">Name:</span> {{ editingUser.username }}</p>
 		</div>
 
-		<div>
-			<label *ngFor="let role of userRoles">
+		<div class="space-y-2 mb-6">
+			<label *ngFor="let role of userRoles" class="flex items-center gap-2 cursor-pointer">
 				<input type="radio" name="role" [value]="role" [(ngModel)]="selectedRole" />
-				{{ role }}
+				<span>{{ role }}</span>
 			</label>
 		</div>
 
-		<div>
-			<button (click)="changeRole(); editingUser = null; selectedRole = null">Submit</button>
-			<button (click)="editingUser = null; selectedRole = null">Cancel</button>
+		<div class="flex gap-3">
+			<button
+				(click)="changeRole(); editingUser = null; selectedRole = null"
+				class="px-4 py-2 bg-secondary-active text-gray-700 rounded hover:bg-secondary-hover transition"
+			>
+				Change Role
+			</button>
+
+			<button
+				(click)="editingUser = null; selectedRole = null"
+				class="px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition"
+			>
+				Cancel
+			</button>
 		</div>
 	</section>
 </div>
