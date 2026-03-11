@@ -18,6 +18,4 @@ export class Policies {
 		const policyIds = new Set(this.user.currentUser()?.policyIds || []);
 		return this.policiesStore.policies()?.filter((policy) => !policyIds.has(policy.id));
 	});
-
-	addPolicy() {}
 }
