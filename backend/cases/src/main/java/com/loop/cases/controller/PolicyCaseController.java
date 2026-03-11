@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.loop.cases.model.PolicyCase;
 import com.loop.cases.service.PolicyCaseService;
 
-import reactor.core.publisher.Mono;
-
 @RestController
 @RequestMapping("/cases")
 public class PolicyCaseController {
@@ -26,9 +24,9 @@ public class PolicyCaseController {
     }
 
     @GetMapping
-    public Mono<ResponseEntity<Set<PolicyCase>>> getAllPolicyCases(Authentication authentication, @RequestHeader("Authorization") String token) {
+    public ResponseEntity<Set<PolicyCase>> getAllPolicyCases(Authentication authentication, @RequestHeader("Authorization") String token) {
         Jwt jwt = (Jwt) authentication.getPrincipal();
         String userId = jwt.getClaim("sub");
-        return policyCaseService.getAllPolicyCases(userId, token).map(ResponseEntity::ok);
+        return ResponseEntity.ok(policyCaseService.getAllPolicyCases(userId, token));
     }
 }
