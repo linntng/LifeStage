@@ -22,6 +22,9 @@ public class LifeEvent {
   @Column(nullable = false)
   private String name;
 
+  @Column
+  private String description;
+
   @ManyToMany(mappedBy = "lifeEvents")
   private List<User> users;
 
@@ -71,5 +74,13 @@ public class LifeEvent {
 
   public void addCoveringPolicy(Policy policy) {
     this.coveringPolicies.add(policy);
+  }
+
+    public String getDescription() {
+    return this.description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
   }
 }
