@@ -1,11 +1,12 @@
 DELETE FROM life_events;
-INSERT INTO life_events (name)
+
+INSERT INTO life_events (name, description)
 VALUES
-    ('marriage'),
-    ('childbirth'),
-    ('property purchase'),
-    ('employment change'),
-    ('temporary move abroad');
+    ('marriage', 'Getting legally married to a partner'),
+    ('childbirth', 'Birth or adoption of a child'),
+    ('property purchase', 'Buying a house, apartment, or other property'),
+    ('employment change', 'Starting a new job or changing employer'),
+    ('temporary move abroad', 'Living abroad for a limited period of time');
 
     
 DELETE FROM policy_life_events;

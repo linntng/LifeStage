@@ -3,8 +3,9 @@
 	@if (userLifeevents()?.length === 0) {
 		<p class="p-5">You haven't added any life events yet.</p>
 	}
+
 	@for (event of userLifeevents(); track event) {
-		<article class="info-bar">
+		<article class="info-bar flex flex-wrap">
 			<img
 				(click)="toggleEventInfoBar(event.id)"
 				(keydown.enter)="toggleEventInfoBar(event.id)"
@@ -28,19 +29,26 @@
 			>
 				Remove
 			</button>
+
+			@if (selectedEventInfoBar() === event.id) {
+				<div class="w-full mt-2 ml-8 text-gray-700 leading-relaxed text-center">
+					{{ event.description }}
+				</div>
+			}
 		</article>
 	}
 </section>
-
 <section>
 	<h2>Add a life event</h2>
+
 	@for (event of remainingLifeevents(); track event) {
-		<article class="info-bar">
+		<article class="info-bar flex flex-wrap">
 			<img
 				(click)="toggleEventInfoBar(event.id)"
 				(keydown.enter)="toggleEventInfoBar(event.id)"
 				(keydown.space)="toggleEventInfoBar(event.id)"
 				tabindex="0"
+				class="cursor-pointer"
 				[src]="
 					selectedEventInfoBar() === event.id
 						? 'svg/info-circle-fill.svg'
@@ -59,6 +67,12 @@
 			>
 				Add
 			</button>
+
+			@if (selectedEventInfoBar() === event.id) {
+				<div class="w-full mt-2 text-center text-gray-700 leading-relaxed">
+					{{ event.description }}
+				</div>
+			}
 		</article>
 	}
 </section>

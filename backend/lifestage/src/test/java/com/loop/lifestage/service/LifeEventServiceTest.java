@@ -53,6 +53,7 @@ class LifeEventServiceTest {
     assertEquals(1, result.size());
     assertEquals(lifeEventDTO.getId(), result.get(0).getId());
     assertEquals(lifeEventDTO.getName(), result.get(0).getName());
+    assertEquals(lifeEventDTO.getDescription(), result.get(0).getDescription());
 
     verify(lifeEventRepository).findAll();
     verify(lifeEventMapper).toLifeEventDTO(lifeEvent);
@@ -86,11 +87,14 @@ class LifeEventServiceTest {
     LifeEvent event = new LifeEvent();
     event.setId(1L);
     event.setName("Graduation");
+    event.setDescription("University graduation");
     event.setUsers(java.util.Collections.emptyList());
     return event;
   }
 
   private LifeEventDTO createLifeEventDTO() {
-    return new LifeEventDTO(1L, "Graduation");
+    LifeEventDTO dto = new LifeEventDTO(1L, "Graduation");
+    dto.setDescription("University graduation");
+    return dto;
   }
 }
