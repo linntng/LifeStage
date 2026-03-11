@@ -52,4 +52,16 @@ export class UserApi {
 			headers: this.getAuthHeaders(),
 		});
 	}
+
+	getAllUsers() {
+		return this.http.get<User[]>(`${this.userUrl}`, {
+			headers: this.getAuthHeaders(),
+		});
+	}
+
+	changeRoleOfUser(userId: string, role: string) {
+		return this.http.patch(`${this.userUrl}/${userId}/role`, role, {
+			headers: this.getAuthHeaders(),
+		});
+	}
 }
