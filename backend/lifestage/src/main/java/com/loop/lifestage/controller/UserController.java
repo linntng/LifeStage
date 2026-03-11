@@ -23,7 +23,7 @@ public class UserController {
   }
 
   @GetMapping("/{id}")
-  @PreAuthorize("id == authentication.token.claims['sub']")
+  @PreAuthorize("#id == authentication.token.claims['sub']")
   public ResponseEntity<UserDTO> getUserById(@PathVariable String id) {
     return ResponseEntity.ok(userService.getUserById(id));
   }
@@ -34,7 +34,7 @@ public class UserController {
   }
 
   @PostMapping("/{id}/lifeevents")
-  @PreAuthorize("id == authentication.token.claims['sub']")
+  @PreAuthorize("#id == authentication.token.claims['sub']")
   public ResponseEntity<UserDTO> addLifeEventToUser(
       @PathVariable String id, @RequestBody Long lifeEventId) {
     UserDTO userDTO = userService.getUserById(id);
@@ -42,7 +42,7 @@ public class UserController {
   }
 
   @PatchMapping("/{id}/lifeevents/{lifeEventId}")
-  @PreAuthorize("id == authentication.token.claims['sub']")
+  @PreAuthorize("#id == authentication.token.claims['sub']")
   public ResponseEntity<UserDTO> removeLifeEventForUser(
       @PathVariable String id, @PathVariable Long lifeEventId) {
     UserDTO userDTO = userService.getUserById(id);

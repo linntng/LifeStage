@@ -3,9 +3,11 @@ package com.loop.cases.controller;
 import java.util.Set;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,5 +30,11 @@ public class PolicyCaseController {
         Jwt jwt = (Jwt) authentication.getPrincipal();
         String userId = jwt.getClaim("sub");
         return ResponseEntity.ok(policyCaseService.getAllPolicyCases(userId, token));
+    }
+
+    @GetMapping("/user/{id}")
+    @PreAuthorize("#id == authentication.token.claims['sub']")
+    public ResponseEntity<Set<PolicyCase>> getUserPolicyCases(@RequestHeader("Authorization") String token, @PathVariable String id) {
+        return ResponseEntity.ok(policyCaseService.getUserPolicyCases(id, token));
     }
 }
