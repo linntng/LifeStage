@@ -7,9 +7,8 @@ export interface User {
 	id: string;
 	username: string;
 	lifeEventIds: number[]; // List of life event IDs associated with the user
-  policyIds: number[];
+	policyIds: number[];
 	role: 'ADMIN' | 'USER' | 'CASE_HANDLER' | 'RISK_ANALYST' | null;
-
 }
 
 @Injectable({
@@ -57,9 +56,10 @@ export class UserApi {
 
 	addPolicyToUser(userId: string, policyId: number) {
 		return this.http.post(`${this.userUrl}/${userId}/policies`, policyId, {
-      headers: this.getAuthHeaders()
-     	});
-    
+			headers: this.getAuthHeaders(),
+		});
+	}
+
 	getAllUsers() {
 		return this.http.get<User[]>(`${this.userUrl}`, {
 			headers: this.getAuthHeaders(),
@@ -68,9 +68,10 @@ export class UserApi {
 
 	removePolicyFromUser(userId: string, policyId: number) {
 		return this.http.patch(`${this.userUrl}/${userId}/policies/${policyId}`, null, {
-      headers: this.getAuthHeaders(),
-      });
-    
+			headers: this.getAuthHeaders(),
+		});
+	}
+
 	changeRoleOfUser(userId: string, role: string) {
 		return this.http.patch(`${this.userUrl}/${userId}/role`, role, {
 			headers: this.getAuthHeaders(),

@@ -189,9 +189,9 @@ export class UserStore {
 			error: (err) => {
 				console.error('Error removing policy from user', err);
 			},
-      
-      });
-    
+		});
+	}
+
 	getAllUsers() {
 		this.userApi.getAllUsers().subscribe({
 			next: (users) => {
