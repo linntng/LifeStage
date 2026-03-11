@@ -3,6 +3,7 @@ package com.loop.lifestage.dto;
 public class LifeEventDTO {
   private Long id;
   private String name;
+  private String description;
 
   public LifeEventDTO() {}
 
@@ -25,5 +26,13 @@ public class LifeEventDTO {
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public String getDescription() {
+    return this.description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
   }
 }
