@@ -70,6 +70,7 @@ export class Auth {
 			id: userInfo!['sub'],
 			username: userInfo!['preferred_username'],
 			lifeEventIds: [],
+			policyIds: [],
 		};
 		return user;
 	}
