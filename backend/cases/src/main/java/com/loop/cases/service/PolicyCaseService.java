@@ -75,4 +75,17 @@ public class PolicyCaseService {
             throw new RuntimeException("An error occurred while retrieving users", e);
         }
     }
+
+    @Transactional
+    public PolicyCase addPolicyCaseToUser(PolicyCase policyCase) {
+        try {
+            return policyCaseRepository.save(policyCase);
+        } catch (IllegalArgumentException e) {
+            throw new BadRequestException("Invalid user data: " + e.getMessage());
+        } catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException("User not found with id: " + policyCase.getId());
+        } catch (Exception e) {
+            throw new RuntimeException("An error occurred while updating the user", e);
+        }
+    }
 }

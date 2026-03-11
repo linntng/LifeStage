@@ -8,6 +8,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,4 +39,13 @@ public class PolicyCaseController {
     public ResponseEntity<Set<PolicyCase>> getUserPolicyCases(@RequestHeader("Authorization") String token, @PathVariable String id) {
         return ResponseEntity.ok(policyCaseService.getUserPolicyCases(id, token));
     }
+
+    @PostMapping("user/{id}")
+    @PreAuthorize("#id == authentication.token.claims['sub']")
+    public ResponseEntity<PolicyCase> addPolicyCaseToUser(
+        @PathVariable String id, @RequestBody PolicyCase policyCase
+        ) {
+        return ResponseEntity.ok(policyCaseService.addPolicyCaseToUser(policyCase));
+    }
+
 }
