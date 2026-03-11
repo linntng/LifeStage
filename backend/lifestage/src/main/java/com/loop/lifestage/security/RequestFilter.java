@@ -18,12 +18,13 @@ public class RequestFilter {
     http.cors(Customizer.withDefaults())
         .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(
-            auth -> auth.requestMatchers(HttpMethod.OPTIONS, "/**")
-                .permitAll()
-                .requestMatchers("/lifeevents", "/actuator/health", "/policies")
-                .permitAll()
-                .anyRequest()
-                .authenticated())
+            auth ->
+                auth.requestMatchers(HttpMethod.OPTIONS, "/**")
+                    .permitAll()
+                    .requestMatchers("/lifeevents", "/actuator/health", "/policies")
+                    .permitAll()
+                    .anyRequest()
+                    .authenticated())
         .oauth2ResourceServer(oauth -> oauth.jwt(Customizer.withDefaults()));
 
     return http.build();

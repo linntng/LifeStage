@@ -1,8 +1,11 @@
-package com.loop.lifestage.model;
+package com.loop.lifestage.model.user;
 
+import com.loop.lifestage.model.LifeEvent;
 import com.loop.lifestage.model.policy.Policy;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
@@ -20,6 +23,10 @@ public class User {
 
   @Column(nullable = false)
   private String username;
+
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false)
+  private UserRole role;
 
   @ManyToMany
   @JoinTable(
@@ -81,5 +88,13 @@ public class User {
 
   public void addPolicy(Policy policy) {
     this.policies.add(policy);
+  }
+
+  public UserRole getRole() {
+    return this.role;
+  }
+
+  public void setRole(UserRole role) {
+    this.role = role;
   }
 }

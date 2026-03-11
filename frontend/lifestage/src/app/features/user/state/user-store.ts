@@ -13,6 +13,7 @@ export class UserStore {
 	readonly currentUser = signal<User | null>(null);
 	readonly currentUserLoading = signal(false);
 	readonly userLifeevents = signal<Lifeevent[] | null>(null);
+	readonly allUsers = signal<User[]>([]);
 
 	private setCurrentUser(user: User | null) {
 		this.currentUser.set(user);
@@ -120,6 +121,24 @@ export class UserStore {
 			error: (err) => {
 				console.error('Error removing life event from user', err);
 			},
+		});
+	}
+
+	getAllUsers() {
+		this.userApi.getAllUsers().subscribe({
+			next: (users) => {
+				this.allUsers.set(users);
+			},
+			error: (err) => {
+				console.error('Error fetching users', err);
+			},
+		});
+	}
+
+	changeRoleOfUser(user: User, role: string) {
+		this.userApi.changeRoleOfUser(user.id, role).subscribe({
+			next: () => this.getAllUsers(),
+			error: (err) => console.error('Error changing role of user', err),
 		});
 	}
 }

@@ -1,7 +1,7 @@
 package com.loop.lifestage.model.policy;
 
 import com.loop.lifestage.model.LifeEvent;
-import com.loop.lifestage.model.User;
+import com.loop.lifestage.model.user.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

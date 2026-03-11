@@ -10,6 +10,11 @@ export const routes: Routes = [
 		pathMatch: 'full',
 	},
 	{
+		path: 'admin',
+		loadComponent: () => import('./features/admin/admin').then((a) => a.Admin),
+		canActivate: [authGuard],
+	},
+	{
 		path: 'lifeevents',
 		loadComponent: () =>
 			import('./features/lifeevents/ui/lifeevents').then((l) => l.Lifeevents),
