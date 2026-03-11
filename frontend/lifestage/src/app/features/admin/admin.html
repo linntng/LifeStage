@@ -1,1 +1,70 @@
-<p>admin works!</p>
+<div class="flex flex-col justify-center items-center">
+	<!-- Header -->
+	<header>
+		<h1>User Administration</h1>
+	</header>
+
+	<!-- Search / Filters -->
+	<section class="w-full max-w-md">
+		<input
+			type="text"
+			placeholder="Search users..."
+			[(ngModel)]="searchTerm"
+			(input)="filterUsers()"
+			class="w-full border rounded-md"
+		/>
+	</section>
+
+	<!-- USER LIST PAGE -->
+	<section *ngIf="!editingUser" class="w-full max-w-xl">
+		<h2>User List</h2>
+
+		<table>
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Name</th>
+					<th>Role</th>
+					<th></th>
+				</tr>
+			</thead>
+
+			<tbody>
+				<tr *ngFor="let user of filteredUsers">
+					<td>{{ user.id }}</td>
+					<td>{{ user.username }}</td>
+					<td>{{ user.role }}</td>
+					<td>
+						<button (click)="editingUser = user">Edit</button>
+					</td>
+				</tr>
+
+				<tr *ngIf="filteredUsers.length === 0">
+					<td colspan="4">No users found</td>
+				</tr>
+			</tbody>
+		</table>
+	</section>
+
+	<!-- EDIT USER PAGE -->
+	<section *ngIf="editingUser">
+		<h2>Edit User</h2>
+
+		<div>
+			<p>ID: {{ editingUser.id }}</p>
+			<p>Name: {{ editingUser.username }}</p>
+		</div>
+
+		<div>
+			<label *ngFor="let role of userRoles">
+				<input type="radio" name="role" [value]="role" [(ngModel)]="selectedRole" />
+				{{ role }}
+			</label>
+		</div>
+
+		<div>
+			<button (click)="changeRole(); editingUser = null; selectedRole = null">Submit</button>
+			<button (click)="editingUser = null; selectedRole = null">Cancel</button>
+		</div>
+	</section>
+</div>
