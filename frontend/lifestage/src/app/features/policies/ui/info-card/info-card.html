@@ -1,0 +1,13 @@
+<article class="bg-cyan-50 p-4 rounded-lg w-full">
+	<mat-card class="rounded-lg shadow-lg mb-4 w-full">
+		<mat-card-header class="flex flex-col items-start">
+			<h3>{{ policy.name ? policy.name : 'Untitled' }}</h3>
+			<p>{{ 'Premium: ' + (policy.premium ? policy.premium : 'No premium') }}</p>
+			<p>Coverage includes:</p>
+			@for (lifeevents of policy.coveredLifeEvents; track lifeevents) {
+				<li class="ml-7">{{ lifeevents }}</li>
+			}
+			<button>{{ policy.status }}</button>
+		</mat-card-header>
+	</mat-card>
+</article>
