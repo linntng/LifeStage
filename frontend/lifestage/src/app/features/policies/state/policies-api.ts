@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 export interface Policy {
 	id: number;
 	name: string;
+	coveredLifeEvents: number[];
 	premium: number;
 	status: PolicyStatus;
 }
