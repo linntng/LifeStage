@@ -1,3 +1,17 @@
 <div>
-	<section>Halla</section>
+	<section>
+		<h2>Your policies</h2>
+		@if (userPolicies()?.length === 0) {
+			<p class="p-5">You have no policies.</p>
+		}
+		@for (policy of userPolicies(); track policy) {
+			{{ policy.name }}
+		}
+	</section>
+	<section>
+		<h2>Policies</h2>
+		@for (policy of remainingPolicies(); track policy) {
+			<li>{{ policy.name }}</li>
+		}
+	</section>
 </div>
