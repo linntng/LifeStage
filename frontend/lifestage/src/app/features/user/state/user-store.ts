@@ -2,9 +2,7 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { User, UserApi } from './user-api';
 import { LifeeventStore } from '../../lifeevents/state/lifeevent-store';
 import { Lifeevent } from '../../lifeevents/state/lifeevent-api';
-import { Policies } from '../../policies/ui/policies';
 import { PoliciesStore } from '../../policies/state/policies-store';
-import { Policy } from '../../policies/state/policies-api';
 
 @Injectable({
 	providedIn: 'root',

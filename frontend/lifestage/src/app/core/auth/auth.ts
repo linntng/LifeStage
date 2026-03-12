@@ -1,7 +1,7 @@
 import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import Keycloak, { KeycloakUserInfo } from 'keycloak-js';
 import { User } from '../../features/user/state/user-api';
-import { KEYCLOAK_EVENT_SIGNAL, KeycloakEventType } from 'keycloak-angular';
+import { KEYCLOAK_EVENT_SIGNAL } from 'keycloak-angular';
 
 @Injectable({
 	providedIn: 'root',
@@ -72,7 +72,6 @@ export class Auth {
 			lifeEventIds: [],
 			policyIds: [],
 			role: 'USER',
-      
 		};
 		return user;
 	}

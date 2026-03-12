@@ -1,6 +1,5 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { UserStore } from '../user/state/user-store';
-import Keycloak from 'keycloak-js';
 import { Auth } from '../../core/auth/auth';
 import { CapitalizePipe } from '../../shared/capitalize-pipe';
 
@@ -15,8 +14,4 @@ export class Dashboard {
 	auth = inject(Auth);
 	userLifeevents = this.userstore.userLifeevents;
 	userPolicies = this.userstore.userPolicies;
-
-	ngOnInit() {
-		console.log(this.auth.token);
-	}
 }
