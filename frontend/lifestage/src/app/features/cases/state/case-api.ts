@@ -3,7 +3,6 @@ import { inject, Injectable } from '@angular/core';
 import { Auth } from '../../../core/auth/auth';
 import { environment } from '../../../environments/environment';
 
-
 export interface Case {
 	id: number;
 	userId: string;
@@ -38,7 +37,10 @@ export class CaseApi {
 	}
 
 	addPolicyCaseToUser(userId: string, policyCase: CaseDTO) {
-		const headers = { 'Content-Type': 'application/json', Authorization: `Bearer ${this.auth.token()}` };
+		const headers = {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${this.auth.token()}`,
+		};
 		return this.http.post<Case>(`${this.caseUrl}/user/${userId}`, policyCase, { headers });
 	}
 }

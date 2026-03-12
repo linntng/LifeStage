@@ -7,9 +7,8 @@
 	{{ this.authenticated() ? 'Logout' : 'Login' }}
 </button>
 <p>Cases:</p>
-<p>{{cases()}}</p>
+<p>{{ cases() }}</p>
 
 <button (click)="addTestCase()">Add Test Case</button>
 
-
-<article>{{currentUser()?.username}}</article>
+<article>{{ currentUser()?.username }}</article>

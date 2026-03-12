@@ -7,7 +7,7 @@ import { UserStore } from '../../user/state/user-store';
 })
 export class CaseStore {
 	private caseApi = inject(CaseApi);
-	private userStore = inject(UserStore)
+	private userStore = inject(UserStore);
 
 	readonly userCases = signal<Case[] | null>(null);
 	readonly cases = signal<Case[] | null>(null);

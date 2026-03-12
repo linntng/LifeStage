@@ -72,7 +72,6 @@ export class Auth {
 			lifeEventIds: [],
 			policyIds: [],
 			role: 'USER',
-      
 		};
 		return user;
 	}
