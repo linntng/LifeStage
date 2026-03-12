@@ -12,7 +12,6 @@ export class LoginButton {
 	private auth = inject(Auth);
 	protected userStore = inject(UserStore);
 	private readonly keycloakSignal = inject(KEYCLOAK_EVENT_SIGNAL);
-
 	authenticated = this.auth.authenticated;
 
 	constructor() {

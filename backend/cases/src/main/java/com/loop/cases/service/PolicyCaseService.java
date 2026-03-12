@@ -1,0 +1,91 @@
+package com.loop.cases.service;
+
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.loop.cases.client.LifestageClient;
+import com.loop.cases.dto.LifestageUserDTO;
+import com.loop.cases.exception.BadRequestException;
+import com.loop.cases.exception.NotAuthorizedException;
+import com.loop.cases.exception.ResourceNotFoundException;
+import com.loop.cases.model.PolicyCase;
+import com.loop.cases.repository.PolicyCaseRepository;
+
+import feign.FeignException;
+import jakarta.persistence.EntityNotFoundException;
+
+@Service
+public class PolicyCaseService {
+    
+    private final PolicyCaseRepository policyCaseRepository;
+    private final LifestageClient lifestageClient;
+
+    public PolicyCaseService(
+        PolicyCaseRepository policyCaseRepository,
+        LifestageClient lifestageClient
+        ) {
+        this.policyCaseRepository = policyCaseRepository;
+        this.lifestageClient = lifestageClient;
+    }
+
+    @Transactional
+    public PolicyCase createPolicyCase(PolicyCase policyCase) {
+        try {
+            return policyCaseRepository.save(policyCase);
+        } catch (IllegalArgumentException e) {
+            throw new BadRequestException("Invalid user data: " + e.getMessage());
+        } catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException("User not found with id: " + policyCase.getId());
+        } catch (Exception e) {
+            throw new RuntimeException("An error occurred while creating the policy case", e);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public Set<PolicyCase> getAllPolicyCases(String userId, String token) {
+        try {
+            LifestageUserDTO user = lifestageClient.getUserById(userId, token);
+            if (!user.getRole().equals("CASE_HANDLER") && !user.getRole().equals("ADMIN")) {
+                throw new NotAuthorizedException("User with id: " + userId + " does not have permission to access all policy cases");
+            }
+            return policyCaseRepository.findAll().stream()
+                .collect(Collectors.toSet());
+        } catch (NotAuthorizedException e) {
+            throw e;
+        } catch (FeignException.NotFound e) {
+            throw new ResourceNotFoundException("User not found with id: " + userId);
+        } catch (Exception e) {
+            throw new RuntimeException("An error occurred while retrieving policy cases", e);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public Set<PolicyCase> getUserPolicyCases(String userId, String token) {
+        try {
+            LifestageUserDTO user = lifestageClient.getUserById(userId, token);
+            return policyCaseRepository.findAll().stream()
+                    .filter(policyCase -> policyCase.getUserId().equals(userId))
+                    .collect(Collectors.toSet());
+        } catch (FeignException.NotFound e) {
+            throw new ResourceNotFoundException("User not found with id: " + userId);
+        } catch (Exception e) {
+            throw new RuntimeException("An error occurred while retrieving policy cases", e);
+        }
+    }
+
+    @Transactional
+    public PolicyCase addPolicyCaseToUser(PolicyCase policyCase) {
+        try {
+            return policyCaseRepository.save(policyCase);
+        } catch (IllegalArgumentException e) {
+            throw new BadRequestException("Invalid user data: " + e.getMessage());
+        } catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException("User not found with id: " + policyCase.getId());
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+}

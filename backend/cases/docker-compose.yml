@@ -1,0 +1,9 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: lifestage
+      POSTGRES_USER: lifestage
+      POSTGRES_PASSWORD: lifestage_pw
+    ports:
+      - "5432:5432"
