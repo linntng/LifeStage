@@ -1,8 +1,10 @@
 package com.loop.lifestage.model.policy;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Immutable;
 
 import com.loop.lifestage.model.LifeEvent;
@@ -31,15 +33,19 @@ public class PolicyRecommendation {
     private float premiumImpact;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "life_event_id")
+    @JoinColumn(name = "life_event_id", nullable = false)
     private LifeEvent lifeEvent;
 
     @OneToMany(mappedBy = "policyRecommendation")
     private Set<PolicyEditAction> editActions = new HashSet<>();
+
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
 
     public PolicyRecommendation() {}
 
@@ -77,5 +83,9 @@ public class PolicyRecommendation {
 
     public void setEditActions(Set<PolicyEditAction> editActions) {
         this.editActions = editActions;
+    }
+
+    public void addEditAction(PolicyEditAction action) {
+        this.editActions.add(action);
     }
 }
