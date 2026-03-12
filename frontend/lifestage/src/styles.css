@@ -59,6 +59,8 @@
 		@apply text-black font-semibold rounded-full p-2 cursor-pointer
         hover:bg-primary-hover/30 active:bg-primary-active transition-all duration-150;
 	}
+
+	
 }
 
 @layer components {

@@ -7,7 +7,7 @@ export interface Case {
 	id: number;
 	userId: string;
 	policyId: number;
-	status: string;
+	status: "ACCEPTED" | "DENIED" | "IN_PROGRESS";
 }
 
 export interface CaseDTO {
