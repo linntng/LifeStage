@@ -14,11 +14,8 @@ export class LoginButton {
 	private auth = inject(Auth);
 	protected userStore = inject(UserStore);
 	private readonly keycloakSignal = inject(KEYCLOAK_EVENT_SIGNAL);
-	private caseStore = inject(CaseStore);
 	authenticated = this.auth.authenticated;
-	currentUser = this.userStore.currentUser;
 
-	cases = this.caseStore.userCases;
 
 	constructor() {
 		effect(() => {
@@ -54,20 +51,4 @@ export class LoginButton {
 		});
 	}
 
-	loadUserCases() {
-		const currentUser = this.userStore.currentUser();
-		if (currentUser) {
-			this.caseStore.loadUserCases(currentUser.id);
-		}
-	}
-
-	addTestCase() {
-		const newCase = {
-			id: 0,
-			userId: '',
-			policyId: 123,
-			status: 'Workin baby!',
-		};
-		this.caseStore.addPolicyCaseToUser(newCase);
-	}
 }
