@@ -9,13 +9,13 @@ import { InfoCard } from './info-card/info-card';
 	templateUrl: './policies.html',
 })
 export class Policies {
-	user = inject(UserStore);
-	userPolicies = this.user.userPolicies;
+	userStore = inject(UserStore);
+	userPolicies = this.userStore.userPolicies;
 	policiesStore = inject(PoliciesStore);
 	policies = this.policiesStore.policies;
 
 	remainingPolicies = computed(() => {
-		const policyIds = new Set(this.user.currentUser()?.policyIds || []);
+		const policyIds = new Set(this.userStore.currentUser()?.policyIds || []);
 		return this.policiesStore.policies()?.filter((policy) => !policyIds.has(policy.id));
 	});
 }

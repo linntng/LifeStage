@@ -13,7 +13,6 @@ export class PoliciesStore {
 		this.loading.set(true);
 		this.policiesApi.getPolicies().subscribe({
 			next: (policies) => {
-				console.log('Policies from API' + policies);
 				this.policies.set(policies);
 			},
 			error: () => {
