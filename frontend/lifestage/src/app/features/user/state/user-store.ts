@@ -1,4 +1,4 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { User, UserApi } from './user-api';
 import { LifeeventStore } from '../../lifeevents/state/lifeevent-store';
 import { Lifeevent } from '../../lifeevents/state/lifeevent-api';
@@ -17,8 +17,17 @@ export class UserStore {
 	readonly currentUser = signal<User | null>(null);
 	readonly currentUserLoading = signal(false);
 	readonly userLifeevents = signal<Lifeevent[] | null>(null);
-	readonly userPolicies = signal<Policy[] | null>(null);
 	readonly allUsers = signal<User[]>([]);
+
+	readonly userPolicies = computed(() => {
+		const user = this.currentUser();
+		const allPolicies = this.policiesStore.policies() ?? [];
+
+		if (!user?.policyIds?.length) return [];
+
+		const policyIds = new Set(user.policyIds);
+		return allPolicies.filter((policy) => policyIds.has(policy.id));
+	});
 
 	private setCurrentUser(user: User | null) {
 		this.currentUser.set(user);
@@ -130,14 +139,6 @@ export class UserStore {
 		});
 	}
 
-	private loadUserPolicies() {
-		this.userPolicies.set(
-			this.currentUser()
-				?.policyIds.map((policyId) => this.policiesStore.getPolicyById(policyId))
-				.filter((p): p is Policy => p !== undefined) || [],
-		);
-	}
-
 	addPolicyToCurrentUser(policyId: number) {
 		if (!this.currentUser()) {
 			console.error('No current user to add policy to');
@@ -156,8 +157,6 @@ export class UserStore {
 						policyIds: [...user.policyIds, policyId],
 					};
 				});
-
-				this.loadUserPolicies();
 			},
 			error: (err) => {
 				console.error('Error adding policy to user', err);
@@ -183,8 +182,6 @@ export class UserStore {
 						policyIds: user.policyIds.filter((id) => id !== policyId),
 					};
 				});
-
-				this.loadUserPolicies();
 			},
 			error: (err) => {
 				console.error('Error removing policy from user', err);
