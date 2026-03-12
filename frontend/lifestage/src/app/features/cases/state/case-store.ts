@@ -1,5 +1,5 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { Case, CaseApi } from './case-api';
+import { Case, CaseApi, CaseDTO } from './case-api';
 import { UserStore } from '../../user/state/user-store';
 
 @Injectable({
@@ -10,11 +10,15 @@ export class CaseStore {
 	private userStore = inject(UserStore)
 
 	readonly userCases = signal<Case[] | null>(null);
+	readonly cases = signal<Case[] | null>(null);
 
 	loadUserCases(userId: string) {
-		this.caseApi.getUserPolicyCases(userId);
+		this.caseApi.getUserPolicyCases(userId).subscribe({
+			next: (cases) => this.userCases.set(cases),
+			error: (err) => console.error('Error loading user cases', err),
+		});
 	}
-	addPolicyCaseToUser(policyCase: Case) {
+	addPolicyCaseToUser(policyCase: CaseDTO) {
 		const currentUser = this.userStore.currentUser();
 		if (!currentUser) {
 			console.error('No current user found');
@@ -28,6 +32,13 @@ export class CaseStore {
 			error: (err) => {
 				console.error('Error adding policy case to user', err);
 			},
+		});
+	}
+
+	loadAllCases() {
+		this.caseApi.getAllPolicyCases().subscribe({
+			next: (cases) => this.cases.set(cases),
+			error: (err) => console.error('Error loading all cases', err),
 		});
 	}
 }

@@ -1,6 +1,7 @@
 package com.loop.cases.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -37,13 +38,22 @@ public class GlobalExceptionHandler {
         HttpStatus.CONFLICT);
   }
 
+  @ExceptionHandler(NotAuthorizedException.class)
+  @ResponseStatus(HttpStatus.FORBIDDEN)
+  public ResponseEntity<ErrorResponse> handleNotAuthorized(
+      NotAuthorizedException ex, HttpServletRequest request) {
+    return new ResponseEntity<ErrorResponse>(
+        new ErrorResponse(401, "Unauthorized", ex.getMessage(), request.getRequestURI()),
+        HttpStatus.FORBIDDEN);
+  }
+
   @ExceptionHandler(Exception.class)
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   public ResponseEntity<ErrorResponse> handleGenericException(
-      Exception ex, HttpServletRequest request) {
-    return new ResponseEntity<ErrorResponse>(
-        new ErrorResponse(
-            500, "Internal Server Error", "An unexpected error occurred", request.getRequestURI()),
-        HttpStatus.INTERNAL_SERVER_ERROR);
+          Exception ex, HttpServletRequest request) {
+      return new ResponseEntity<ErrorResponse>(
+              new ErrorResponse(500, "Internal Server Error", ex.getMessage(), request.getRequestURI()),
+              HttpStatus.INTERNAL_SERVER_ERROR);
   }
+
 }

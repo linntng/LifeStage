@@ -11,6 +11,12 @@ export interface Case {
 	status: string;
 }
 
+export interface CaseDTO {
+	userId: string;
+	policyId: number;
+	status: string;
+}
+
 @Injectable({
 	providedIn: 'root',
 })
@@ -25,7 +31,13 @@ export class CaseApi {
 		return this.http.get<Case[]>(`${this.caseUrl}/user/${userId}`, { headers });
 	}
 
-	addPolicyCaseToUser(userId: string, policyCase: Case) {
+	// Requires user to have role "CASE_HANDLER" or "ADMIN"
+	getAllPolicyCases() {
+		const headers = { Authorization: `Bearer ${this.auth.token()}` };
+		return this.http.get<Case[]>(this.caseUrl, { headers });
+	}
+
+	addPolicyCaseToUser(userId: string, policyCase: CaseDTO) {
 		const headers = { 'Content-Type': 'application/json', Authorization: `Bearer ${this.auth.token()}` };
 		return this.http.post<Case>(`${this.caseUrl}/user/${userId}`, policyCase, { headers });
 	}
