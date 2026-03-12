@@ -1,6 +1,7 @@
 package com.loop.lifestage.model.policy;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Table;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,6 +12,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.EnumType;
 
 @Entity
+@Table(name = "policy_edit_actions")
 public class PolicyEditAction {
 
     @Id

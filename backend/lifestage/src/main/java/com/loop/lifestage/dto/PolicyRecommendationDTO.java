@@ -6,25 +6,16 @@ import java.util.Set;
 
 public class PolicyRecommendationDTO {
 
-    private Long id;
     private float premiumImpact;
 
-    private Long userId;
+    private String userId;
     private Long lifeEventId;
 
-    private Set<Long> policyEditActionIds = new HashSet<>();
+    private Set<PolicyEditActionDTO> policyEditActions = new HashSet<>();
 
     private LocalDateTime createdAt;
 
     public PolicyRecommendationDTO() {}
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public float getPremiumImpact() {
         return premiumImpact;
@@ -34,11 +25,11 @@ public class PolicyRecommendationDTO {
         this.premiumImpact = premiumImpact;
     }
 
-    public Long getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
@@ -50,16 +41,16 @@ public class PolicyRecommendationDTO {
         this.lifeEventId = lifeEventId;
     }
 
-    public Set<Long> getPolicyEditActionIds() {
-        return policyEditActionIds;
+    public Set<PolicyEditActionDTO> getPolicyEditActions() {
+        return policyEditActions;
     }
 
-    public void setPolicyEditActionIds(Set<Long> policyEditActionIds) {
-        this.policyEditActionIds = policyEditActionIds;
+    public void setPolicyEditActions(Set<PolicyEditActionDTO> policyEditActions) {
+        this.policyEditActions = policyEditActions;
     }
 
-    public void addPolicyEditActionId(Long editActionId) {
-        this.policyEditActionIds.add(editActionId);
+    public void addPolicyEditAction(PolicyEditActionDTO editActionId) {
+        this.policyEditActions.add(editActionId);
     }
 
     public LocalDateTime getCreatedAt() {

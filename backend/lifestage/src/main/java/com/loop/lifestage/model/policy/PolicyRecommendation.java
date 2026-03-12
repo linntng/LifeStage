@@ -10,6 +10,7 @@ import org.hibernate.annotations.Immutable;
 import com.loop.lifestage.model.LifeEvent;
 import com.loop.lifestage.model.user.User;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -40,7 +41,7 @@ public class PolicyRecommendation {
     @JoinColumn(name = "life_event_id", nullable = false)
     private LifeEvent lifeEvent;
 
-    @OneToMany(mappedBy = "policyRecommendation")
+    @OneToMany(mappedBy = "policyRecommendation", cascade = CascadeType.ALL)
     private Set<PolicyEditAction> editActions = new HashSet<>();
 
     @CreationTimestamp
@@ -87,5 +88,6 @@ public class PolicyRecommendation {
 
     public void addEditAction(PolicyEditAction action) {
         this.editActions.add(action);
+        action.setPolicyRecommendation(this);
     }
 }
