@@ -7,6 +7,8 @@ export interface User {
 	id: string;
 	username: string;
 	lifeEventIds: number[]; // List of life event IDs associated with the user
+	policyIds: number[];
+	role: 'ADMIN' | 'USER' | 'CASE_HANDLER' | 'RISK_ANALYST' | null;
 }
 
 @Injectable({
@@ -18,21 +20,61 @@ export class UserApi {
 
 	private userUrl = `${environment.apiUrl}/users`;
 
+	private getAuthHeaders() {
+		const token = this.auth.token();
+		if (!token) {
+			throw new Error('Missing access token for authenticated user request');
+		}
+		return {
+			Authorization: `Bearer ${token}`,
+		};
+	}
+
 	getUserById(id: string) {
-		return this.http.get<User>(`${this.userUrl}/${id}`);
+		return this.http.get<User>(`${this.userUrl}/${id}`, {
+			headers: this.getAuthHeaders(),
+		});
 	}
 
 	addUser(user: User) {
-		return this.http.post<User>(this.userUrl, user);
+		return this.http.post<User>(this.userUrl, user, {
+			headers: this.getAuthHeaders(),
+		});
 	}
 
 	addLifeEventToUser(userId: string, lifeEventId: number) {
-		const headers = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${this.auth.token()}` };
-		return this.http.post(`${this.userUrl}/${userId}/lifeevents/`, lifeEventId, { headers });
+		return this.http.post(`${this.userUrl}/${userId}/lifeevents`, lifeEventId, {
+			headers: this.getAuthHeaders(),
+		});
 	}
 
 	removeLifeEventFromUser(userId: string, lifeEventId: number) {
-		const headers = { Authorization: `Bearer ${this.auth.token()}` };
-		return this.http.delete(`${this.userUrl}/${userId}/lifeevents/${lifeEventId}`, { headers });
+		return this.http.patch(`${this.userUrl}/${userId}/lifeevents/${lifeEventId}`, null, {
+			headers: this.getAuthHeaders(),
+		});
+	}
+
+	addPolicyToUser(userId: string, policyId: number) {
+		return this.http.post(`${this.userUrl}/${userId}/policies`, policyId, {
+			headers: this.getAuthHeaders(),
+		});
+	}
+
+	getAllUsers() {
+		return this.http.get<User[]>(`${this.userUrl}`, {
+			headers: this.getAuthHeaders(),
+		});
+	}
+
+	removePolicyFromUser(userId: string, policyId: number) {
+		return this.http.patch(`${this.userUrl}/${userId}/policies/${policyId}`, null, {
+			headers: this.getAuthHeaders(),
+		});
+	}
+
+	changeRoleOfUser(userId: string, role: string) {
+		return this.http.patch(`${this.userUrl}/${userId}/role`, role, {
+			headers: this.getAuthHeaders(),
+		});
 	}
 }

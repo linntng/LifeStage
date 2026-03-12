@@ -17,7 +17,7 @@ public class LifeEventController {
     this.lifeEventService = lifeEventService;
   }
 
-  @GetMapping("")
+  @GetMapping
   public ResponseEntity<List<LifeEventDTO>> getAllLifeEvents() {
     return ResponseEntity.ok(lifeEventService.getAllLifeEvents());
   }

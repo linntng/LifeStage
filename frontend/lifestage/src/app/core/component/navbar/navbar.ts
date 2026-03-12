@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { LoginButton } from '../../../features/auth/login-button/login-button';
 import { CommonModule } from '@angular/common';
+import { UserStore } from '../../../features/user/state/user-store';
 
 @Component({
 	selector: 'app-navbar',
@@ -10,5 +11,6 @@ import { CommonModule } from '@angular/common';
 	styleUrl: './navbar.css',
 })
 export class Navbar {
-	menuOpen: boolean = false;
+	menuOpen = false;
+	userStore = inject(UserStore);
 }

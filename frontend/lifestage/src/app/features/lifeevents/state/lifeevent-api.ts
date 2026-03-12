@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 export interface Lifeevent {
 	id: number;
 	name: string;
+	description: string;
 }
 
 @Injectable({

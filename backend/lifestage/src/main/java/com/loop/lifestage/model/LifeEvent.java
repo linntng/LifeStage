@@ -1,5 +1,7 @@
 package com.loop.lifestage.model;
 
+import com.loop.lifestage.model.policy.Policy;
+import com.loop.lifestage.model.user.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "life_events")
@@ -19,15 +22,22 @@ public class LifeEvent {
   @Column(nullable = false)
   private String name;
 
+  @Column
+  private String description;
+
   @ManyToMany(mappedBy = "lifeEvents")
   private List<User> users;
 
+  @ManyToMany(mappedBy = "coveredLifeEvents")
+  private Set<Policy> coveringPolicies;
+
   public LifeEvent() {}
 
-  public LifeEvent(Long id, String name, List<User> users) {
+  public LifeEvent(Long id, String name, List<User> users, Set<Policy> coveringPolicies) {
     this.id = id;
     this.name = name;
     this.users = users;
+    this.coveringPolicies = coveringPolicies;
   }
 
   public Long getId() {
@@ -56,5 +66,21 @@ public class LifeEvent {
 
   public void addUser(User user) {
     this.users.add(user);
+  }
+
+  public Set<Policy> getCoveringPolicies() {
+    return this.coveringPolicies;
+  }
+
+  public void addCoveringPolicy(Policy policy) {
+    this.coveringPolicies.add(policy);
+  }
+
+    public String getDescription() {
+    return this.description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
   }
 }
