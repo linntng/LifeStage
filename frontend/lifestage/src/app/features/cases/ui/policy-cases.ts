@@ -1,6 +1,9 @@
 import { Component, computed, inject, OnInit } from '@angular/core';
 import { CaseStore } from '../state/case-store';
 import { PolicyCaseStatus } from '../state/policy-case-status';
+import { CaseDialog } from './case-dialog/case-dialog';
+import { MatDialog } from '@angular/material/dialog';
+import { Case } from '../state/case-api';
 
 @Component({
 	selector: 'app-policy-cases',
@@ -10,8 +13,13 @@ import { PolicyCaseStatus } from '../state/policy-case-status';
 export class PolicyCases {
 	policyCaseStore = inject(CaseStore);
 	cases = this.policyCaseStore.cases;
-	activeCases = computed(() => this.cases()?.filter(c => c.status === PolicyCaseStatus.IN_REVIEW));
-	inactiveCases = computed(() => this.cases()?.filter(c => c.status !== PolicyCaseStatus.IN_REVIEW));
+	activeCases = computed(() =>
+		this.cases()?.filter((c) => c.status === PolicyCaseStatus.IN_REVIEW),
+	);
+	inactiveCases = computed(() =>
+		this.cases()?.filter((c) => c.status !== PolicyCaseStatus.IN_REVIEW),
+	);
+	private dialog = inject(MatDialog);
 
 	ngOnInit() {
 		this.policyCaseStore.loadAllCases();
@@ -19,10 +27,18 @@ export class PolicyCases {
 
 	addCase() {
 		this.policyCaseStore.addPolicyCaseToUser({
-			userId: "test-user-id2",
+			userId: 'test-user-id2',
 			policyId: 0,
 			status: PolicyCaseStatus.IN_REVIEW,
 		});
 	}
 
+	openDialog(policyCase : Case) {
+		const dialogRef = this.dialog.open(CaseDialog, { data: policyCase });
+		dialogRef.afterClosed().subscribe((confirmed) => {
+			if (confirmed) {
+				this.addCase();
+			}
+		});
+	}
 }

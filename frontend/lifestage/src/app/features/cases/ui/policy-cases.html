@@ -16,7 +16,7 @@
                 <tr>
                     <td>{{ case.userId }}</td>
                     <td>{{ case.policyId }}</td>
-                    <td><button >Review</button></td>
+                    <td><button (click)="openDialog(case)">Review</button></td>
                 </tr>
             }
             </tbody>
