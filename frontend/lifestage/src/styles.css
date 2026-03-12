@@ -10,6 +10,7 @@
 	--color-secondary: #ddf6d2;
 	--color-secondary-hover: #cae8bd;
 	--color-secondary-active: #b0db9c;
+	--color-secondary-dark: #5e7961;
 
 	--color-dark-glow: #0000002d;
 }
@@ -45,7 +46,7 @@
 
 	button {
 		@apply px-4 py-2 
-		bg-secondary/40 hover:bg-secondary-hover active:bg-secondary-active  disabled:bg-gray-400 
+		bg-secondary hover:bg-secondary-hover active:bg-secondary-active  disabled:bg-gray-400 
 		shadow-md/30
 		active:shadow-none active:translate-y-0.25
         rounded-2xl transition-all ease-linear duration-150;
@@ -59,12 +60,37 @@
 		@apply text-black font-semibold rounded-full p-2 cursor-pointer
         hover:bg-primary-hover/30 active:bg-primary-active transition-all duration-150;
 	}
-
-	
 }
 
 @layer components {
 	.info-bar {
 		@apply p-6 m-4 w-full bg-primary/50 rounded-xl flex flex-row justify-between;
+	}
+
+	.info-table {
+		@apply  border-collapse;
+	}
+	.info-table thead {
+		@apply bg-primary sticky top-0;
+	}
+	.info-table thead tr {
+		@apply text-left border-b-2;
+	}
+	.info-table th {
+		@apply py-2 px-4;
+	}
+
+	.info-table tbody {
+		@apply h-20 overflow-y-auto overflow-x-hidden;
+	}
+	.info-table tbody tr {
+		@apply border-b hover:bg-primary/10;
+	}
+	.info-table td {
+		@apply py-2 px-4;
+	}
+
+	.scroll-container {
+		@apply overflow-y-auto
 	}
 }
