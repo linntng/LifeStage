@@ -3,11 +3,15 @@
 	<h2>Life events</h2>
 	<section>
 		@for (event of userLifeevents(); track event) {
-			<li>{{ event.name }}</li>
+			<li>{{ event.name | capitalize }}</li>
 		}
 	</section>
 </div>
 <div>
 	<h2>Policies</h2>
-	<section></section>
+	<section>
+		@for (policy of userPolicies(); track policy) {
+			<li>{{ policy.name | capitalize }}</li>
+		}
+	</section>
 </div>

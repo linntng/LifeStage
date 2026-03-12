@@ -20,9 +20,11 @@
 		</div>
 	}
 
-	<div class="m-4 hidden md:flex">
-		<a routerLink="/policies">Policies</a>
-	</div>
+	@if (userStore.currentUser()?.role === 'USER') {
+		<div class="m-4 hidden md:flex">
+			<a routerLink="/policies">Policies</a>
+		</div>
+	}
 
 	@if (userStore.currentUser()?.role === 'ADMIN') {
 		<div class="m-4 hidden md:flex">
@@ -46,6 +48,10 @@
 >
 	@if (userStore.currentUser()?.role === 'USER') {
 		<a class="m-1" routerLink="/lifeevents">Life events</a>
+	}
+
+	@if (userStore.currentUser()?.role === 'USER') {
+		<a class="m-1" routerLink="/policies">Policies</a>
 	}
 
 	@if (userStore.currentUser()?.role === 'ADMIN') {

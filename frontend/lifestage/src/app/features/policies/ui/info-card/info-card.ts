@@ -5,6 +5,7 @@ import { LifeeventStore } from '../../../lifeevents/state/lifeevent-store';
 import { MatDialog } from '@angular/material/dialog';
 import { PolicyDialog } from '../policy-dialog/policy-dialog';
 import { CapitalizePipe } from '../../../../shared/capitalize-pipe';
+import { UserStore } from '../../../user/state/user-store';
 
 @Component({
 	selector: 'app-info-card',
@@ -13,10 +14,13 @@ import { CapitalizePipe } from '../../../../shared/capitalize-pipe';
 })
 export class InfoCard {
 	@Input() policy!: Policy;
+	@Input() showStatus = false;
 
 	private dialog = inject(MatDialog);
 
 	lifeeventStore = inject(LifeeventStore);
+	userStore = inject(UserStore);
+	currentUser = this.userStore.currentUser;
 
 	getLifeeventName(id: number) {
 		return this.lifeeventStore.lifeevents()?.find((l) => l.id === id);
@@ -24,11 +28,14 @@ export class InfoCard {
 
 	openDialog() {
 		const dialogRef = this.dialog.open(PolicyDialog, { data: this.policy });
-
 		dialogRef.afterClosed().subscribe((confirmed) => {
 			if (confirmed) {
-				console.log('Nice :)');
+				this.addPolicy(this.policy);
 			}
 		});
+	}
+
+	addPolicy(policy: Policy) {
+		this.userStore.addPolicyToCurrentUser(policy.id);
 	}
 }
