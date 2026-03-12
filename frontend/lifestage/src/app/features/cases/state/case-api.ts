@@ -2,19 +2,16 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Auth } from '../../../core/auth/auth';
 import { environment } from '../../../environments/environment';
+import { PolicyCaseStatus } from './policy-case-status';
 
 export interface Case {
 	id: number;
 	userId: string;
 	policyId: number;
-	status: "ACCEPTED" | "DENIED" | "IN_PROGRESS";
+	status: PolicyCaseStatus;
 }
 
-export interface CaseDTO {
-	userId: string;
-	policyId: number;
-	status: string;
-}
+export type CaseDTO = Omit<Case, 'id'>;
 
 @Injectable({
 	providedIn: 'root',
