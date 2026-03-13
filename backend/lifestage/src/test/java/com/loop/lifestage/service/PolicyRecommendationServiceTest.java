@@ -1,22 +1,24 @@
 package com.loop.lifestage.service;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.loop.lifestage.dto.PolicyRecommendationDTO;
 import com.loop.lifestage.exception.ResourceNotFoundException;
 import com.loop.lifestage.mapper.PolicyRecommendationMapper;
 import com.loop.lifestage.model.policy.PolicyRecommendation;
 import com.loop.lifestage.repository.PolicyRecommendationRepository;
-
-import java.util.Optional;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 class PolicyRecommendationServiceTest {
@@ -29,6 +31,8 @@ class PolicyRecommendationServiceTest {
 
   @InjectMocks
   private PolicyRecommendationService policyRecommendationService;
+  @InjectMocks
+  private UserService userService;
 
   private PolicyRecommendation policyRecommendation;
   private PolicyRecommendationDTO policyRecommendationDTO;
@@ -57,7 +61,7 @@ class PolicyRecommendationServiceTest {
 
     // When
     PolicyRecommendationDTO result =
-        policyRecommendationService.getLatestPolicyRecommendationForUser(userId);
+        userService.getLatestPolicyRecommendationForUser(userId);
 
     // Then
     assertNotNull(result);
@@ -81,7 +85,7 @@ class PolicyRecommendationServiceTest {
     // Then
     assertThrows(
         ResourceNotFoundException.class,
-        () -> policyRecommendationService.getLatestPolicyRecommendationForUser(userId));
+        () -> userService.getLatestPolicyRecommendationForUser(userId));
   }
 
   @Test
@@ -96,7 +100,7 @@ class PolicyRecommendationServiceTest {
     // Then
     assertThrows(
         RuntimeException.class,
-        () -> policyRecommendationService.getLatestPolicyRecommendationForUser(userId));
+        () -> userService.getLatestPolicyRecommendationForUser(userId));
   }
 
   // =========================
