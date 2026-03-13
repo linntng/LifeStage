@@ -33,6 +33,11 @@ public class PolicyEditAction {
 
     public PolicyEditAction() {}
 
+    public PolicyEditAction(Policy policy, EditAction action) {
+        this.policy = policy;
+        this.action = action;
+    }
+
     public Long getId() {
         return id;
     }
