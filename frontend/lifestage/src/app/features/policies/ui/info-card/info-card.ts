@@ -5,7 +5,7 @@ import { LifeeventStore } from '../../../lifeevents/state/lifeevent-store';
 import { MatDialog } from '@angular/material/dialog';
 import { PolicyDialog } from '../policy-dialog/policy-dialog';
 import { CapitalizePipe } from '../../../../shared/capitalize-pipe';
-import { UserStore } from '../../../user/state/user-store';
+import { UserStore } from '../../../user/user-state/user-store';
 
 @Component({
 	selector: 'app-info-card',

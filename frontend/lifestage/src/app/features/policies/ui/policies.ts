@@ -1,5 +1,5 @@
 import { Component, computed, inject } from '@angular/core';
-import { UserStore } from '../../user/state/user-store';
+import { UserStore } from '../../user/user-state/user-store';
 import { PoliciesStore } from '../state/policies-store';
 import { InfoCard } from './info-card/info-card';
 
