@@ -19,6 +19,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
 @Entity
@@ -49,6 +50,11 @@ public class PolicyRecommendation {
     private LocalDateTime createdAt;
 
     public PolicyRecommendation() {}
+
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = LocalDateTime.now();
+    }
 
     public Long getId() {
         return id;
@@ -89,5 +95,9 @@ public class PolicyRecommendation {
     public void addEditAction(PolicyEditAction action) {
         this.editActions.add(action);
         action.setPolicyRecommendation(this);
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 }

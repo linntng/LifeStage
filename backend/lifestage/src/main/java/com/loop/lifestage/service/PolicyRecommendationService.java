@@ -56,7 +56,7 @@ public class PolicyRecommendationService {
           policyRecommendationMapper.toEntity(recommendationDTO);
 
       return policyRecommendationMapper.toDto(
-          policyRecommendationRepository.save(recommendation));
+          policyRecommendationRepository.saveAndFlush(recommendation));
 
     } catch (Exception e) {
       throw new RuntimeException(
