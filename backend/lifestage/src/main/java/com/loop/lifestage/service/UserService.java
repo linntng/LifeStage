@@ -1,10 +1,19 @@
 package com.loop.lifestage.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.loop.lifestage.dto.PolicyRecommendationDTO;
 import com.loop.lifestage.dto.UserDTO;
 import com.loop.lifestage.engine.PolicyRecommendationEngine;
 import com.loop.lifestage.exception.BadRequestException;
 import com.loop.lifestage.exception.ResourceAlreadyExistsException;
 import com.loop.lifestage.exception.ResourceNotFoundException;
+import com.loop.lifestage.mapper.PolicyRecommendationMapper;
 import com.loop.lifestage.mapper.UserMapper;
 import com.loop.lifestage.model.LifeEvent;
 import com.loop.lifestage.model.policy.PolicyRecommendation;
@@ -13,12 +22,8 @@ import com.loop.lifestage.model.user.UserRole;
 import com.loop.lifestage.repository.LifeEventRepository;
 import com.loop.lifestage.repository.PolicyRecommendationRepository;
 import com.loop.lifestage.repository.UserRepository;
+
 import jakarta.persistence.EntityNotFoundException;
-import java.util.List;
-import java.util.stream.Collectors;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserService {
@@ -28,15 +33,18 @@ public class UserService {
   private final PolicyRecommendationEngine recommendationEngine;
   private final LifeEventRepository lifeEventRepository;
   private final PolicyRecommendationRepository policyRecommendationRepository;
+  private final PolicyRecommendationMapper policyRecommendationMapper;
 
   public UserService(
     UserRepository userRepository, 
     UserMapper userMapper,
     PolicyRecommendationEngine recommendationEngine,
     LifeEventRepository lifeEventRepository,
-    PolicyRecommendationRepository policyRecommendationRepository) {
+    PolicyRecommendationRepository policyRecommendationRepository,
+    PolicyRecommendationMapper policyRecommendationMapper) {
     this.userRepository = userRepository;
     this.userMapper = userMapper;
+    this.policyRecommendationMapper = policyRecommendationMapper;
     this.recommendationEngine = recommendationEngine;
     this.lifeEventRepository = lifeEventRepository;
     this.policyRecommendationRepository = policyRecommendationRepository;
@@ -187,6 +195,28 @@ public class UserService {
       }
     } catch (Exception e) {
       throw new RuntimeException(e.getMessage(), e);
+    }
+  }
+
+   @Transactional(readOnly = true)
+  public PolicyRecommendationDTO getLatestPolicyRecommendationForUser(String userId) {
+    try {
+
+      PolicyRecommendation recommendation =
+          policyRecommendationRepository
+              .findTopByUserIdOrderByCreatedAtDesc(userId)
+              .orElseThrow(
+                  () ->
+                      new ResourceNotFoundException(
+                          "No policy recommendations found for user id: " + userId));
+
+      return policyRecommendationMapper.toDto(recommendation);
+
+    } catch (ResourceNotFoundException e) {
+      throw e;
+    } catch (Exception e) {
+      throw new RuntimeException(
+          "An error occurred while fetching the latest policy recommendation", e);
     }
   }
 }

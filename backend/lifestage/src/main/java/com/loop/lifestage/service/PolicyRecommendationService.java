@@ -1,17 +1,12 @@
 package com.loop.lifestage.service;
 
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.loop.lifestage.dto.PolicyRecommendationDTO;
-import com.loop.lifestage.exception.ResourceNotFoundException;
 import com.loop.lifestage.mapper.PolicyRecommendationMapper;
 import com.loop.lifestage.model.policy.PolicyRecommendation;
 import com.loop.lifestage.repository.PolicyRecommendationRepository;
-
-import jakarta.persistence.EntityNotFoundException;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class PolicyRecommendationService {
@@ -24,28 +19,6 @@ public class PolicyRecommendationService {
       PolicyRecommendationMapper policyRecommendationMapper) {
     this.policyRecommendationRepository = policyRecommendationRepository;
     this.policyRecommendationMapper = policyRecommendationMapper;
-  }
-
-  @Transactional(readOnly = true)
-  public PolicyRecommendationDTO getLatestPolicyRecommendationForUser(String userId) {
-    try {
-
-      PolicyRecommendation recommendation =
-          policyRecommendationRepository
-              .findTopByUserIdOrderByCreatedAtDesc(userId)
-              .orElseThrow(
-                  () ->
-                      new ResourceNotFoundException(
-                          "No policy recommendations found for user id: " + userId));
-
-      return policyRecommendationMapper.toDto(recommendation);
-
-    } catch (ResourceNotFoundException e) {
-      throw e;
-    } catch (Exception e) {
-      throw new RuntimeException(
-          "An error occurred while fetching the latest policy recommendation", e);
-    }
   }
 
   @Transactional
