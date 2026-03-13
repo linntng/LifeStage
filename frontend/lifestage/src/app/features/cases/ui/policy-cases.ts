@@ -26,7 +26,7 @@ export class PolicyCases {
 	}
 
 	addCase() {
-		this.policyCaseStore.addPolicyCaseToUser({
+		this.policyCaseStore.addPolicyCaseToCurrentUser({
 			userId: 'test-user-id2',
 			policyId: 0,
 			status: PolicyCaseStatus.IN_REVIEW,

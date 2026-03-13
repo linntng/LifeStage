@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { PolicyDialog } from '../policy-dialog/policy-dialog';
 import { CapitalizePipe } from '../../../../shared/capitalize-pipe';
 import { UserStore } from '../../../user/state/user-store';
+import { CaseStore } from '../../../cases/state/case-store';
 
 @Component({
 	selector: 'app-info-card',
@@ -17,10 +18,14 @@ export class InfoCard {
 	@Input() showStatus = false;
 
 	private dialog = inject(MatDialog);
-
-	lifeeventStore = inject(LifeeventStore);
-	userStore = inject(UserStore);
+	private lifeeventStore = inject(LifeeventStore);
+	private userStore = inject(UserStore);
+	private caseStore = inject(CaseStore);
 	currentUser = this.userStore.currentUser;
+	get status() {
+		const user = this.currentUser();
+		return user && this.policy && user.policyIds.includes(this.policy.id) ? "Active" : "In review";
+	}
 
 	getLifeeventName(id: number) {
 		return this.lifeeventStore.lifeevents()?.find((l) => l.id === id);
@@ -30,12 +35,8 @@ export class InfoCard {
 		const dialogRef = this.dialog.open(PolicyDialog, { data: this.policy });
 		dialogRef.afterClosed().subscribe((confirmed) => {
 			if (confirmed) {
-				this.addPolicy(this.policy);
+				this.caseStore.applyForPolicyWithCurrentUser(this.policy.id);
 			}
 		});
-	}
-
-	addPolicy(policy: Policy) {
-		this.userStore.addPolicyToCurrentUser(policy.id);
 	}
 }

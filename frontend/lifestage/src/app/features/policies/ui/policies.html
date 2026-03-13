@@ -10,10 +10,22 @@
 			}
 		</div>
 	</section>
+	@if (userPolicies().length === 0) {
+		<section>
+			<h2>Policies in review</h2>
+			
+				<p class="p-5">You have no policies D:</p>
+			<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+				@for (policy of userPolicies(); track policy) {
+					<app-info-card [policy]="policy" [showStatus]="true"></app-info-card>
+				}
+			</div>
+		</section>
+	}
 	<section>
 		<h2>Policies</h2>
 		<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-			@for (policy of policies(); track policy.id) {
+			@for (policy of remainingPolicies(); track policy.id) {
 				<app-info-card [policy]="policy"> </app-info-card>
 			}
 		</div>

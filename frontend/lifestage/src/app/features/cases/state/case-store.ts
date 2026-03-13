@@ -1,6 +1,7 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { effect, inject, Injectable, signal } from '@angular/core';
 import { Case, CaseApi, CaseDTO } from './case-api';
 import { UserStore } from '../../user/state/user-store';
+import { PolicyCaseStatus } from './policy-case-status';
 
 @Injectable({
 	providedIn: 'root',
@@ -12,22 +13,36 @@ export class CaseStore {
 	readonly userCases = signal<Case[] | null>(null);
 	readonly cases = signal<Case[] | null>(null);
 
-	loadUserCases(userId: string) {
+	constructor() {
+		effect(() => {
+			if (!this.userStore.currentUserLoading()) {
+				this.loadUserCases();
+			}
+		});
+	}
+
+	loadUserCases() {
+		const userId = this.userStore.currentUser()?.id;
+		if (!userId) {
+			console.error('No current user found');
+			return;
+		}
 		this.caseApi.getUserPolicyCases(userId).subscribe({
 			next: (cases) => this.userCases.set(cases),
 			error: (err) => console.error('Error loading user cases', err),
 		});
 	}
-	addPolicyCaseToUser(policyCase: CaseDTO) {
+
+	addPolicyCaseToCurrentUser(policyCase: CaseDTO) {
 		const currentUser = this.userStore.currentUser();
 		if (!currentUser) {
 			console.error('No current user found');
 			return;
 		}
+		console.log('Adding policy case to user', currentUser.id, policyCase);
 		this.caseApi.addPolicyCaseToUser(currentUser.id, policyCase).subscribe({
 			next: (newCase) => {
-				const currentCases = this.userCases() || [];
-				this.userCases.set([...currentCases, newCase]);
+				this.userCases.update(userCases => [...(userCases || []), newCase]);
 			},
 			error: (err) => {
 				console.error('Error adding policy case to user', err);
@@ -40,5 +55,18 @@ export class CaseStore {
 			next: (cases) => this.cases.set(cases),
 			error: (err) => console.error('Error loading all cases', err),
 		});
+	}
+
+	applyForPolicyWithCurrentUser(policyId: number) {
+		if (!this.userStore.currentUser()) {
+			console.error('No current user found');
+			return;
+		}
+		const caseDTO: CaseDTO = {
+			policyId: policyId,
+			userId: this.userStore.currentUser()?.id || '',
+			status: PolicyCaseStatus.IN_REVIEW
+		};
+		this.addPolicyCaseToCurrentUser(caseDTO);
 	}
 }
