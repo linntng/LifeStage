@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { UserStore } from '../user/state/user-store';
+import { UserStore } from '../user/user-state/user-store';
 import { Auth } from '../../core/auth/auth';
 import { CapitalizePipe } from '../../shared/capitalize-pipe';
 
@@ -14,4 +14,5 @@ export class Dashboard {
 	auth = inject(Auth);
 	userLifeevents = this.userstore.userLifeevents;
 	userPolicies = this.userstore.userPolicies;
+	userPolicyRec = this.userstore.userPolicyRec;
 }

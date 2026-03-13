@@ -1,4 +1,15 @@
-<h1 class="mt-5 mb-20">{{ 'Hello, ' + auth.keycloakName() + '!' }}</h1>
+<h1 class="mt-5">{{ 'Hello, ' + auth.keycloakName() + '!' }}</h1>
+<section class="flex flex-row justify-around bg-blue-200 mb-30">
+	<img src="/images/image1.png" class="hidden md:block w-120 rounded-4xl shadow justify-start" />
+	<div>
+		<p>Based on your life event:</p>
+		<li>{{ userPolicyRec()?.lifeEventId }}</li>
+		<p>We recommend:</p>
+		<p>Add Family Insurance</p>
+		<p>Remove Single Coverage</p>
+		<p>Estimated premium change: {{ userPolicyRec()?.premiumImpact }}</p>
+	</div>
+</section>
 <div class="mb-30">
 	<h2>Life events</h2>
 	<section>
