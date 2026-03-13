@@ -31,14 +31,4 @@ public class PolicyRecommendationController {
     return ResponseEntity.ok(
         policyRecommendationService.getLatestPolicyRecommendationForUser(userId));
   }
-
-  @PostMapping("/{userId}")
-  @PreAuthorize("#userId == authentication.token.claims['sub']")
-  public ResponseEntity<PolicyRecommendationDTO> createPolicyRecommendationForUser(
-      @PathVariable String userId,
-      @RequestBody PolicyRecommendationDTO policyRecommendationDTO) {
-
-    return ResponseEntity.ok(
-        policyRecommendationService.createPolicyRecommendation(policyRecommendationDTO));
-  }
 }
