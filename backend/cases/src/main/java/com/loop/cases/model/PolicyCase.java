@@ -2,6 +2,8 @@ package com.loop.cases.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -14,14 +16,15 @@ public class PolicyCase {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(nullable = false)
     private String userId;
 
-    @Column
+    @Column(nullable = false)
     private Long policyId;
 
-    @Column
-    public String status;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private PolicyCaseStatus status;
 
 
     public Long getId() {
@@ -48,11 +51,11 @@ public class PolicyCase {
         this.policyId = policyId;
     }
 
-    public String getStatus() {
+    public PolicyCaseStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(PolicyCaseStatus status) {
         this.status = status;
     }
 }
