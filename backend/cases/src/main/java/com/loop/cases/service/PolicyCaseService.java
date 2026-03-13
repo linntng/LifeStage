@@ -8,9 +8,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.loop.cases.client.LifestageClient;
 import com.loop.cases.dto.LifestageUserDTO;
+import com.loop.cases.dto.PolicyCaseDTO;
 import com.loop.cases.exception.BadRequestException;
 import com.loop.cases.exception.NotAuthorizedException;
 import com.loop.cases.exception.ResourceNotFoundException;
+import com.loop.cases.mapper.PolicyCaseMapper;
 import com.loop.cases.model.PolicyCase;
 import com.loop.cases.repository.PolicyCaseRepository;
 
@@ -22,13 +24,16 @@ public class PolicyCaseService {
     
     private final PolicyCaseRepository policyCaseRepository;
     private final LifestageClient lifestageClient;
+    private final PolicyCaseMapper policyCaseMapper;
 
     public PolicyCaseService(
         PolicyCaseRepository policyCaseRepository,
-        LifestageClient lifestageClient
+        LifestageClient lifestageClient,
+        PolicyCaseMapper policyCaseMapper
         ) {
         this.policyCaseRepository = policyCaseRepository;
         this.lifestageClient = lifestageClient;
+        this.policyCaseMapper = policyCaseMapper;
     }
 
     @Transactional
@@ -77,13 +82,14 @@ public class PolicyCaseService {
     }
 
     @Transactional
-    public PolicyCase addPolicyCaseToUser(PolicyCase policyCase) {
+    public PolicyCase addPolicyCaseToUser(PolicyCaseDTO policyCaseDTO) {
         try {
+            PolicyCase policyCase = policyCaseMapper.toPolicyCase(policyCaseDTO);
             return policyCaseRepository.save(policyCase);
         } catch (IllegalArgumentException e) {
             throw new BadRequestException("Invalid user data: " + e.getMessage());
         } catch (EntityNotFoundException e) {
-            throw new ResourceNotFoundException("User not found with id: " + policyCase.getId());
+            throw new ResourceNotFoundException("User not found with id: " + policyCaseDTO.getUserId());
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }

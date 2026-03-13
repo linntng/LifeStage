@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.loop.cases.dto.PolicyCaseDTO;
 import com.loop.cases.model.PolicyCase;
 import com.loop.cases.service.PolicyCaseService;
 
@@ -43,9 +44,9 @@ public class PolicyCaseController {
     @PostMapping("user/{id}")
     @PreAuthorize("#id == authentication.token.claims['sub']")
     public ResponseEntity<PolicyCase> addPolicyCaseToUser(
-        @PathVariable String id, @RequestBody PolicyCase policyCase
+        @PathVariable String id, @RequestBody PolicyCaseDTO policyCaseDTO
         ) {
-        return ResponseEntity.ok(policyCaseService.addPolicyCaseToUser(policyCase));
+        return ResponseEntity.ok(policyCaseService.addPolicyCaseToUser(policyCaseDTO));
     }
 
 }
