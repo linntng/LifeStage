@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 
@@ -9,7 +9,7 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 		<h2 mat-dialog-title>{{ data.title }}</h2>
 
 		<mat-dialog-content>
-			{{data.content}}
+			{{ data.content }}
 		</mat-dialog-content>
 
 		<mat-dialog-actions>
@@ -25,7 +25,4 @@ export class Dialog {
 	confirm() {
 		this.dialogRef.close(true);
 	}
-
-	
 }
-

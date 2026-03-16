@@ -3,7 +3,6 @@ import { User, UserApi } from './user-api';
 import { LifeeventStore } from '../../lifeevents/state/lifeevent-store';
 import { Lifeevent } from '../../lifeevents/state/lifeevent-api';
 import { PoliciesStore } from '../../policies/state/policies-store';
-import { CaseStore } from '../../cases/state/case-store';
 
 @Injectable({
 	providedIn: 'root',

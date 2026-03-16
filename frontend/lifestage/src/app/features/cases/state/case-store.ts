@@ -103,7 +103,9 @@ export class CaseStore {
 			next: (updatedCase) => {
 				this.cases.update((cases) =>
 					cases
-						? cases.map((policyCase) => (policyCase.id === updatedCase.id ? updatedCase : policyCase))
+						? cases.map((policyCase) =>
+								policyCase.id === updatedCase.id ? updatedCase : policyCase,
+							)
 						: null,
 				);
 				this.userCases.update((userCases) =>

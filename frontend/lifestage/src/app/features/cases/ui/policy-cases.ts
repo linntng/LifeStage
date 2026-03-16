@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, OnInit } from '@angular/core';
 import { CaseStore } from '../state/case-store';
 import { PolicyCaseStatus } from '../state/policy-case-status';
 import { CaseDialog } from './case-dialog/case-dialog';
@@ -10,7 +10,7 @@ import { Case } from '../state/case-api';
 	imports: [],
 	templateUrl: './policy-cases.html',
 })
-export class PolicyCases {
+export class PolicyCases implements OnInit {
 	policyCaseStore = inject(CaseStore);
 	cases = this.policyCaseStore.cases;
 	activeCases = computed(() =>
@@ -29,12 +29,12 @@ export class PolicyCases {
 		this.policyCaseStore.updatePolicyCaseStatus(caseId, PolicyCaseStatus.ACCEPTED);
 	}
 
-	openDialog(policyCase : Case) {
+	openDialog(policyCase: Case) {
 		const dialogRef = this.dialog.open(CaseDialog, { data: policyCase });
 		dialogRef.afterClosed().subscribe((closeResult) => {
-			if (closeResult === "ACCEPTED") {
+			if (closeResult === 'ACCEPTED') {
 				this.acceptCase(policyCase.id);
-			} else if (closeResult === "DENIED") {
+			} else if (closeResult === 'DENIED') {
 				this.policyCaseStore.updatePolicyCaseStatus(policyCase.id, PolicyCaseStatus.DENIED);
 			}
 		});

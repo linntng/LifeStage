@@ -1,51 +1,51 @@
 <section>
-    <h1>Cases to review</h1>
-    <br>
-    <div class="scroll-container max-h-[40vh]">
-        <table class="info-table">
-            <thead>
-                <tr>
-                    <th>User Id</th>
-                    <th>Policy Id</th>
-                    <th></th>
-                </tr>
-
-            </thead>
-            <tbody>
-                @for (case of activeCases(); track case.id) {
-                <tr>
-                    <td>{{ case.userId }}</td>
-                    <td>{{ case.policyId }}</td>
-                    <td><button (click)="openDialog(case)">Review</button></td>
-                </tr>
-            }
-            </tbody>
-        </table>
-    </div>
+	<h1>Cases to review</h1>
+	<br />
+	<div class="scroll-container max-h-[40vh]">
+		<table class="info-table">
+			<thead>
+				<tr>
+					<th>User Id</th>
+					<th>Policy Id</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				@for (case of activeCases(); track case.id) {
+					<tr>
+						<td>{{ case.userId }}</td>
+						<td>{{ case.policyId }}</td>
+						<td><button (click)="openDialog(case)">Review</button></td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
 </section>
 
 <section>
-    <h1>Inactive Cases</h1>
-    <br>
-    <div class="scroll-container max-h-[40vh]">
-        <table class="info-table">
-            <thead>
-                <tr>
-                    <th>User Id</th>
-                    <th>Policy Id</th>
-                    <th>Status</th>
-                </tr>
-
-            </thead>
-            <tbody>
-                @for (case of inactiveCases(); track case.id) {
-                <tr>
-                    <td>{{ case.userId }}</td>
-                    <td>{{ case.policyId }}</td>
-                    <td [class]="case.status === 'ACCEPTED' ? 'bg-green-100' : 'bg-red-100'">{{ case.status }}</td>
-                </tr>
-            }
-            </tbody>
-        </table>
-    </div>
+	<h1>Inactive Cases</h1>
+	<br />
+	<div class="scroll-container max-h-[40vh]">
+		<table class="info-table">
+			<thead>
+				<tr>
+					<th>User Id</th>
+					<th>Policy Id</th>
+					<th>Status</th>
+				</tr>
+			</thead>
+			<tbody>
+				@for (case of inactiveCases(); track case.id) {
+					<tr>
+						<td>{{ case.userId }}</td>
+						<td>{{ case.policyId }}</td>
+						<td [class]="case.status === 'ACCEPTED' ? 'bg-green-100' : 'bg-red-100'">
+							{{ case.status }}
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
 </section>

@@ -11,11 +11,14 @@ import { PoliciesStore } from '../../../policies/state/policies-store';
 		<h2 mat-dialog-title>Review case {{ case.id }}</h2>
 
 		<mat-dialog-content>
-				@if (policy) {
-					<p>The user <i>{{ case.userId }}</i> is applying for the policy <strong>{{ policy.name }}</strong></p>
-				} @else {
-					<p>No policy with this ID</p>
-				}
+			@if (policy) {
+				<p>
+					The user <i>{{ case.userId }}</i> is applying for the policy
+					<strong>{{ policy.name }}</strong>
+				</p>
+			} @else {
+				<p>No policy with this ID</p>
+			}
 		</mat-dialog-content>
 
 		<mat-dialog-actions>
@@ -33,11 +36,10 @@ export class CaseDialog {
 	policy = this.policies.find((policy) => policy.id === this.case.policyId);
 
 	accept() {
-		this.dialogRef.close("ACCEPTED");
+		this.dialogRef.close('ACCEPTED');
 	}
 
 	deny() {
-		this.dialogRef.close("DENIED");
+		this.dialogRef.close('DENIED');
 	}
-
 }

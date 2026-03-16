@@ -1,6 +1,5 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
-import { MatDialog } from '@angular/material/dialog';
 
 @Component({
 	selector: 'app-info-card',
@@ -10,7 +9,4 @@ import { MatDialog } from '@angular/material/dialog';
 export class InfoCard {
 	@Input() title = '';
 	@Input() color = 'bg-primary';
-
-
-	
 }

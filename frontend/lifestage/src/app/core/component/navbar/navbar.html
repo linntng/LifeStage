@@ -14,7 +14,10 @@
 			<a routerLink="/lifeevents">Life events</a>
 		</div>
 	}
-	@if (userStore.currentUser()?.role === 'CASE_HANDLER' || userStore.currentUser()?.role === 'ADMIN') {
+	@if (
+		userStore.currentUser()?.role === 'CASE_HANDLER' ||
+		userStore.currentUser()?.role === 'ADMIN'
+	) {
 		<div class="m-4 hidden md:flex">
 			<a routerLink="/cases">Manage cases</a>
 		</div>

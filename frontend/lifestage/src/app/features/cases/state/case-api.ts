@@ -54,5 +54,4 @@ export class CaseApi {
 		console.log('Updating policy case status', caseId, status);
 		return this.http.patch<Case>(`${this.caseUrl}/${caseId}/status`, status, { headers });
 	}
-
 }
