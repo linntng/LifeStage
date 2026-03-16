@@ -14,18 +14,18 @@ DELETE FROM policies;
 
 INSERT INTO policies (id, name, premium, status) VALUES
 -- Single life event policies
-(1, 'Marriage Protection', 25.00, 'DRAFT'),
-(2, 'Childbirth Support', 35.00, 'DRAFT'),
-(3, 'Property Purchase Security', 40.00, 'DRAFT'),
-(4, 'Career Change Safety Net', 30.00, 'DRAFT'),
-(5, 'Temporary Relocation Cover', 45.00, 'DRAFT'),
+(1, 'Marriage Protection', 25.00, 'ACTIVE'),
+(2, 'Childbirth Support', 35.00, 'ACTIVE'),
+(3, 'Property Purchase Security', 40.00, 'ACTIVE'),
+(4, 'Career Change Safety Net', 30.00, 'ACTIVE'),
+(5, 'Temporary Relocation Cover', 45.00, 'ACTIVE'),
 
 -- Compound policies
-(6, 'Family Bundle', 65.00, 'DRAFT'),
-(7, 'Home & Career Package', 70.00, 'DRAFT'),
-(8, 'International Transition Plan', 80.00, 'DRAFT'),
-(9, 'Major Life Changes Package', 95.00, 'DRAFT'),
-(10, 'Complete Life Protection', 120.00, 'DRAFT');
+(6, 'Family Bundle', 65.00, 'ACTIVE'),
+(7, 'Home & Career Package', 70.00, 'ACTIVE'),
+(8, 'International Transition Plan', 80.00, 'ACTIVE'),
+(9, 'Major Life Changes Package', 95.00, 'ACTIVE'),
+(10, 'Complete Life Protection', 120.00, 'ACTIVE');
 
 INSERT INTO policy_life_events (policy_id, life_event_id) VALUES
 
