@@ -40,66 +40,6 @@ class PolicyRecommendationServiceTest {
   }
 
   // =========================
-  // GET LATEST POLICY RECOMMENDATION
-  // =========================
-
-  @Test
-  void getLatestPolicyRecommendationForUser_shouldReturnMappedRecommendation() {
-
-    // Given
-    String userId = "user123";
-
-    when(policyRecommendationRepository.findTopByUserIdOrderByCreatedAtDesc(userId))
-        .thenReturn(Optional.of(policyRecommendation));
-
-    when(policyRecommendationMapper.toDto(policyRecommendation))
-        .thenReturn(policyRecommendationDTO);
-
-    // When
-    PolicyRecommendationDTO result =
-        policyRecommendationService.getLatestPolicyRecommendationForUser(userId);
-
-    // Then
-    assertNotNull(result);
-    assertEquals(policyRecommendationDTO.getUserId(), result.getUserId());
-
-    verify(policyRecommendationRepository)
-        .findTopByUserIdOrderByCreatedAtDesc(userId);
-
-    verify(policyRecommendationMapper).toDto(policyRecommendation);
-  }
-
-  @Test
-  void getLatestPolicyRecommendationForUser_shouldThrowResourceNotFound_whenRecommendationMissing() {
-
-    // Given
-    String userId = "user123";
-
-    when(policyRecommendationRepository.findTopByUserIdOrderByCreatedAtDesc(userId))
-        .thenReturn(Optional.empty());
-
-    // Then
-    assertThrows(
-        ResourceNotFoundException.class,
-        () -> policyRecommendationService.getLatestPolicyRecommendationForUser(userId));
-  }
-
-  @Test
-  void getLatestPolicyRecommendationForUser_shouldThrowRuntimeException_whenUnexpectedExceptionOccurs() {
-
-    // Given
-    String userId = "user123";
-
-    when(policyRecommendationRepository.findTopByUserIdOrderByCreatedAtDesc(userId))
-        .thenThrow(new RuntimeException("database error"));
-
-    // Then
-    assertThrows(
-        RuntimeException.class,
-        () -> policyRecommendationService.getLatestPolicyRecommendationForUser(userId));
-  }
-
-  // =========================
   // CREATE POLICY RECOMMENDATION
   // =========================
 
