@@ -158,6 +158,15 @@ public class UserService {
   public UserDTO addPolicyToUser(UserDTO userDTO, Long policyId) {
     try {
       userDTO.addPolicyById(policyId);
+      User user = userMapper.toUser(userDTO);
+      PolicyRecommendation latestRecommendation =
+        policyRecommendationRepository
+            .findTopByUserIdOrderByCreatedAtDesc(userDTO.getId())
+            .orElse(null);
+      if (latestRecommendation != null) {
+        policyRecommendationRepository
+          .save(recommendationEngine.generateRecommendation(user, latestRecommendation.getLifeEvent(), new PolicyRecommendation()));
+      }
       return updateUser(userDTO);
     } catch (Exception e) {
       throw new RuntimeException("An error occurred while adding policy to the user", e);
@@ -168,6 +177,15 @@ public class UserService {
   public UserDTO removePolicyForUser(UserDTO userDTO, Long policyId) {
     try {
       userDTO.removePolicyById(policyId);
+      User user = userMapper.toUser(userDTO);
+      PolicyRecommendation latestRecommendation =
+        policyRecommendationRepository
+            .findTopByUserIdOrderByCreatedAtDesc(userDTO.getId())
+            .orElse(null);
+      if (latestRecommendation != null) {
+        policyRecommendationRepository
+          .save(recommendationEngine.generateRecommendation(user, latestRecommendation.getLifeEvent(), new PolicyRecommendation()));
+      }
       return updateUser(userDTO);
     } catch (Exception e) {
       throw new RuntimeException("An error occurred while removing policy from the user", e);

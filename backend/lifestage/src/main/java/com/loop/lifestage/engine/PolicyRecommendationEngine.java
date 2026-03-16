@@ -5,6 +5,7 @@ import com.loop.lifestage.model.policy.EditAction;
 import com.loop.lifestage.model.policy.Policy;
 import com.loop.lifestage.model.policy.PolicyEditAction;
 import com.loop.lifestage.model.policy.PolicyRecommendation;
+import com.loop.lifestage.model.policy.PolicyStatus;
 import com.loop.lifestage.model.user.User;
 
 import java.util.Comparator;
@@ -38,7 +39,7 @@ public class PolicyRecommendationEngine {
     }
 
     private Set<PolicyEditAction> generateActions(User user) {
-        List<Policy> allPolicies = policyRepository.findAll();
+        List<Policy> allPolicies = policyRepository.findByStatus(PolicyStatus.ACTIVE);
         Set<Long> lifeEventIds = user.getLifeEvents().stream().map(l -> l.getId()).collect(Collectors.toSet());
         Set<Long> bestPolicyPlan = getBestPolicyPlan(lifeEventIds, allPolicies);
         Set<Long> currentPolicies = user.getPolicies().stream().map(p -> p.getId()).collect(Collectors.toSet());
