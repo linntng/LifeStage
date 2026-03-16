@@ -54,12 +54,6 @@ export class UserApi {
 		});
 	}
 
-	addPolicyToUser(userId: string, policyId: number) {
-		return this.http.post(`${this.userUrl}/${userId}/policies`, policyId, {
-			headers: this.getAuthHeaders(),
-		});
-	}
-
 	getAllUsers() {
 		return this.http.get<User[]>(`${this.userUrl}`, {
 			headers: this.getAuthHeaders(),

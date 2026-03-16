@@ -42,7 +42,7 @@ export class CaseStore {
 		console.log('Adding policy case to user', currentUser.id, policyCase);
 		this.caseApi.addPolicyCaseToUser(currentUser.id, policyCase).subscribe({
 			next: (newCase) => {
-				this.userCases.update(userCases => [...(userCases || []), newCase]);
+				this.userCases.update((userCases) => [...(userCases || []), newCase]);
 			},
 			error: (err) => {
 				console.error('Error adding policy case to user', err);
@@ -65,8 +65,36 @@ export class CaseStore {
 		const caseDTO: CaseDTO = {
 			policyId: policyId,
 			userId: this.userStore.currentUser()?.id || '',
-			status: PolicyCaseStatus.IN_REVIEW
+			status: PolicyCaseStatus.IN_REVIEW,
 		};
 		this.addPolicyCaseToCurrentUser(caseDTO);
+	}
+
+	removePolicyCaseFromCurrentUser(policyId: number) {
+		const currentUser = this.userStore.currentUser();
+		if (!currentUser) {
+			console.error('No current user found');
+			return;
+		}
+		const policyCase = this.userCases()?.find((c) => c.policyId === policyId);
+		if (!policyCase) {
+			console.error(
+				'Policy case not found for user',
+				currentUser.id,
+				'with policy ID',
+				policyId,
+			);
+			return;
+		}
+		this.caseApi.removePolicyCase(policyCase.id).subscribe({
+			next: () => {
+				this.userCases.update((userCases) =>
+					userCases ? userCases.filter((c) => c.id !== policyCase.id) : null,
+				);
+			},
+			error: (err) => {
+				console.error('Error removing policy case', err);
+			},
+		});
 	}
 }

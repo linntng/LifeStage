@@ -138,31 +138,6 @@ export class UserStore {
 		});
 	}
 
-	addPolicyToCurrentUser(policyId: number) {
-		if (!this.currentUser()) {
-			console.error('No current user to add policy to');
-			return;
-		}
-		this.userApi.addPolicyToUser(this.currentUser()!.id, policyId).subscribe({
-			next: () => {
-				// Add life event ID to current user signal
-				this.currentUser.update((user) => {
-					if (!user) {
-						console.error('No current user');
-						return null;
-					}
-					return {
-						...user,
-						policyIds: [...user.policyIds, policyId],
-					};
-				});
-			},
-			error: (err) => {
-				console.error('Error adding policy to user', err);
-			},
-		});
-	}
-
 	removePolicyFromCurrentUser(policyId: number) {
 		if (!this.currentUser()) {
 			console.error('No current user to remove policy from');

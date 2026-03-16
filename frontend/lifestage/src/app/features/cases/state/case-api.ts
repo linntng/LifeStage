@@ -40,4 +40,9 @@ export class CaseApi {
 		};
 		return this.http.post<Case>(`${this.caseUrl}/user/${userId}`, policyCase, { headers });
 	}
+
+	removePolicyCase(caseId: number) {
+		const headers = { Authorization: `Bearer ${this.auth.token()}` };
+		return this.http.delete(`${this.caseUrl}/${caseId}`, { headers });
+	}
 }

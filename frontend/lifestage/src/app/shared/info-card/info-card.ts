@@ -11,15 +11,6 @@ export class InfoCard {
 	@Input() title = '';
 	@Input() color = 'bg-primary';
 
-	private dialog = inject(MatDialog);
 
-
-	openDialog() {
-	// 	const dialogRef = this.dialog.open(PolicyDialog, { data: this.policy });
-	// 	dialogRef.afterClosed().subscribe((confirmed) => {
-	// 		if (confirmed) {
-	// 			this.caseStore.applyForPolicyWithCurrentUser(this.policy.id);
-	// 		}
-	// 	});
-	}
+	
 }
