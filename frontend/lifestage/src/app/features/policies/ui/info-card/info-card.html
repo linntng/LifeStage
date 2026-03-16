@@ -9,6 +9,8 @@
 	>
 		<mat-card-header class="flex flex-col items-start">
 			<h3>{{ policy.name ? policy.name : 'Untitled' }}</h3>
+		</mat-card-header>
+		<mat-card-content>
 			<p>{{ 'Premium: ' + (policy.premium ? policy.premium : 'No premium') }}</p>
 			<p>Coverage includes:</p>
 			@for (lifeeventIds of policy.coveredLifeEvents; track lifeeventIds) {
@@ -21,6 +23,6 @@
 					{{ status }}
 				</span>
 			}
-		</mat-card-header>
+		</mat-card-content>
 	</mat-card>
 </article>
