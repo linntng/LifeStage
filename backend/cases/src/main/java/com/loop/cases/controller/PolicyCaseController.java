@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,6 +48,12 @@ public class PolicyCaseController {
         @PathVariable String id, @RequestBody PolicyCaseDTO policyCaseDTO
         ) {
         return ResponseEntity.ok(policyCaseService.addPolicyCaseToUser(policyCaseDTO));
+    }
+
+    @DeleteMapping("/{caseId}")
+    public ResponseEntity<Void> removePolicyCase(@PathVariable Long caseId) {
+        policyCaseService.removePolicyCase(caseId);
+        return ResponseEntity.noContent().build();
     }
 
 }

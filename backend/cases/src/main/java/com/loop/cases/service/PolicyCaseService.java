@@ -94,4 +94,15 @@ public class PolicyCaseService {
             throw new RuntimeException(e.getMessage());
         }
     }
+
+    @Transactional
+    public void removePolicyCase(Long caseId) {
+        try {
+            policyCaseRepository.deleteById(caseId);
+        } catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException("Policy case not found with id: " + caseId);
+        } catch (Exception e) {
+            throw new RuntimeException("An error occurred while removing the policy case", e);
+        }
+    }
 }
