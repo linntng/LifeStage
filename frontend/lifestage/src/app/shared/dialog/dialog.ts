@@ -13,8 +13,8 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 		</mat-dialog-content>
 
 		<mat-dialog-actions>
-			<button mat-button mat-dialog-actions (click)="confirm()">Confirm</button>
-			<button mat-button mat-dialog-close>Close</button>
+			<button (click)="confirm()">Confirm</button>
+			<button mat-dialog-close class="bg-gray-200">Close</button>
 		</mat-dialog-actions>
 	`,
 })

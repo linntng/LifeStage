@@ -45,4 +45,13 @@ export class CaseApi {
 		const headers = { Authorization: `Bearer ${this.auth.token()}` };
 		return this.http.delete(`${this.caseUrl}/${caseId}`, { headers });
 	}
+
+	updatePolicyCaseStatus(caseId: number, status: PolicyCaseStatus) {
+		const headers = {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${this.auth.token()}`,
+		};
+		return this.http.patch<Case>(`${this.caseUrl}/${caseId}/status`, { status }, { headers });
+	}
+
 }

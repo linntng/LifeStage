@@ -85,7 +85,7 @@ export class Policies {
 		});
 		dialogRef.afterClosed().subscribe((confirmed) => {
 			if (confirmed) {
-				if (this.userPolicies().includes(policy)) {
+				if (this.policiesInReview().includes(policy)) {
 					this.caseStore.removePolicyCaseFromCurrentUser(policy.id);
 				} else {
 					this.userStore.removePolicyFromCurrentUser(policy.id);

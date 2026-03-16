@@ -97,4 +97,24 @@ export class CaseStore {
 			},
 		});
 	}
+
+	updatePolicyCaseStatus(caseId: number, status: PolicyCaseStatus) {
+		this.caseApi.updatePolicyCaseStatus(caseId, status).subscribe({
+			next: (updatedCase) => {
+				this.cases.update((cases) =>
+					cases
+						? cases.map((policyCase) => (policyCase.id === updatedCase.id ? updatedCase : policyCase))
+						: null,
+				);
+				this.userCases.update((userCases) =>
+					userCases
+						? userCases.map((c) => (c.id === updatedCase.id ? updatedCase : c))
+						: null,
+				);
+			},
+			error: (err) => {
+				console.error('Error updating policy case status', err);
+			},
+		});
+	}
 }
