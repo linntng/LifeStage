@@ -59,3 +59,16 @@ INSERT INTO policy_life_events (policy_id, life_event_id) VALUES
 (10,3),
 (10,4),
 (10,5);
+
+-- No delete on policy table
+CREATE OR REPLACE FUNCTION prevent_delete()
+RETURNS trigger AS $$
+BEGIN
+    RAISE EXCEPTION 'Deletion is not allowed on table %', TG_TABLE_NAME;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER no_delete_trigger
+BEFORE DELETE ON policies
+FOR EACH ROW
+EXECUTE FUNCTION prevent_delete();
