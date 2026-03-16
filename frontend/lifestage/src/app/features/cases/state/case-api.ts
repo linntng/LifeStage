@@ -51,7 +51,8 @@ export class CaseApi {
 			'Content-Type': 'application/json',
 			Authorization: `Bearer ${this.auth.token()}`,
 		};
-		return this.http.patch<Case>(`${this.caseUrl}/${caseId}/status`, { status }, { headers });
+		console.log('Updating policy case status', caseId, status);
+		return this.http.patch<Case>(`${this.caseUrl}/${caseId}/status`, status, { headers });
 	}
 
 }

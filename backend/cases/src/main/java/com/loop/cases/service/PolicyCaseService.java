@@ -14,6 +14,7 @@ import com.loop.cases.exception.NotAuthorizedException;
 import com.loop.cases.exception.ResourceNotFoundException;
 import com.loop.cases.mapper.PolicyCaseMapper;
 import com.loop.cases.model.PolicyCase;
+import com.loop.cases.model.PolicyCaseStatus;
 import com.loop.cases.repository.PolicyCaseRepository;
 
 import feign.FeignException;
@@ -51,15 +52,10 @@ public class PolicyCaseService {
 
     @Transactional(readOnly = true)
     public Set<PolicyCase> getAllPolicyCases(String userId, String token) {
+        authenticateCaseHandlerRole(userId, token);
         try {
-            LifestageUserDTO user = lifestageClient.getUserById(userId, token);
-            if (!user.getRole().equals("CASE_HANDLER") && !user.getRole().equals("ADMIN")) {
-                throw new NotAuthorizedException("User with id: " + userId + " does not have permission to access all policy cases");
-            }
             return policyCaseRepository.findAll().stream()
                 .collect(Collectors.toSet());
-        } catch (NotAuthorizedException e) {
-            throw e;
         } catch (FeignException.NotFound e) {
             throw new ResourceNotFoundException("User not found with id: " + userId);
         } catch (Exception e) {
@@ -96,6 +92,23 @@ public class PolicyCaseService {
     }
 
     @Transactional
+    public PolicyCase updatePolicyCaseStatus(Long caseId, String status, String userId, String token) {
+        authenticateCaseHandlerRole(userId, token);
+        try {
+            PolicyCase policyCase = policyCaseRepository.findById(caseId)
+                .orElseThrow(() -> new EntityNotFoundException("Policy case not found with id: " + caseId));
+            policyCase.setStatus(PolicyCaseStatus.valueOf(status));
+            return policyCaseRepository.save(policyCase);
+        } catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException("Policy case not found with id: " + caseId);
+        } catch (IllegalArgumentException e) {
+            throw new BadRequestException("Invalid status value: " + status);
+        } catch (Exception e) {
+            throw new RuntimeException("An error occurred while updating the policy case status", e);
+        }
+    }
+
+    @Transactional
     public void removePolicyCase(Long caseId) {
         try {
             policyCaseRepository.deleteById(caseId);
@@ -105,4 +118,12 @@ public class PolicyCaseService {
             throw new RuntimeException("An error occurred while removing the policy case", e);
         }
     }
+
+    private void authenticateCaseHandlerRole(String userId, String token) {
+        LifestageUserDTO user = lifestageClient.getUserById(userId, token);
+        if (!user.getRole().equals("CASE_HANDLER") && !user.getRole().equals("ADMIN")) {
+            throw new NotAuthorizedException("User with id: " + userId + " does not have permission to access all policy cases");
+        }
+    }
+
 }
