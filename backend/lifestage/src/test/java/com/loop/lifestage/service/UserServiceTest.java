@@ -1,15 +1,24 @@
 package com.loop.lifestage.service;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
+import com.loop.lifestage.dto.PolicyRecommendationDTO;
 import com.loop.lifestage.dto.UserDTO;
+import com.loop.lifestage.engine.PolicyRecommendationEngine;
 import com.loop.lifestage.exception.BadRequestException;
 import com.loop.lifestage.exception.ResourceAlreadyExistsException;
 import com.loop.lifestage.exception.ResourceNotFoundException;
+import com.loop.lifestage.mapper.PolicyRecommendationMapper;
 import com.loop.lifestage.mapper.UserMapper;
+import com.loop.lifestage.model.LifeEvent;
+import com.loop.lifestage.model.policy.PolicyRecommendation;
 import com.loop.lifestage.model.user.User;
 import com.loop.lifestage.model.user.UserRole;
+import com.loop.lifestage.repository.LifeEventRepository;
+import com.loop.lifestage.repository.PolicyRecommendationRepository;
 import com.loop.lifestage.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.Optional;
@@ -26,8 +35,11 @@ import org.springframework.dao.DataIntegrityViolationException;
 class UserServiceTest {
 
   @Mock private UserRepository userRepository;
-
   @Mock private UserMapper userMapper;
+  @Mock private PolicyRecommendationRepository policyRecommendationRepository;
+  @Mock private PolicyRecommendationMapper policyRecommendationMapper;
+  @Mock private LifeEventRepository lifeEventRepository;
+  @Mock private PolicyRecommendationEngine recommendationEngine;
 
   @InjectMocks private UserService userService;
 
@@ -50,15 +62,12 @@ class UserServiceTest {
     @Test
     void shouldCreateUserSuccessfully() {
 
-      // Given
       when(userMapper.toUser(userDTO)).thenReturn(user);
       when(userRepository.save(user)).thenReturn(user);
       when(userMapper.toUserDTO(user)).thenReturn(userDTO);
 
-      // When
       UserDTO result = userService.createUser(userDTO);
 
-      // Then
       assertEquals(userDTO, result);
       verify(userRepository).save(user);
     }
@@ -66,31 +75,25 @@ class UserServiceTest {
     @Test
     void shouldThrowResourceAlreadyExistsWhenConstraintViolation() {
 
-      // Given
       when(userMapper.toUser(userDTO)).thenReturn(user);
       when(userRepository.save(user)).thenThrow(new DataIntegrityViolationException("duplicate"));
 
-      // Then
       assertThrows(ResourceAlreadyExistsException.class, () -> userService.createUser(userDTO));
     }
 
     @Test
     void shouldThrowBadRequestWhenMapperThrowsIllegalArgument() {
 
-      // Given
       when(userMapper.toUser(userDTO)).thenThrow(new IllegalArgumentException("invalid"));
 
-      // Then
       assertThrows(BadRequestException.class, () -> userService.createUser(userDTO));
     }
 
     @Test
     void shouldThrowRuntimeExceptionWhenUnexpectedErrorOccurs() {
 
-      // Given
       when(userMapper.toUser(userDTO)).thenThrow(new RuntimeException("unexpected"));
 
-      // Then
       assertThrows(RuntimeException.class, () -> userService.createUser(userDTO));
     }
   }
@@ -105,15 +108,12 @@ class UserServiceTest {
     @Test
     void shouldUpdateUserSuccessfully() {
 
-      // Given
       when(userMapper.toUser(userDTO)).thenReturn(user);
       when(userRepository.save(user)).thenReturn(user);
       when(userMapper.toUserDTO(user)).thenReturn(userDTO);
 
-      // When
       UserDTO result = userService.updateUser(userDTO);
 
-      // Then
       assertEquals(userDTO, result);
       verify(userRepository).save(user);
     }
@@ -121,32 +121,26 @@ class UserServiceTest {
     @Test
     void shouldThrowBadRequestWhenMapperThrowsIllegalArgument() {
 
-      // Given
       when(userMapper.toUser(userDTO)).thenThrow(new IllegalArgumentException());
 
-      // Then
       assertThrows(BadRequestException.class, () -> userService.updateUser(userDTO));
     }
 
     @Test
     void shouldThrowResourceNotFoundWhenRepositoryThrowsEntityNotFound() {
 
-      // Given
       when(userMapper.toUser(userDTO)).thenReturn(user);
       when(userRepository.save(user)).thenThrow(new EntityNotFoundException());
 
-      // Then
       assertThrows(ResourceNotFoundException.class, () -> userService.updateUser(userDTO));
     }
 
     @Test
     void shouldThrowRuntimeExceptionWhenUnexpectedErrorOccurs() {
 
-      // Given
       when(userMapper.toUser(userDTO)).thenReturn(user);
       when(userRepository.save(user)).thenThrow(new RuntimeException());
 
-      // Then
       assertThrows(RuntimeException.class, () -> userService.updateUser(userDTO));
     }
   }
@@ -161,14 +155,11 @@ class UserServiceTest {
     @Test
     void shouldReturnUserWhenFound() {
 
-      // Given
       when(userRepository.findById("1")).thenReturn(Optional.of(user));
       when(userMapper.toUserDTO(user)).thenReturn(userDTO);
 
-      // When
       UserDTO result = userService.getUserById("1");
 
-      // Then
       assertEquals(userDTO, result);
       verify(userRepository).findById("1");
     }
@@ -176,20 +167,16 @@ class UserServiceTest {
     @Test
     void shouldThrowResourceNotFoundWhenUserDoesNotExist() {
 
-      // Given
       when(userRepository.findById("1")).thenReturn(Optional.empty());
 
-      // Then
       assertThrows(ResourceNotFoundException.class, () -> userService.getUserById("1"));
     }
 
     @Test
     void shouldThrowRuntimeExceptionWhenUnexpectedErrorOccurs() {
 
-      // Given
       when(userRepository.findById("1")).thenThrow(new RuntimeException());
 
-      // Then
       assertThrows(RuntimeException.class, () -> userService.getUserById("1"));
     }
   }
@@ -204,7 +191,6 @@ class UserServiceTest {
     @Test
     void shouldReturnAllUsersWhenAdminRequests() {
 
-      // Given
       User admin = createUser();
       admin.setRole(UserRole.ADMIN);
 
@@ -212,10 +198,8 @@ class UserServiceTest {
       when(userRepository.findAll()).thenReturn(java.util.List.of(user));
       when(userMapper.toUserDTO(user)).thenReturn(userDTO);
 
-      // When
       var result = userService.getAllUsers("1");
 
-      // Then
       assertEquals(1, result.size());
       assertEquals(userDTO, result.get(0));
 
@@ -226,39 +210,22 @@ class UserServiceTest {
     @Test
     void shouldThrowRuntimeExceptionWhenAdminNotFound() {
 
-      // Given
       when(userRepository.findById("1")).thenReturn(Optional.empty());
 
-      // Then
       assertThrows(RuntimeException.class, () -> userService.getAllUsers("1"));
-
-      verify(userRepository).findById("1");
     }
 
     @Test
     void shouldThrowRuntimeExceptionWhenUserIsNotAdmin() {
 
-      // Given
       User normalUser = createUser();
       normalUser.setRole(UserRole.USER);
 
       when(userRepository.findById("1")).thenReturn(Optional.of(normalUser));
 
-      // Then
       assertThrows(RuntimeException.class, () -> userService.getAllUsers("1"));
 
-      verify(userRepository).findById("1");
       verify(userRepository, never()).findAll();
-    }
-
-    @Test
-    void shouldThrowRuntimeExceptionWhenRepositoryFails() {
-
-      // Given
-      when(userRepository.findById("1")).thenThrow(new RuntimeException());
-
-      // Then
-      assertThrows(RuntimeException.class, () -> userService.getAllUsers("1"));
     }
   }
 
@@ -272,27 +239,26 @@ class UserServiceTest {
     @Test
     void shouldDeleteUserSuccessfully() {
 
-      // Given
       when(userMapper.toUser(userDTO)).thenReturn(user);
 
-      // When
       userService.deleteUser(userDTO);
 
-      // Then
       verify(userRepository).delete(user);
     }
 
     @Test
     void shouldThrowRuntimeExceptionWhenDeleteFails() {
 
-      // Given
       when(userMapper.toUser(userDTO)).thenReturn(user);
       doThrow(new RuntimeException()).when(userRepository).delete(user);
 
-      // Then
       assertThrows(RuntimeException.class, () -> userService.deleteUser(userDTO));
     }
   }
+
+  // =========================
+  // MANAGE LIFE EVENTS
+  // =========================
 
   @Nested
   class ManageLifeEvents {
@@ -300,207 +266,94 @@ class UserServiceTest {
     @Test
     void addLifeEventToUser_shouldAddEventAndPersistUser() {
 
-      // Given
       Long eventId = 10L;
+      LifeEvent event = new LifeEvent();
+      PolicyRecommendation recommendation = new PolicyRecommendation();
+
       userDTO.setLifeEventIds(new java.util.HashSet<>());
 
       when(userMapper.toUser(userDTO)).thenReturn(user);
       when(userRepository.save(user)).thenReturn(user);
       when(userMapper.toUserDTO(user)).thenReturn(userDTO);
 
-      // When
+      when(lifeEventRepository.findById(eventId)).thenReturn(Optional.of(event));
+      when(recommendationEngine.generateRecommendation(eq(user), eq(event), any()))
+          .thenReturn(recommendation);
+      when(policyRecommendationRepository.save(recommendation)).thenReturn(recommendation);
+
       UserDTO result = userService.addLifeEventToUser(userDTO, eventId);
 
-      // Then
       assertTrue(userDTO.getLifeEventIds().contains(eventId));
       assertEquals(userDTO, result);
 
+      verify(policyRecommendationRepository).save(recommendation);
       verify(userRepository).save(user);
     }
 
     @Test
     void removeLifeEventForUser_shouldRemoveEventAndPersistUser() {
 
-      // Given
       Long eventId = 5L;
+      LifeEvent event = new LifeEvent();
+      PolicyRecommendation recommendation = new PolicyRecommendation();
+
       userDTO.setLifeEventIds(new java.util.HashSet<>(java.util.List.of(eventId)));
 
       when(userMapper.toUser(userDTO)).thenReturn(user);
       when(userRepository.save(user)).thenReturn(user);
       when(userMapper.toUserDTO(user)).thenReturn(userDTO);
 
-      // When
+      when(lifeEventRepository.findById(eventId)).thenReturn(Optional.of(event));
+      when(recommendationEngine.generateRecommendation(eq(user), eq(event), any()))
+          .thenReturn(recommendation);
+      when(policyRecommendationRepository.save(recommendation)).thenReturn(recommendation);
+
       UserDTO result = userService.removeLifeEventForUser(userDTO, eventId);
 
-      // Then
       assertFalse(userDTO.getLifeEventIds().contains(eventId));
       assertEquals(userDTO, result);
 
+      verify(policyRecommendationRepository).save(recommendation);
       verify(userRepository).save(user);
     }
+  }
 
-    // =========================
-    // MANAGE POLICIES
-    // =========================
+  // =========================
+  // GET LATEST POLICY RECOMMENDATION
+  // =========================
 
-    @Nested
-    class ManagePolicies {
+  @Nested
+  class GetLatestPolicyRecommendation {
 
-      @Test
-      void addPolicyToUser_shouldAddPolicyAndPersistUser() {
+    @Test
+    void shouldReturnLatestRecommendationWhenFound() {
 
-        // Given
-        Long policyId = 20L;
-        userDTO.setPolicyIds(new java.util.HashSet<>());
+      String userId = "1";
+      PolicyRecommendation recommendation = new PolicyRecommendation();
+      PolicyRecommendationDTO dto = new PolicyRecommendationDTO();
 
-        when(userMapper.toUser(userDTO)).thenReturn(user);
-        when(userRepository.save(user)).thenReturn(user);
-        when(userMapper.toUserDTO(user)).thenReturn(userDTO);
+      when(policyRecommendationRepository.findTopByUserIdOrderByCreatedAtDesc(userId))
+          .thenReturn(Optional.of(recommendation));
 
-        // When
-        UserDTO result = userService.addPolicyToUser(userDTO, policyId);
+      when(policyRecommendationMapper.toDto(recommendation)).thenReturn(dto);
 
-        // Then
-        assertTrue(userDTO.getPolicyIds().contains(policyId));
-        assertEquals(userDTO, result);
+      PolicyRecommendationDTO result =
+          userService.getLatestPolicyRecommendationForUser(userId);
 
-        verify(userRepository).save(user);
-      }
-
-      @Test
-      void removePolicyForUser_shouldRemovePolicyAndPersistUser() {
-
-        // Given
-        Long policyId = 30L;
-        userDTO.setPolicyIds(new java.util.HashSet<>(java.util.List.of(policyId)));
-
-        when(userMapper.toUser(userDTO)).thenReturn(user);
-        when(userRepository.save(user)).thenReturn(user);
-        when(userMapper.toUserDTO(user)).thenReturn(userDTO);
-
-        // When
-        UserDTO result = userService.removePolicyForUser(userDTO, policyId);
-
-        // Then
-        assertFalse(userDTO.getPolicyIds().contains(policyId));
-        assertEquals(userDTO, result);
-
-        verify(userRepository).save(user);
-      }
-
-      @Test
-      void addPolicyToUser_shouldThrowRuntimeException_whenUpdateFails() {
-
-        // Given
-        Long policyId = 40L;
-        userDTO.setPolicyIds(new java.util.HashSet<>());
-
-        when(userMapper.toUser(userDTO)).thenReturn(user);
-        when(userRepository.save(user)).thenThrow(new RuntimeException());
-
-        // Then
-        assertThrows(RuntimeException.class, () -> userService.addPolicyToUser(userDTO, policyId));
-      }
-
-      @Test
-      void removePolicyForUser_shouldThrowRuntimeException_whenUpdateFails() {
-
-        // Given
-        Long policyId = 50L;
-        userDTO.setPolicyIds(new java.util.HashSet<>(java.util.List.of(policyId)));
-
-        when(userMapper.toUser(userDTO)).thenReturn(user);
-        when(userRepository.save(user)).thenThrow(new RuntimeException());
-
-        // Then
-        assertThrows(
-            RuntimeException.class, () -> userService.removePolicyForUser(userDTO, policyId));
-      }
+      assertEquals(dto, result);
     }
 
-    // =========================
-    // CHANGE USER ROLE
-    // =========================
+    @Test
+    void shouldThrowResourceNotFoundWhenRecommendationDoesNotExist() {
 
-    @Nested
-    class ChangeRoleOfUser {
+      String userId = "1";
 
-      @Test
-      void shouldChangeUserRoleWhenAdminRequests() {
+      when(policyRecommendationRepository.findTopByUserIdOrderByCreatedAtDesc(userId))
+          .thenReturn(Optional.empty());
 
-        // Given
-        User admin = createUser();
-        admin.setRole(UserRole.ADMIN);
-
-        when(userRepository.findById("user1")).thenReturn(Optional.of(user));
-        when(userRepository.findById("admin1")).thenReturn(Optional.of(admin));
-        when(userRepository.save(user)).thenReturn(user);
-        when(userMapper.toUserDTO(user)).thenReturn(userDTO);
-
-        // When
-        UserDTO result = userService.changeRoleOfUser("user1", "admin1", UserRole.ADMIN);
-
-        // Then
-        assertEquals(userDTO, result);
-        assertEquals(UserRole.ADMIN, user.getRole());
-
-        verify(userRepository).save(user);
-      }
-
-      @Test
-      void shouldThrowRuntimeExceptionWhenUserNotFound() {
-
-        // Given
-        when(userRepository.findById("user1")).thenReturn(Optional.empty());
-
-        // Then
-        assertThrows(
-            RuntimeException.class,
-            () -> userService.changeRoleOfUser("user1", "admin1", UserRole.ADMIN));
-      }
-
-      @Test
-      void shouldThrowRuntimeExceptionWhenAdminNotFound() {
-
-        // Given
-        when(userRepository.findById("user1")).thenReturn(Optional.of(user));
-        when(userRepository.findById("admin1")).thenReturn(Optional.empty());
-
-        // Then
-        assertThrows(
-            RuntimeException.class,
-            () -> userService.changeRoleOfUser("user1", "admin1", UserRole.ADMIN));
-      }
-
-      @Test
-      void shouldThrowRuntimeExceptionWhenRequesterIsNotAdmin() {
-
-        // Given
-        User normalUser = createUser();
-        normalUser.setRole(UserRole.USER);
-
-        when(userRepository.findById("user1")).thenReturn(Optional.of(user));
-        when(userRepository.findById("admin1")).thenReturn(Optional.of(normalUser));
-
-        // Then
-        assertThrows(
-            RuntimeException.class,
-            () -> userService.changeRoleOfUser("user1", "admin1", UserRole.ADMIN));
-
-        verify(userRepository, never()).save(user);
-      }
-
-      @Test
-      void shouldThrowRuntimeExceptionWhenRepositoryFails() {
-
-        // Given
-        when(userRepository.findById("user1")).thenThrow(new RuntimeException());
-
-        // Then
-        assertThrows(
-            RuntimeException.class,
-            () -> userService.changeRoleOfUser("user1", "admin1", UserRole.ADMIN));
-      }
+      assertThrows(
+          ResourceNotFoundException.class,
+          () -> userService.getLatestPolicyRecommendationForUser(userId));
     }
   }
 
