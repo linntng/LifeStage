@@ -1,4 +1,32 @@
-<h1 class="mt-5 mb-20">{{ 'Hello, ' + auth.keycloakName() + '!' }}</h1>
+<h1 class="mt-5">{{ 'Hello, ' + auth.keycloakName() + '!' }}</h1>
+<section class="flex flex-row justify-around bg-blue-200 mb-30">
+	<img
+		src="/images/image1.png"
+		class="hidden md:block w-120 rounded-4xl shadow justify-start"
+		alt="happy people with life events covered"
+	/>
+	@if (alreadyCovered()) {
+		<div>
+			<h3>You're well covered!</h3>
+			<p>Your current policies cover your life events.</p>
+		</div>
+	} @else {
+		<div>
+			<p class="font-bold">Based on your newly added life event:</p>
+			<p>{{ getLifeeventName(userPolicyRec()?.lifeEventId) | capitalize }}</p>
+			<p class="font-bold">We recommend:</p>
+			@for (policy of policiesToAdd(); track policy.policyId) {
+				<p>Add: {{ getPolicyName(policy.policyId) }}</p>
+			}
+
+			@for (removepolicy of policiesToRemove(); track removepolicy.policyId) {
+				<p>Remove: {{ getPolicyName(removepolicy.policyId) }}</p>
+			}
+			<p class="font-bold">Estimated premium change: {{ userPolicyRec()?.premiumImpact }}</p>
+			<button class="mt-3" [routerLink]="['/policies']">Check it out</button>
+		</div>
+	}
+</section>
 <div class="mb-30">
 	<h2>Life events</h2>
 	<section>

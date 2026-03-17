@@ -11,7 +11,7 @@
 					(keydown.enter)="openActivePolicyDialog(policy)"
 					(keydown.space)="openActivePolicyDialog(policy)"
 					[title]="policy.name"
-					[color]="status(policy) === 'In review' ? 'bg-pending' : 'bg-primary'"
+					[color]="status(policy).active ? 'bg-primary' : 'bg-pending'"
 				>
 					<p>{{ 'Premium: ' + (policy.premium ? policy.premium : 'No premium') }}</p>
 					<p>Coverage includes:</p>
@@ -20,9 +20,20 @@
 							{{ getLifeeventName(lifeeventIds)?.name | capitalize }}
 						</li>
 					}
-					<span class="mt-5 px-4 py-2 rounded-full text-sm font-semibold bg-dark-glow">
-						{{ status(policy) }}
-					</span>
+					<div class="flex flex-col items-center justify-center">
+						<span
+							class="mt-3 w-full py-2 text-center rounded-full text-sm font-semibold bg-dark-glow"
+						>
+							{{ status(policy).active ? 'Active' : 'In review' }}
+						</span>
+						@if (status(policy).remove) {
+							<span
+								class="mt-2 px-4 py-2 rounded-full text-xs font-medium bg-red-200 text-center flex items-center justify-center w-fit min-w-48"
+							>
+								Recommended for removal
+							</span>
+						}
+					</div>
 				</app-info-card>
 			}
 		</div>
@@ -44,6 +55,13 @@
 						<li class="ml-7">
 							{{ getLifeeventName(lifeeventIds)?.name | capitalize }}
 						</li>
+					}
+					@if (status(policy).recommended) {
+						<span
+							class="mt-3 inline-block px-4 py-2 rounded-full text-sm font-semibold bg-green-100"
+						>
+							Recommended
+						</span>
 					}
 				</app-info-card>
 			}
