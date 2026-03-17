@@ -200,7 +200,9 @@ export class UserStore {
 
 	loadPolicyRecommendations(userId: string) {
 		this.userPolicyRecApi.getPolicyRecommendationById(userId).subscribe({
-			next: (data) => this.userPolicyRec.set(data),
+			next: (data) => {
+				this.userPolicyRec.set(data);
+			},
 			error: (err) => console.error('Error loading policy recommendations for user', err),
 		});
 	}
