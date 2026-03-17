@@ -1,0 +1,56 @@
+<section class="flex flex-col gap-4 min-w-[400px]">
+	<h1>Create new policy</h1>
+
+	<!-- Name -->
+	<div>
+		<label class="block mb-1">Policy name</label>
+		<input
+			type="text"
+			name="name"
+			[(ngModel)]="name"
+			class="w-full border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:border-black"
+		/>
+	</div>
+
+	<!-- Premium -->
+	<div>
+		<label class="block mb-1">Premium</label>
+		<input
+			type="text"
+			name="premium"
+			[(ngModel)]="premium"
+			class="w-full border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:border-black"
+		/>
+	</div>
+
+	<!-- Life events -->
+	<div>
+		<label>Life events</label>
+		<br />
+
+		<div class="scroll-container max-h-[150px]">
+			<table class="info-table">
+				<tbody>
+					@for (event of lifeEventStore.lifeevents(); track event) {
+						<tr>
+							<td>
+								<input
+									type="checkbox"
+									[checked]="selectedLifeEvents.includes(event.id)"
+									(change)="onLifeEventToggle(event.id, $event)"
+								/>
+							</td>
+							<td>{{ event.name }}</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<!-- Actions -->
+	<div class="flex justify-end gap-2">
+		<button (click)="close()">Cancel</button>
+		<button (click)="submit()">Create</button>
+	</div>
+</section>
