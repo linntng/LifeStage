@@ -21,8 +21,10 @@ export class Dashboard {
 	userPolicies = this.userstore.userPolicies;
 	allPolicies = this.policiesStore.policies;
 	allLifeevents = this.lifeeventStore.lifeevents;
-
 	userPolicyRec = this.userstore.userPolicyRec;
+	alreadyCovered = this.userstore.alreadyCovered;
+	policiesToAdd = this.userstore.policiesToAdd;
+	policiesToRemove = this.userstore.policiesToRemove;
 
 	constructor() {
 		effect(() => {
@@ -33,25 +35,6 @@ export class Dashboard {
 			}
 		});
 	}
-
-	readonly alreadyCovered = computed(() => {
-		const recPolicies = this.userPolicyRec()?.policyEditActions ?? [];
-		const userPolicies = this.userPolicies() ?? [];
-
-		const userPolicyIds = new Set(userPolicies.map((p) => p.id));
-
-		const addPolicies = recPolicies.filter((p) => p.action === 'ADD');
-
-		return addPolicies.every((p) => userPolicyIds.has(p.policyId));
-	});
-
-	readonly policiesToAdd = computed(
-		() => this.userPolicyRec()?.policyEditActions?.filter((a) => a.action === 'ADD') ?? [],
-	);
-
-	readonly policiesToRemove = computed(
-		() => this.userPolicyRec()?.policyEditActions?.filter((a) => a.action === 'REMOVE') ?? [],
-	);
 
 	getPolicyName(policyId: number) {
 		const policy = this.allPolicies()?.find((p) => p.id === policyId);
