@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit, effect, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { UserStore } from '../user/user-state/user-store';
 import { User } from '../user/user-state/user-api';
 import { Adminstore } from './state/adminstore';
 

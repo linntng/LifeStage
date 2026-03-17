@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, OnInit } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { UserStore } from '../user/user-state/user-store';
 import { Auth } from '../../core/auth/auth';
 import { CapitalizePipe } from '../../shared/capitalize-pipe';

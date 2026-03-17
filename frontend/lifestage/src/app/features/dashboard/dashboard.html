@@ -1,6 +1,10 @@
 <h1 class="mt-5">{{ 'Hello, ' + auth.keycloakName() + '!' }}</h1>
 <section class="flex flex-row justify-around bg-blue-200 mb-30">
-	<img src="/images/image1.png" class="hidden md:block w-120 rounded-4xl shadow justify-start" />
+	<img
+		src="/images/image1.png"
+		class="hidden md:block w-120 rounded-4xl shadow justify-start"
+		alt="happy people with life events covered"
+	/>
 	@if (alreadyCovered()) {
 		<div>
 			<h3>You're well covered!</h3>
