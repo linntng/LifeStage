@@ -1,7 +1,7 @@
 <article [class]="color + ' hover:' + color + '/50 p-4 rounded-lg w-full  hover:cursor-pointer'">
 	<mat-card class="rounded-lg shadow-lg mb-4 w-full">
 		<mat-card-header class="flex flex-col items-start">
-			<h2>{{ title ? title : 'Untitled' }}</h2>
+			<h2 class="text-lg">{{ title ? title : 'Untitled' }}</h2>
 		</mat-card-header>
 		<mat-card-content>
 			<ng-content />
