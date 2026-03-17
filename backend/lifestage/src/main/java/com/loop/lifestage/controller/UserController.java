@@ -64,7 +64,6 @@ public class UserController {
   }
 
   @PostMapping("/{id}/policies")
-  @PreAuthorize("#id == authentication.token.claims['sub']")
   public ResponseEntity<UserDTO> addPolicyToUser(
       @PathVariable String id, @RequestBody Long policyId) {
 
