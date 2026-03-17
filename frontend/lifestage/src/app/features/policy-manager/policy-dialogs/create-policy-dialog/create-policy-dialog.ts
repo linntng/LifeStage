@@ -7,6 +7,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { LifeeventStore } from '../../../lifeevents/state/lifeevent-store';
 import { Policy } from '../../../policies/state/policies-api';
+import { PolicyStatus } from '../../../policies/state/policy-status.enum';
 
 @Component({
 	selector: 'app-create-policy-dialog',
@@ -24,6 +25,7 @@ export class CreatePolicyDialog {
 	name: string = this.policy?.name ?? '';
 	premium: number | null = this.policy?.premium ?? null;
 	selectedLifeEvents: number[] = this.policy?.coveredLifeEvents ?? [];
+	status: PolicyStatus | null = this.policy?.status ?? null;
 
 	onLifeEventToggle(id: number, event: any) {
 		if (event.target.checked) {
@@ -39,6 +41,7 @@ export class CreatePolicyDialog {
 			name: this.name,
 			premium: this.premium,
 			coveredLifeEvents: this.selectedLifeEvents,
+			status: this.status,
 		});
 	}
 

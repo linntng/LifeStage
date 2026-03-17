@@ -28,7 +28,6 @@ export class PoliciesApi {
 	}
 
 	patchPolicy(policy: Policy): Observable<Policy> {
-		console.log('PATCH load:', policy);
 		return this.http.patch<Policy>(this.policiesUrl, policy);
 	}
 }

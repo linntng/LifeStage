@@ -51,7 +51,7 @@ public class PolicyService {
                   () -> new EntityNotFoundException("User not found with id: " + managerId));
       if (manager.getRole() == UserRole.POLICY_MANAGER) {
         Policy policy = policyMapper.toPolicy(policyDTO);
-        policy.setStatus(PolicyStatus.ACTIVE);
+        policy.setStatus(PolicyStatus.DRAFT);
         return policyMapper.toPolicyDTO(policyRepository.save(policy));
       } else {
         throw new RuntimeException("Could not create new policy");
@@ -73,12 +73,22 @@ public class PolicyService {
         Policy oldPolicy = policyRepository.findById(policyDTO.getId())
                               .orElseThrow(
                                 () -> new EntityNotFoundException("Policy not found with id: " + policyDTO.getId()));
-        Policy newPolicy = policyMapper.toPolicy(policyDTO);
-        oldPolicy.setStatus(PolicyStatus.EXPIRED);
-        newPolicy.setId(null);
-        newPolicy.setStatus(PolicyStatus.ACTIVE);
-        policyRepository.save(oldPolicy);
-        return policyMapper.toPolicyDTO((policyRepository.save(newPolicy)));
+        if (policyDTO.getStatus() == PolicyStatus.CANCELLED) {
+          oldPolicy.setStatus(PolicyStatus.CANCELLED);
+          return policyMapper.toPolicyDTO(policyRepository.save(oldPolicy));                
+        } else if (oldPolicy.getStatus() == PolicyStatus.PENDING) {
+          Policy newPolicy = policyMapper.toPolicy(policyDTO);
+          oldPolicy.setStatus(PolicyStatus.EXPIRED);
+          newPolicy.setStatus(PolicyStatus.ACTIVE);
+          newPolicy.setId(null);
+          policyRepository.save(oldPolicy);
+          return policyMapper.toPolicyDTO((policyRepository.save(newPolicy)));
+        } else if (oldPolicy.getStatus() == PolicyStatus.DRAFT) {
+          oldPolicy.setStatus(PolicyStatus.ACTIVE);
+          return policyMapper.toPolicyDTO(policyRepository.save(oldPolicy));
+        } else {
+          throw new RuntimeException("Something went wrong with the policy status: " + oldPolicy.getStatus());
+        }                        
       } else {
         throw new RuntimeException("Could not create new policy");
       }
