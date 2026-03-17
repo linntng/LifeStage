@@ -8,7 +8,6 @@ import { UserStore } from '../../../features/user/user-state/user-store';
 	selector: 'app-navbar',
 	imports: [RouterModule, LoginButton, CommonModule],
 	templateUrl: './navbar.html',
-	styleUrl: './navbar.css',
 })
 export class Navbar {
 	menuOpen = false;

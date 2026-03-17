@@ -8,5 +8,5 @@ import { MatCardModule } from '@angular/material/card';
 })
 export class InfoCard {
 	@Input() title = '';
-	@Input() color = 'bg-primary';
+	@Input() color = 'bg-secondary';
 }
