@@ -10,7 +10,7 @@ export interface User {
 	role: UserRole | null;
 }
 
-export type UserRole = 'ADMIN' | 'USER' | 'CASE_HANDLER' | 'RISK_ANALYST';
+export type UserRole = 'ADMIN' | 'USER' | 'CASE_HANDLER' | 'RISK_ANALYST' | 'POLICY_MANAGER';
 
 @Injectable({
 	providedIn: 'root',
