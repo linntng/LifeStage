@@ -1,14 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { PolicyEditActions } from './policy-edit-action';
+import { PolicyEditAction } from './policy-edit-action';
 
 export interface PolicyRecommendation {
 	id: number;
 	premiumImpact: number;
 	lifeEventId: number;
 	userId: string;
-	policyEditActions: PolicyEditActions[];
+	policyEditActions: PolicyEditAction[];
 }
 
 @Injectable({

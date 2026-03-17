@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-export interface PolicyEditActions {
+export interface PolicyEditAction {
 	id: number;
 	policyId: number;
 	policyRecommendationId: number;
