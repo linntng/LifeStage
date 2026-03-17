@@ -1,62 +1,44 @@
-<nav class="shadow-xl flex justify-around items-center bg-primary/30">
+<header class="sticky top-0 z-100 p-4 shadow-xl flex justify-between items-center bg-primary">
 	<!-- Logo -->
-	<div class="m-4">
-		<a routerLink="" class=""> LifeStage</a>
+	<div class="">
+		<a routerLink="" class="font-serif text-3xl"> LifeStage</a>
 	</div>
+
+	<nav
+		class="absolute md:relative top-full md:top-0 right-0 items-end md:items-center z-10 w-fit md:w-full flex flex-col md:flex-row justify-around 
+		bg-secondary/70 p-4 md:p-0 gap-2 md:gap-0
+		transition-all duration-300 transform
+		 "
+		[class]="
+			menuOpen
+				? ' translate-x-0  rounded-bl-2xl '
+				: 'opacity-0 md:opacity-100 md:flex  md:translate-x-0'
+		"
+	>
+		<!-- Navigation Links -->
+		@if (userStore.currentUser()?.role === 'USER') {
+			<a routerLink="/lifeevents">Life events</a>
+		}
+
+		@if (userStore.currentUser()?.role === 'USER') {
+			<a routerLink="/policies">Policies</a>
+		}
+		@if (userStore.currentUser()?.role === 'CASE_HANDLER' || userStore.currentUser()?.role === 'ADMIN') {
+			<a routerLink="/cases">Manage cases</a>
+		}
+
+		@if (userStore.currentUser()?.role === 'ADMIN') {
+			<a routerLink="/admin">Admin</a>
+		}
+		<app-login-button></app-login-button>
+	</nav>
+
 	<!-- Hamburger menu-->
-	<div class="m-4 md:hidden">
+	<div class="md:hidden">
 		<button class="" (click)="menuOpen = !menuOpen">☰</button>
 	</div>
 
-	<!-- Navigation Links -->
-	@if (userStore.currentUser()?.role === 'USER') {
-		<div class="m-4 hidden md:flex">
-			<a routerLink="/lifeevents">Life events</a>
-		</div>
-	}
-	@if (userStore.currentUser()?.role === 'CASE_HANDLER' || userStore.currentUser()?.role === 'ADMIN') {
-		<div class="m-4 hidden md:flex">
-			<a routerLink="/cases">Manage cases</a>
-		</div>
-	}
+	
+</header>
 
-	@if (userStore.currentUser()?.role === 'USER') {
-		<div class="m-4 hidden md:flex">
-			<a routerLink="/policies">Policies</a>
-		</div>
-	}
 
-	@if (userStore.currentUser()?.role === 'ADMIN') {
-		<div class="m-4 hidden md:flex">
-			<a routerLink="/admin">Admin</a>
-		</div>
-	}
-
-	<!-- Optional CTA -->
-	<div class="m-4 hidden md:flex">
-		<app-login-button></app-login-button>
-	</div>
-</nav>
-
-<!-- Dropdown menu -->
-<div
-	class="absolute w-full md:hidden flex flex-col items-end bg-primary/10 transition-all duration-300 transform"
-	[class.translate-x-0]="menuOpen"
-	[class.opacity-100]="menuOpen"
-	[class.translate-x-full]="!menuOpen"
-	[class.opacity-0]="!menuOpen"
->
-	@if (userStore.currentUser()?.role === 'USER') {
-		<a class="m-1" routerLink="/lifeevents">Life events</a>
-	}
-
-	@if (userStore.currentUser()?.role === 'USER') {
-		<a class="m-1" routerLink="/policies">Policies</a>
-	}
-
-	@if (userStore.currentUser()?.role === 'ADMIN') {
-		<a class="m-1" routerLink="/admin">Admin</a>
-	}
-
-	<app-login-button class="m-2"></app-login-button>
-</div>
