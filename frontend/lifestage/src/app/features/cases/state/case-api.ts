@@ -23,12 +23,12 @@ export class CaseApi {
 	private caseUrl = `${environment.caseApiUrl}/cases`;
 
 	getUserPolicyCases(userId: string) {
-		return this.http.get<Case[]>(`${this.caseUrl}/user/${userId}`, { headers });
+		return this.http.get<Case[]>(`${this.caseUrl}/user/${userId}`);
 	}
 
 	// Requires user to have role "CASE_HANDLER" or "ADMIN"
 	getAllPolicyCases() {
-		return this.http.get<Case[]>(this.caseUrl, { headers });
+		return this.http.get<Case[]>(this.caseUrl);
 	}
 
 	addPolicyCaseToUser(userId: string, policyCase: CaseDTO) {
@@ -39,7 +39,7 @@ export class CaseApi {
 	}
 
 	removePolicyCase(caseId: number) {
-		return this.http.delete(`${this.caseUrl}/${caseId}`, { headers });
+		return this.http.delete(`${this.caseUrl}/${caseId}`);
 	}
 
 	updatePolicyCaseStatus(caseId: number, status: PolicyCaseStatus) {
