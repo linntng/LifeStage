@@ -4,6 +4,14 @@ import { FormsModule } from '@angular/forms';
 import { UserStore } from '../user/state/user-store';
 import { User } from '../user/state/user-api';
 
+export enum UserRoles {
+	Admin = 'ADMIN',
+	User = 'USER',
+	CaseHandler = 'CASE_HANDLER',
+	RiskAnalyst = 'RISK_ANALYST',
+	PolicyManager = 'POLICY_MANAGER',
+}
+
 @Component({
 	selector: 'app-admin',
 	imports: [CommonModule, FormsModule],
@@ -17,7 +25,7 @@ export class Admin implements OnInit {
 	searchTerm = '';
 	filteredUsers: User[] = [];
 	editingUser: User | null = null;
-	userRoles: string[] = ['ADMIN', 'USER', 'CASE_HANDLER', 'RISK_ANALYST'];
+	userRoles: string[] = Object.values(UserRoles);
 	selectedRole: string | null = null;
 
 	constructor() {
