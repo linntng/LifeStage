@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PolicyDialog } from './policy-dialog';
+import { Dialog } from './dialog';
 
-describe('PolicyDialog', () => {
-	let component: PolicyDialog;
-	let fixture: ComponentFixture<PolicyDialog>;
+describe('Dialog', () => {
+	let component: Dialog;
+	let fixture: ComponentFixture<Dialog>;
 
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
-			imports: [PolicyDialog],
+			imports: [Dialog],
 		}).compileComponents();
 
-		fixture = TestBed.createComponent(PolicyDialog);
+		fixture = TestBed.createComponent(Dialog);
 		component = fixture.componentInstance;
 		await fixture.whenStable();
 	});

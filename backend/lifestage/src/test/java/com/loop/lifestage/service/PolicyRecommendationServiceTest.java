@@ -103,9 +103,6 @@ class PolicyRecommendationServiceTest {
         () -> userService.getLatestPolicyRecommendationForUser(userId));
   }
 
-  // =========================
-  // CREATE POLICY RECOMMENDATION
-  // =========================
 
   @Test
   void createPolicyRecommendation_shouldSaveAndReturnMappedDTO() {

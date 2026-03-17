@@ -13,6 +13,7 @@
 	--color-secondary-dark: #5e7961;
 
 	--color-dark-glow: #0000002d;
+	--color-pending: #ffe7b2;
 }
 
 @layer base {
