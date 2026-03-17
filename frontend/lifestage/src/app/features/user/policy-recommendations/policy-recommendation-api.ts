@@ -1,18 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { Auth } from '../../../core/auth/auth';
+import { PolicyEditActions } from './policy-edit-action';
 
 export interface PolicyRecommendation {
-	premiumImpact: string;
-	userId: string;
+	id: number;
+	premiumImpact: number;
 	lifeEventId: number;
+	userId: string;
 	policyEditActions: PolicyEditActions[];
-}
-
-export interface PolicyEditActions {
-	policyId: number;
-	action: 'ADD' | 'REMOVE';
 }
 
 @Injectable({
