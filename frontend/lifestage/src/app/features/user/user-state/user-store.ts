@@ -213,9 +213,13 @@ export class UserStore {
 
 		const userPolicyIds = new Set(userPolicies.map((p) => p.id));
 
-		const addPolicies = recPolicies.filter((p) => p.action === 'ADD');
+		const shouldAddPolicies = recPolicies.filter((p) => p.action === 'ADD');
+		const shouldRemovePolicies = recPolicies.filter((p) => p.action === 'REMOVE');
 
-		return addPolicies.every((p) => userPolicyIds.has(p.policyId));
+		const allAddsCovered = shouldAddPolicies.every((p) => userPolicyIds.has(p.policyId));
+		const noRemovesPresent = shouldRemovePolicies.every((p) => !userPolicyIds.has(p.policyId));
+
+		return allAddsCovered && noRemovesPresent;
 	});
 
 	readonly policiesToAdd = computed(
