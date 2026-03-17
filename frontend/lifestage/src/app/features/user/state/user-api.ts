@@ -2,13 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Auth } from '../../../core/auth/auth';
+import { UserRoles } from '../../admin/admin';
 
 export interface User {
 	id: string;
 	username: string;
 	lifeEventIds: number[]; // List of life event IDs associated with the user
 	policyIds: number[];
-	role: 'ADMIN' | 'USER' | 'CASE_HANDLER' | 'RISK_ANALYST' | null;
+	role: UserRoles;
 }
 
 @Injectable({

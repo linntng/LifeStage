@@ -14,7 +14,10 @@
 			<a routerLink="/lifeevents">Life events</a>
 		</div>
 	}
-	@if (userStore.currentUser()?.role === 'CASE_HANDLER' || userStore.currentUser()?.role === 'ADMIN') {
+	@if (
+		userStore.currentUser()?.role === 'CASE_HANDLER' ||
+		userStore.currentUser()?.role === 'ADMIN'
+	) {
 		<div class="m-4 hidden md:flex">
 			<a routerLink="/cases">Manage cases</a>
 		</div>
@@ -29,6 +32,11 @@
 	@if (userStore.currentUser()?.role === 'ADMIN') {
 		<div class="m-4 hidden md:flex">
 			<a routerLink="/admin">Admin</a>
+		</div>
+	}
+	@if (userStore.currentUser()?.role === 'POLICY_MANAGER') {
+		<div class="m-4 hidden md:flex">
+			<a routerLink="/policy-manager">Policy management</a>
 		</div>
 	}
 
@@ -56,6 +64,10 @@
 
 	@if (userStore.currentUser()?.role === 'ADMIN') {
 		<a class="m-1" routerLink="/admin">Admin</a>
+	}
+
+	@if (userStore.currentUser()?.role === 'POLICY_MANAGER') {
+		<a class="m-1" routerLink="/policy-manager">Policy management</a>
 	}
 
 	<app-login-button class="m-2"></app-login-button>

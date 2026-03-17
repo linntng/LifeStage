@@ -31,6 +31,12 @@ export const routes: Routes = [
 		canActivate: [authGuard],
 	},
 	{
+		path: 'policy-manager',
+		loadComponent: () =>
+			import('./features/policy-manager/policy-manager').then((p) => p.PolicyManager),
+		canActivate: [authGuard],
+	},
+	{
 		path: 'policy-cases',
 		redirectTo: 'cases',
 		pathMatch: 'full',
