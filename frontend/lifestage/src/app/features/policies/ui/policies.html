@@ -6,15 +6,46 @@
 		}
 		<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
 			@for (policy of userPolicies(); track policy) {
-				<app-info-card [policy]="policy" [showStatus]="true"></app-info-card>
+				<app-info-card
+					(click)="openActivePolicyDialog(policy)"
+					(keydown.enter)="openActivePolicyDialog(policy)"
+					(keydown.space)="openActivePolicyDialog(policy)"
+					[title]="policy.name"
+					[color]="status(policy) === 'In review' ? 'bg-pending' : 'bg-primary'"
+				>
+					<p>{{ 'Premium: ' + (policy.premium ? policy.premium : 'No premium') }}</p>
+					<p>Coverage includes:</p>
+					@for (lifeeventIds of policy.coveredLifeEvents; track lifeeventIds) {
+						<li class="ml-7">
+							{{ getLifeeventName(lifeeventIds)?.name | capitalize }}
+						</li>
+					}
+					<span class="mt-5 px-4 py-2 rounded-full text-sm font-semibold bg-dark-glow">
+						{{ status(policy) }}
+					</span>
+				</app-info-card>
 			}
 		</div>
 	</section>
+
 	<section>
 		<h2>Policies</h2>
 		<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
 			@for (policy of remainingPolicies(); track policy.id) {
-				<app-info-card [policy]="policy"> </app-info-card>
+				<app-info-card
+					(click)="openRemainingPolicyDialog(policy)"
+					(keydown.enter)="openRemainingPolicyDialog(policy)"
+					(keydown.space)="openRemainingPolicyDialog(policy)"
+					[title]="policy.name"
+				>
+					<p>{{ 'Premium: ' + (policy.premium ? policy.premium : 'No premium') }}</p>
+					<p>Coverage includes:</p>
+					@for (lifeeventIds of policy.coveredLifeEvents; track lifeeventIds) {
+						<li class="ml-7">
+							{{ getLifeeventName(lifeeventIds)?.name | capitalize }}
+						</li>
+					}
+				</app-info-card>
 			}
 		</div>
 	</section>
