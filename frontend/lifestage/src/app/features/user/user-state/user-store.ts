@@ -206,4 +206,23 @@ export class UserStore {
 			error: (err) => console.error('Error loading policy recommendations for user', err),
 		});
 	}
+
+	readonly alreadyCovered = computed(() => {
+		const recPolicies = this.userPolicyRec()?.policyEditActions ?? [];
+		const userPolicies = this.userPolicies() ?? [];
+
+		const userPolicyIds = new Set(userPolicies.map((p) => p.id));
+
+		const addPolicies = recPolicies.filter((p) => p.action === 'ADD');
+
+		return addPolicies.every((p) => userPolicyIds.has(p.policyId));
+	});
+
+	readonly policiesToAdd = computed(
+		() => this.userPolicyRec()?.policyEditActions?.filter((a) => a.action === 'ADD') ?? [],
+	);
+
+	readonly policiesToRemove = computed(
+		() => this.userPolicyRec()?.policyEditActions?.filter((a) => a.action === 'REMOVE') ?? [],
+	);
 }
