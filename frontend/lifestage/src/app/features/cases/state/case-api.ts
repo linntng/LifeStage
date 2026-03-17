@@ -33,7 +33,7 @@ export class CaseApi {
 
 	addPolicyCaseToUser(userId: string, policyCase: CaseDTO) {
 		const headers = {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
 		};
 		return this.http.post<Case>(`${this.caseUrl}/user/${userId}`, policyCase, { headers });
 	}

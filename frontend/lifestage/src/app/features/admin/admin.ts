@@ -1,40 +1,47 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit, effect, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { UserStore } from '../user/state/user-store';
-import { User } from '../user/state/user-api';
+import { User } from '../user/user-state/user-api';
+import { Adminstore } from './state/adminstore';
+
+export enum UserRoles {
+	Admin = 'ADMIN',
+	User = 'USER',
+	CaseHandler = 'CASE_HANDLER',
+	RiskAnalyst = 'RISK_ANALYST',
+	PolicyManager = 'POLICY_MANAGER',
+}
 
 @Component({
 	selector: 'app-admin',
 	imports: [CommonModule, FormsModule],
 	templateUrl: './admin.html',
-	styleUrls: ['./admin.css'],
 })
 export class Admin implements OnInit {
-	userStore = inject(UserStore);
+	adminStore = inject(Adminstore);
 	cdr = inject(ChangeDetectorRef);
 
 	searchTerm = '';
 	filteredUsers: User[] = [];
 	editingUser: User | null = null;
-	userRoles: string[] = ['ADMIN', 'USER', 'CASE_HANDLER', 'RISK_ANALYST'];
+	userRoles: string[] = Object.values(UserRoles);
 	selectedRole: string | null = null;
 
 	constructor() {
 		effect(() => {
-			this.filteredUsers = this.userStore.allUsers();
+			this.filteredUsers = this.adminStore.allUsers();
 			this.cdr.detectChanges(); // force UI update
 		});
 	}
 
 	ngOnInit(): void {
-		this.userStore.getAllUsers();
+		this.adminStore.getAllUsers();
 	}
 
 	filterUsers() {
 		const term = this.searchTerm.toLowerCase();
 
-		this.filteredUsers = this.userStore
+		this.filteredUsers = this.adminStore
 			.allUsers()
 			.filter(
 				(user) =>
@@ -45,6 +52,6 @@ export class Admin implements OnInit {
 	}
 
 	changeRole() {
-		this.userStore.changeRoleOfUser(this.editingUser!, this.selectedRole!);
+		this.adminStore.changeRoleOfUser(this.editingUser!, this.selectedRole!);
 	}
 }

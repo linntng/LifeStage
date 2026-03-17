@@ -1,22 +1,24 @@
 package com.loop.lifestage.service;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.loop.lifestage.dto.PolicyRecommendationDTO;
 import com.loop.lifestage.exception.ResourceNotFoundException;
 import com.loop.lifestage.mapper.PolicyRecommendationMapper;
 import com.loop.lifestage.model.policy.PolicyRecommendation;
 import com.loop.lifestage.repository.PolicyRecommendationRepository;
-
-import java.util.Optional;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 class PolicyRecommendationServiceTest {
@@ -29,6 +31,8 @@ class PolicyRecommendationServiceTest {
 
   @InjectMocks
   private PolicyRecommendationService policyRecommendationService;
+  @InjectMocks
+  private UserService userService;
 
   private PolicyRecommendation policyRecommendation;
   private PolicyRecommendationDTO policyRecommendationDTO;
@@ -40,8 +44,65 @@ class PolicyRecommendationServiceTest {
   }
 
   // =========================
-  // CREATE POLICY RECOMMENDATION
+  // GET LATEST POLICY RECOMMENDATION
   // =========================
+
+  @Test
+  void getLatestPolicyRecommendationForUser_shouldReturnMappedRecommendation() {
+
+    // Given
+    String userId = "user123";
+
+    when(policyRecommendationRepository.findTopByUserIdOrderByCreatedAtDesc(userId))
+        .thenReturn(Optional.of(policyRecommendation));
+
+    when(policyRecommendationMapper.toDto(policyRecommendation))
+        .thenReturn(policyRecommendationDTO);
+
+    // When
+    PolicyRecommendationDTO result =
+        userService.getLatestPolicyRecommendationForUser(userId);
+
+    // Then
+    assertNotNull(result);
+    assertEquals(policyRecommendationDTO.getUserId(), result.getUserId());
+
+    verify(policyRecommendationRepository)
+        .findTopByUserIdOrderByCreatedAtDesc(userId);
+
+    verify(policyRecommendationMapper).toDto(policyRecommendation);
+  }
+
+  @Test
+  void getLatestPolicyRecommendationForUser_shouldThrowResourceNotFound_whenRecommendationMissing() {
+
+    // Given
+    String userId = "user123";
+
+    when(policyRecommendationRepository.findTopByUserIdOrderByCreatedAtDesc(userId))
+        .thenReturn(Optional.empty());
+
+    // Then
+    assertThrows(
+        ResourceNotFoundException.class,
+        () -> userService.getLatestPolicyRecommendationForUser(userId));
+  }
+
+  @Test
+  void getLatestPolicyRecommendationForUser_shouldThrowRuntimeException_whenUnexpectedExceptionOccurs() {
+
+    // Given
+    String userId = "user123";
+
+    when(policyRecommendationRepository.findTopByUserIdOrderByCreatedAtDesc(userId))
+        .thenThrow(new RuntimeException("database error"));
+
+    // Then
+    assertThrows(
+        RuntimeException.class,
+        () -> userService.getLatestPolicyRecommendationForUser(userId));
+  }
+
 
   @Test
   void createPolicyRecommendation_shouldSaveAndReturnMappedDTO() {

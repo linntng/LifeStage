@@ -1,6 +1,6 @@
 import { effect, inject, Injectable, signal } from '@angular/core';
 import { Case, CaseApi, CaseDTO } from './case-api';
-import { UserStore } from '../../user/state/user-store';
+import { UserStore } from '../../user/user-state/user-store';
 import { PolicyCaseStatus } from './policy-case-status';
 
 @Injectable({

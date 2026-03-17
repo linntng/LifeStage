@@ -1,6 +1,6 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, effect, inject } from '@angular/core';
+import { UserStore } from '../../user/user-state/user-store';
 import { CommonModule } from '@angular/common';
-import { UserStore } from '../../user/state/user-store';
 import { PoliciesStore } from '../state/policies-store';
 import { InfoCard } from '../../../shared/info-card/info-card';
 import { PolicyStatus } from '../state/policy-status.enum';
@@ -22,10 +22,32 @@ export class Policies {
 	caseStore = inject(CaseStore);
 	private lifeeventStore = inject(LifeeventStore);
 	private dialog = inject(MatDialog);
+	user = this.userStore.currentUser;
+	policiesToAdd = this.userStore.policiesToAdd;
+	policiesToRemove = this.userStore.policiesToRemove;
+
+	constructor() {
+		effect(() => {
+			const currentUser = this.user();
+
+			if (currentUser) {
+				this.userStore.loadPolicyRecommendations(currentUser.id);
+			}
+		});
+	}
 
 	status(policy: Policy) {
 		const user = this.userStore.currentUser();
-		return user && policy && user.policyIds.includes(policy.id) ? 'Active' : 'In review';
+		const isActive = user?.policyIds.includes(policy.id);
+
+		const shouldAdd = this.policiesToAdd().some((p) => p.policyId === policy.id);
+		const shouldRemove = this.policiesToRemove().some((p) => p.policyId === policy.id);
+
+		return {
+			active: isActive,
+			recommended: shouldAdd,
+			remove: shouldRemove,
+		};
 	}
 
 	activePolicies = computed(() =>

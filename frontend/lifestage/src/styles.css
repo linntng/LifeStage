@@ -20,7 +20,7 @@
 
 @layer base {
 	body {
-		font-family: sans-serif;
+		font-family: 'Inter', sans-serif;
 		@apply text-gray-900 m-auto bg-white;
 	}
 
@@ -71,7 +71,7 @@
 	}
 
 	.info-table {
-		@apply  border-collapse;
+		@apply border-collapse;
 	}
 	.info-table thead {
 		@apply bg-primary sticky top-0 text-white;
@@ -94,6 +94,6 @@
 	}
 
 	.scroll-container {
-		@apply overflow-y-auto
+		@apply overflow-y-auto;
 	}
 }
