@@ -24,8 +24,8 @@ INSERT INTO policies (id, name, premium, status) VALUES
 (6, 'Family Bundle', 65.00, 'ACTIVE'),
 (7, 'Home & Career Package', 70.00, 'ACTIVE'),
 (8, 'International Transition Plan', 80.00, 'ACTIVE'),
-(9, 'Major Life Changes Package', 95.00, 'DRAFT'),
-(10, 'Complete Life Protection', 120.00, 'DRAFT');
+(9, 'Major Life Changes Package', 95.00, 'ACTIVE'),
+(10, 'Complete Life Protection', 120.00, 'ACTIVE');
 
 INSERT INTO policy_life_events (policy_id, life_event_id) VALUES
 
