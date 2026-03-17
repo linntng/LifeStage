@@ -3,7 +3,7 @@
 	@if (userLifeevents()?.length === 0) {
 		<p class="p-5">You haven't added any life events yet.</p>
 	}
-
+	<div class="w-full grid md:grid-cols-2 gap-4">
 	@for (event of userLifeevents(); track event) {
 		<article class="info-bar flex flex-wrap">
 			<img
@@ -37,10 +37,11 @@
 			}
 		</article>
 	}
+	</div>
 </section>
 <section>
 	<h2>Add a life event</h2>
-
+	<div class="w-full grid md:grid-cols-2 gap-4">
 	@for (event of remainingLifeevents(); track event) {
 		<article class="info-bar flex flex-wrap">
 			<img
@@ -63,7 +64,7 @@
 				(click)="addEvent(event)"
 				(keydown.enter)="addEvent(event)"
 				(keydown.space)="addEvent(event)"
-				class="font-bold"
+				class="font-bold bg-green-200"
 			>
 				Add
 			</button>
@@ -75,4 +76,5 @@
 			}
 		</article>
 	}
+	</div>
 </section>

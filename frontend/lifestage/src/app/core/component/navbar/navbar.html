@@ -1,19 +1,18 @@
 <header class="sticky top-0 z-100 p-4 shadow-xl flex justify-between items-center bg-primary">
 	<!-- Logo -->
 	<div class="">
-		<a routerLink="" class="font-serif text-3xl"> LifeStage</a>
+		<a
+			routerLink=""
+			class="font-serif text-3xl italic hover:bg-transparent text-shadow-md text-shadow-black hover:text-shadow-secondary"
+		>
+			LifeStage
+		</a>
 	</div>
 
 	<nav
-		class="absolute md:relative top-full md:top-0 right-0 items-end md:items-center z-10 w-fit md:w-full flex flex-col md:flex-row justify-around 
-		bg-secondary/70 p-4 md:p-0 gap-2 md:gap-0
-		transition-all duration-300 transform
-		 "
-		[class]="
-			menuOpen
-				? ' translate-x-0  rounded-bl-2xl '
-				: 'opacity-0 md:opacity-100 md:flex  md:translate-x-0'
-		"
+		class="absolute md:relative top-full md:top-0 right-0 items-end md:items-center z-10 w-fit md:w-full flex flex-col md:flex-row justify-around bg-primary/70 md:bg-transparent p-4 md:p-0 gap-2 md:gap-0 
+		transition-all  duration-0 transform"
+		[class]="menuOpen ? 'rounded-bl-2xl duration-300' : 'opacity-0 md:opacity-100'"
 	>
 		<!-- Navigation Links -->
 		@if (userStore.currentUser()?.role === 'USER') {
@@ -23,7 +22,10 @@
 		@if (userStore.currentUser()?.role === 'USER') {
 			<a routerLink="/policies">Policies</a>
 		}
-		@if (userStore.currentUser()?.role === 'CASE_HANDLER' || userStore.currentUser()?.role === 'ADMIN') {
+		@if (
+			userStore.currentUser()?.role === 'CASE_HANDLER' ||
+			userStore.currentUser()?.role === 'ADMIN'
+		) {
 			<a routerLink="/cases">Manage cases</a>
 		}
 
@@ -34,11 +36,5 @@
 	</nav>
 
 	<!-- Hamburger menu-->
-	<div class="md:hidden">
-		<button class="" (click)="menuOpen = !menuOpen">☰</button>
-	</div>
-
-	
+	<button class="md:hidden bg-transparent shadow-none text-white hover:text-secondary text-2xl p-0 mx-2" (click)="menuOpen = !menuOpen">☰</button>
 </header>
-
-
