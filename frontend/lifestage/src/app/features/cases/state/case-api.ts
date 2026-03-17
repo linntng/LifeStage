@@ -23,33 +23,28 @@ export class CaseApi {
 	private caseUrl = `${environment.caseApiUrl}/cases`;
 
 	getUserPolicyCases(userId: string) {
-		const headers = { Authorization: `Bearer ${this.auth.token()}` };
 		return this.http.get<Case[]>(`${this.caseUrl}/user/${userId}`, { headers });
 	}
 
 	// Requires user to have role "CASE_HANDLER" or "ADMIN"
 	getAllPolicyCases() {
-		const headers = { Authorization: `Bearer ${this.auth.token()}` };
 		return this.http.get<Case[]>(this.caseUrl, { headers });
 	}
 
 	addPolicyCaseToUser(userId: string, policyCase: CaseDTO) {
 		const headers = {
-			'Content-Type': 'application/json',
-			Authorization: `Bearer ${this.auth.token()}`,
+			'Content-Type': 'application/json'
 		};
 		return this.http.post<Case>(`${this.caseUrl}/user/${userId}`, policyCase, { headers });
 	}
 
 	removePolicyCase(caseId: number) {
-		const headers = { Authorization: `Bearer ${this.auth.token()}` };
 		return this.http.delete(`${this.caseUrl}/${caseId}`, { headers });
 	}
 
 	updatePolicyCaseStatus(caseId: number, status: PolicyCaseStatus) {
 		const headers = {
 			'Content-Type': 'application/json',
-			Authorization: `Bearer ${this.auth.token()}`,
 		};
 		console.log('Updating policy case status', caseId, status);
 		return this.http.patch<Case>(`${this.caseUrl}/${caseId}/status`, status, { headers });
