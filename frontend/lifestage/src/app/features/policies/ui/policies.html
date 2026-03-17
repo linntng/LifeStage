@@ -11,18 +11,16 @@
 					(keydown.enter)="openActivePolicyDialog(policy)"
 					(keydown.space)="openActivePolicyDialog(policy)"
 					[title]="policy.name"
-<<<<<<< 56-fix-styling
-					[color]="status(policy) === 'In review' ? 'bg-pending' : 'bg-secondary'"
-=======
 					[color]="status(policy).active ? 'bg-primary' : 'bg-pending'"
->>>>>>> main
 				>
 					<p>{{ 'Premium: ' + (policy.premium ? policy.premium : 'No premium') }}</p>
 					<p>Coverage includes:</p>
 					@for (lifeeventIds of policy.coveredLifeEvents; track lifeeventIds) {
-						<li class="ml-7">
-							{{ getLifeeventName(lifeeventIds)?.name | capitalize }}
-						</li>
+						<ul>
+							<li class="ml-7">
+								{{ getLifeeventName(lifeeventIds)?.name | capitalize }}
+							</li>
+						</ul>
 					}
 					<div class="flex flex-col items-center justify-center">
 						<span
@@ -56,9 +54,11 @@
 					<p>{{ 'Premium: ' + (policy.premium ? policy.premium : 'No premium') }}</p>
 					<p>Coverage includes:</p>
 					@for (lifeeventIds of policy.coveredLifeEvents; track lifeeventIds) {
-						<li class="ml-7">
-							{{ getLifeeventName(lifeeventIds)?.name | capitalize }}
-						</li>
+						<ul>
+							<li class="ml-7">
+								{{ getLifeeventName(lifeeventIds)?.name | capitalize }}
+							</li>
+						</ul>
 					}
 					@if (status(policy).recommended) {
 						<span
