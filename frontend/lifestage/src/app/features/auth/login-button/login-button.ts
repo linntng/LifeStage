@@ -1,6 +1,6 @@
 import { Component, effect, inject } from '@angular/core';
 import { Auth } from '../../../core/auth/auth';
-import { UserStore } from '../../user/state/user-store';
+import { UserStore } from '../../user/user-state/user-store';
 import { KEYCLOAK_EVENT_SIGNAL, KeycloakEventType } from 'keycloak-angular';
 
 @Component({

@@ -35,6 +35,14 @@ From the root of the repository, run:
 docker compose up -d
 ```
 
+If you have problems connecting to the database, you probably have a native PostgreSQL service running on your computer. Open a terminal with administrator rights and run: 
+```bash
+Stop-Service -Name postgresql-x64-18
+```
+To confirm that the service was stopped, run:
+```bash
+Get-Service -Name postgresql-x64-18 
+```
 ## Code formatting
 
 This project uses [Spotless](https://github.com/diffplug/spotless) with [Google Java Format](https://github.com/google/google-java-format) to enforce consistent code formatting.

@@ -1,74 +1,49 @@
-<nav class="shadow-xl flex justify-around items-center bg-primary/30">
+<header class="sticky top-0 z-100 p-4 shadow-xl flex justify-between items-center bg-primary">
 	<!-- Logo -->
-	<div class="m-4">
-		<a routerLink="" class=""> LifeStage</a>
-	</div>
-	<!-- Hamburger menu-->
-	<div class="m-4 md:hidden">
-		<button class="" (click)="menuOpen = !menuOpen">☰</button>
+	<div class="">
+		<a
+			routerLink=""
+			class="font-serif text-3xl italic hover:bg-transparent text-shadow-md text-shadow-black hover:text-shadow-secondary"
+		>
+			LifeStage
+		</a>
 	</div>
 
-	<!-- Navigation Links -->
-	@if (userStore.currentUser()?.role === 'USER') {
-		<div class="m-4 hidden md:flex">
+	<nav
+		class="absolute md:relative top-full md:top-0 right-0 items-end md:items-center z-10 w-fit md:w-full flex flex-col md:flex-row justify-around bg-primary/70 md:bg-transparent p-4 md:p-0 gap-2 md:gap-0 transition-all duration-0 transform"
+		[class]="menuOpen ? 'rounded-bl-2xl duration-300' : 'opacity-0 md:opacity-100'"
+	>
+		<!-- Navigation Links -->
+		@if (userStore.currentUser()?.role === 'USER') {
 			<a routerLink="/lifeevents">Life events</a>
-		</div>
-	}
-	@if (
-		userStore.currentUser()?.role === 'CASE_HANDLER' ||
-		userStore.currentUser()?.role === 'ADMIN'
-	) {
-		<div class="m-4 hidden md:flex">
-			<a routerLink="/cases">Manage cases</a>
-		</div>
-	}
+		}
 
-	@if (userStore.currentUser()?.role === 'USER') {
-		<div class="m-4 hidden md:flex">
+		@if (userStore.currentUser()?.role === 'USER') {
 			<a routerLink="/policies">Policies</a>
-		</div>
-	}
+		}
+		@if (
+			userStore.currentUser()?.role === 'CASE_HANDLER' ||
+			userStore.currentUser()?.role === 'ADMIN'
+		) {
+			<a routerLink="/cases">Manage cases</a>
+		}
 
-	@if (userStore.currentUser()?.role === 'ADMIN') {
-		<div class="m-4 hidden md:flex">
+		@if (userStore.currentUser()?.role === 'ADMIN') {
 			<a routerLink="/admin">Admin</a>
-		</div>
-	}
-	@if (userStore.currentUser()?.role === 'POLICY_MANAGER') {
-		<div class="m-4 hidden md:flex">
-			<a routerLink="/policy-manager">Policy management</a>
-		</div>
-	}
 
-	<!-- Optional CTA -->
-	<div class="m-4 hidden md:flex">
+			@if (userStore.currentUser()?.role === 'POLICY_MANAGER') {
+				<a routerLink="/policy-manager">Policy management</a>
+			}
+		}
+
 		<app-login-button></app-login-button>
-	</div>
-</nav>
+	</nav>
 
-<!-- Dropdown menu -->
-<div
-	class="absolute w-full md:hidden flex flex-col items-end bg-primary/10 transition-all duration-300 transform"
-	[class.translate-x-0]="menuOpen"
-	[class.opacity-100]="menuOpen"
-	[class.translate-x-full]="!menuOpen"
-	[class.opacity-0]="!menuOpen"
->
-	@if (userStore.currentUser()?.role === 'USER') {
-		<a class="m-1" routerLink="/lifeevents">Life events</a>
-	}
-
-	@if (userStore.currentUser()?.role === 'USER') {
-		<a class="m-1" routerLink="/policies">Policies</a>
-	}
-
-	@if (userStore.currentUser()?.role === 'ADMIN') {
-		<a class="m-1" routerLink="/admin">Admin</a>
-	}
-
-	@if (userStore.currentUser()?.role === 'POLICY_MANAGER') {
-		<a class="m-1" routerLink="/policy-manager">Policy management</a>
-	}
-
-	<app-login-button class="m-2"></app-login-button>
-</div>
+	<!-- Hamburger menu-->
+	<button
+		class="md:hidden bg-transparent shadow-none text-white hover:text-secondary text-2xl p-0 mx-2"
+		(click)="menuOpen = !menuOpen"
+	>
+		☰
+	</button>
+</header>

@@ -1,7 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { LifeeventStore } from '../state/lifeevent-store';
 import { CommonModule } from '@angular/common';
-import { UserStore } from '../../user/state/user-store';
+import { UserStore } from '../../user/user-state/user-store';
 import { Lifeevent } from '../state/lifeevent-api';
 import { CapitalizePipe } from '../../../shared/capitalize-pipe';
 

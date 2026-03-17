@@ -10,7 +10,7 @@ import { Case } from '../state/case-api';
 	imports: [],
 	templateUrl: './policy-cases.html',
 })
-export class PolicyCases {
+export class PolicyCases implements OnInit {
 	policyCaseStore = inject(CaseStore);
 	cases = this.policyCaseStore.cases;
 	activeCases = computed(() =>
@@ -25,19 +25,17 @@ export class PolicyCases {
 		this.policyCaseStore.loadAllCases();
 	}
 
-	addCase() {
-		this.policyCaseStore.addPolicyCaseToUser({
-			userId: 'test-user-id2',
-			policyId: 0,
-			status: PolicyCaseStatus.IN_REVIEW,
-		});
+	acceptCase(caseId: number) {
+		this.policyCaseStore.updatePolicyCaseStatus(caseId, PolicyCaseStatus.ACCEPTED);
 	}
 
-	openDialog(policyCase : Case) {
+	openDialog(policyCase: Case) {
 		const dialogRef = this.dialog.open(CaseDialog, { data: policyCase });
-		dialogRef.afterClosed().subscribe((confirmed) => {
-			if (confirmed) {
-				this.addCase();
+		dialogRef.afterClosed().subscribe((closeResult) => {
+			if (closeResult === 'ACCEPTED') {
+				this.acceptCase(policyCase.id);
+			} else if (closeResult === 'DENIED') {
+				this.policyCaseStore.updatePolicyCaseStatus(policyCase.id, PolicyCaseStatus.DENIED);
 			}
 		});
 	}

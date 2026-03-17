@@ -1,8 +1,7 @@
-<button
+<a
 	(click)="toggleAuth()"
 	(keydown.enter)="toggleAuth()"
 	(keydown.space)="toggleAuth()"
-	class="text-2xl p-2 cursor-pointer"
 >
 	{{ this.authenticated() ? 'Logout' : 'Login' }}
-</button>
+</a>
