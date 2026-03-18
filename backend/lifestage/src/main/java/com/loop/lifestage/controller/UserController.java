@@ -64,12 +64,11 @@ public class UserController {
   }
 
   @PostMapping("/{id}/policies")
-  @PreAuthorize("#id == authentication.token.claims['sub']")
   public ResponseEntity<UserDTO> addPolicyToUser(
-      @PathVariable String id, @RequestBody Long policyId) {
-
+      @PathVariable String id, @RequestBody Long policyId, @AuthenticationPrincipal Jwt jwt) {
+        String callerId = jwt.getSubject();
     UserDTO userDTO = userService.getUserById(id);
-    return ResponseEntity.ok(userService.addPolicyToUser(userDTO, policyId));
+    return ResponseEntity.ok(userService.addPolicyToUser(userDTO, policyId, callerId));
   }
 
   @PatchMapping("/{id}/policies/{policyId}")

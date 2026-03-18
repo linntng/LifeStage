@@ -98,6 +98,11 @@ public class PolicyCaseService {
             PolicyCase policyCase = policyCaseRepository.findById(caseId)
                 .orElseThrow(() -> new EntityNotFoundException("Policy case not found with id: " + caseId));
             policyCase.setStatus(PolicyCaseStatus.valueOf(status));
+
+            if (PolicyCaseStatus.ACCEPTED.name().equals(status)) {
+                acceptPolicyCase(policyCase, token);
+            }
+
             return policyCaseRepository.save(policyCase);
         } catch (EntityNotFoundException e) {
             throw new ResourceNotFoundException("Policy case not found with id: " + caseId);
@@ -124,6 +129,10 @@ public class PolicyCaseService {
         if (!user.getRole().equals("CASE_HANDLER") && !user.getRole().equals("ADMIN")) {
             throw new NotAuthorizedException("User with id: " + userId + " does not have permission to access all policy cases");
         }
+    }
+
+    private void acceptPolicyCase(PolicyCase policyCase, String token) {
+        LifestageUserDTO user = lifestageClient.addPolicyToUser(policyCase.getUserId(), token, policyCase.getPolicyId());
     }
 
 }

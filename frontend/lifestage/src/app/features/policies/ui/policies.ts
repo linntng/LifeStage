@@ -10,6 +10,7 @@ import { CapitalizePipe } from '../../../shared/capitalize-pipe';
 import { Policy } from '../state/policies-api';
 import { Dialog } from '../../../shared/dialog/dialog';
 import { MatDialog } from '@angular/material/dialog';
+import { PolicyCaseStatus } from '../../cases/state/policy-case-status';
 
 @Component({
 	selector: 'app-policy',
@@ -54,7 +55,10 @@ export class Policies {
 		this.policiesStore.policies().filter((policy) => policy.status === PolicyStatus.ACTIVE),
 	);
 	policiesInReview = computed(() => {
-		const policyCases = this.caseStore.userCases();
+		const policyCases = this.caseStore.userCases()?.filter(
+			(policyCase) =>
+				policyCase.status === PolicyCaseStatus.IN_REVIEW,
+		);
 		const policyIds = policyCases ? policyCases.map((policyCase) => policyCase.policyId) : [];
 		const policies =
 			policyIds.length > 0
