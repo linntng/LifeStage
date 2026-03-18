@@ -26,6 +26,7 @@ export class CreatePolicyDialog {
 	premium: number | null = this.policy?.premium ?? null;
 	selectedLifeEvents: number[] = this.policy?.coveredLifeEvents ?? [];
 	status: PolicyStatus | null = this.policy?.status ?? null;
+	inReview: boolean | null = this.policy?.inReview ?? null;
 
 	onLifeEventToggle(id: number, event: any) {
 		if (event.target.checked) {
@@ -42,6 +43,7 @@ export class CreatePolicyDialog {
 			premium: this.premium,
 			coveredLifeEvents: this.selectedLifeEvents,
 			status: this.status,
+			inReview: this.inReview,
 		});
 	}
 

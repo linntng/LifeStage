@@ -4,6 +4,7 @@ import { PolicyStatus } from '../policies/state/policy-status.enum';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { CreatePolicyDialog } from './policy-dialogs/create-policy-dialog/create-policy-dialog';
 import { Policy } from '../policies/state/policies-api';
+import { ReviewPolicyDialog } from './policy-dialogs/review-policy-dialog/review-policy-dialog';
 
 @Component({
 	selector: 'app-policy-manager',
@@ -20,13 +21,10 @@ export class PolicyManager {
 	}
 
 	getReviewPolicies() {
-		return this.policyStore.getPoliciesFilteredByStatus([
-			PolicyStatus.PENDING,
-			PolicyStatus.DRAFT,
-		]);
+		return this.policyStore.policiesToReview();
 	}
 
-	createPolicyDialog(policy?: Policy) {
+	createOrUpdatePolicyDialog(policy?: Policy) {
 		const dialogRef = this.dialog.open(CreatePolicyDialog, {
 			width: '600px',
 			data: policy,
@@ -39,6 +37,16 @@ export class PolicyManager {
 			} else {
 				this.policyStore.patchPolicy(resultPolicy);
 			}
+		});
+	}
+
+	reviewPolicyDialog(policy: Policy) {
+		const dialogRef = this.dialog.open(ReviewPolicyDialog, {
+			width: '600px',
+			data: policy,
+		});
+		dialogRef.afterClosed().subscribe((resultPolicy) => {
+			this.policyStore.patchPolicy(resultPolicy);
 		});
 	}
 }
