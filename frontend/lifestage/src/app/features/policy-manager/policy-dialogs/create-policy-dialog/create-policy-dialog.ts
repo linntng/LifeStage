@@ -14,7 +14,6 @@ import { PolicyStatus } from '../../../policies/state/policy-status.enum';
 	imports: [FormsModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule],
 	standalone: true,
 	templateUrl: './create-policy-dialog.html',
-	styleUrl: './create-policy-dialog.css',
 })
 export class CreatePolicyDialog {
 	policy = inject(MAT_DIALOG_DATA) as Policy;

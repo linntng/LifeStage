@@ -8,7 +8,6 @@ import { PolicyStatus } from '../../../policies/state/policy-status.enum';
 	selector: 'app-review-policy-dialog',
 	standalone: true,
 	templateUrl: './review-policy-dialog.html',
-	styleUrl: './review-policy-dialog.css',
 })
 export class ReviewPolicyDialog {
 	policy = inject(MAT_DIALOG_DATA) as Policy;

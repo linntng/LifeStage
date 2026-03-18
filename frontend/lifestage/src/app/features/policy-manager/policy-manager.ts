@@ -10,7 +10,6 @@ import { ReviewPolicyDialog } from './policy-dialogs/review-policy-dialog/review
 	selector: 'app-policy-manager',
 	imports: [MatDialogModule, CreatePolicyDialog],
 	templateUrl: './policy-manager.html',
-	styleUrl: './policy-manager.css',
 })
 export class PolicyManager {
 	policyStore = inject(PoliciesStore);
