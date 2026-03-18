@@ -3,6 +3,7 @@ package com.loop.lifestage.controller;
 import com.loop.lifestage.dto.PolicyDTO;
 import com.loop.lifestage.service.PolicyService;
 import java.util.List;
+import java.util.Set;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -43,5 +44,10 @@ public class PolicyController {
       String sub = jwt.getSubject();
       return ResponseEntity.ok(policyService.updatePolicy(sub, policyDTO));
     }
-  
+
+  @GetMapping("/review")
+  public ResponseEntity<Set<PolicyDTO>> getReviewPoliciesForManager(@AuthenticationPrincipal Jwt jwt) {
+    String sub = jwt.getSubject();
+    return ResponseEntity.ok(policyService.getPoliciesToReviewForPolicyManager(sub));
+  }
 }

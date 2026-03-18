@@ -40,6 +40,8 @@ public class PolicyManagerAction {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    public PolicyManagerAction() {}
+
     public PolicyManagerAction(
         User manager,
         Policy originPolicy,
