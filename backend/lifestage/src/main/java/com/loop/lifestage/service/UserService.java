@@ -158,7 +158,13 @@ public class UserService {
   public UserDTO addPolicyToUser(UserDTO userDTO, Long policyId) {
     try {
       userDTO.addPolicyById(policyId);
-      User user = userMapper.toUser(userDTO);
+      User user = userRepository
+          .findById(userDTO.getId())
+          .orElseThrow(() -> new RuntimeException("Case handler not found"));
+      if (user.getRole() != UserRole.CASE_HANDLER && user.getRole() != UserRole.ADMIN) {
+        throw new RuntimeException("Only case handlers and admins can add policies to users");
+      }
+      
       PolicyRecommendation latestRecommendation =
         policyRecommendationRepository
             .findTopByUserIdOrderByCreatedAtDesc(userDTO.getId())
