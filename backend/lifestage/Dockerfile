@@ -3,7 +3,6 @@ FROM eclipse-temurin:21-jdk
 # Set the working directory inside the container
 WORKDIR /app
 
-RUN mvn install
 # Copy the built JAR file into the container
 COPY target/lifestage-0.0.1-SNAPSHOT.jar app.jar
 # Expose the default Spring Boot port
