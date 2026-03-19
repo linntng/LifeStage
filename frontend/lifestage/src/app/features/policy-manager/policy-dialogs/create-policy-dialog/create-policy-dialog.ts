@@ -8,10 +8,18 @@ import { MatButtonModule } from '@angular/material/button';
 import { LifeeventStore } from '../../../lifeevents/state/lifeevent-store';
 import { Policy } from '../../../policies/state/policies-api';
 import { PolicyStatus } from '../../../policies/state/policy-status.enum';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
 	selector: 'app-create-policy-dialog',
-	imports: [FormsModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule],
+	imports: [
+		FormsModule,
+		MatFormFieldModule,
+		MatInputModule,
+		MatSelectModule,
+		MatButtonModule,
+		MatTooltipModule,
+	],
 	standalone: true,
 	templateUrl: './create-policy-dialog.html',
 })
