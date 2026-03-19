@@ -57,6 +57,7 @@ public class PolicyService {
       if (manager.getRole() == UserRole.POLICY_MANAGER) {
         Policy policy = policyMapper.toPolicy(policyDTO);
         policy.setStatus(PolicyStatus.DRAFT);
+        policy.setInReview(true);
         policyRepository.save(policy);
         PolicyManagerAction managerAction = new PolicyManagerAction(manager, null, policy);
         policyManagerActionRepository.save(managerAction);
@@ -126,6 +127,7 @@ public class PolicyService {
 
   private PolicyDTO handleDraftPolicyUpdate(User manager, PolicyDTO policyDTO) {
     Policy policy = policyMapper.toPolicy(policyDTO);
+    policy.setInReview(false);
     PolicyManagerAction newManagerAction = new PolicyManagerAction(manager, null, policy);
     policyManagerActionRepository.save(newManagerAction);
     return policyMapper.toPolicyDTO(policyRepository.save(policy));
