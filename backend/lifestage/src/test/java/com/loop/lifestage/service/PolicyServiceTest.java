@@ -163,7 +163,7 @@ class PolicyServiceTest {
     when(policyRepository.save(newPolicy)).thenReturn(newPolicy);
     when(policyMapper.toPolicyDTO(newPolicy)).thenReturn(policyDTO);
 
-    PolicyDTO result = policyService.updatePolicy(managerId, policyDTO);
+    PolicyDTO result = policyService.updatePolicy(managerId, policyDTO, null);
 
     assertNotNull(result);
     assertEquals(PolicyStatus.EXPIRED, oldPolicy.getStatus());
@@ -187,7 +187,7 @@ class PolicyServiceTest {
     when(policyRepository.findById(policyDTO.getId())).thenReturn(Optional.empty());
 
     assertThrows(RuntimeException.class,
-        () -> policyService.updatePolicy(managerId, policyDTO));
+        () -> policyService.updatePolicy(managerId, policyDTO, null));
   }
 
   @Test
@@ -202,7 +202,7 @@ class PolicyServiceTest {
     when(userRepository.findById(managerId)).thenReturn(Optional.of(manager));
 
     assertThrows(RuntimeException.class,
-        () -> policyService.updatePolicy(managerId, policyDTO));
+        () -> policyService.updatePolicy(managerId, policyDTO, null));
   }
 
   // =========================
