@@ -38,9 +38,27 @@
 	</div>
 
 	<!-- Actions -->
-	<div class="flex justify-end gap-2">
-		<button (click)="back()">Back</button>
-		<button (click)="deny()">Deny</button>
-		<button (click)="accept()">Accept</button>
+	<div class="flex flex-col gap-2">
+		@if (isDenying) {
+			<textarea
+				[(ngModel)]="explanation"
+				rows="2"
+				class="border rounded px-2 py-1"
+				placeholder="Reason for rejection..."
+			></textarea>
+		}
+
+		<div class="flex justify-end gap-2">
+			<button (click)="back()">Back</button>
+
+			<button
+				(click)="isDenying ? deny() : (isDenying = true)"
+				[disabled]="isDenying && !explanation.trim()"
+			>
+				{{ isDenying ? 'Confirm Deny' : 'Deny' }}
+			</button>
+
+			<button (click)="accept()">Accept</button>
+		</div>
 	</div>
 </section>
