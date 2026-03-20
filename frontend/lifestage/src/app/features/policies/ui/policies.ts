@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject } from '@angular/core';
+import { Component, computed, effect, inject, OnInit } from '@angular/core';
 import { UserStore } from '../../user/user-state/user-store';
 import { CommonModule } from '@angular/common';
 import { PoliciesStore } from '../state/policies-store';
@@ -17,7 +17,7 @@ import { PolicyCaseStatus } from '../../cases/state/policy-case-status';
 	imports: [InfoCard, CapitalizePipe, CommonModule],
 	templateUrl: './policies.html',
 })
-export class Policies {
+export class Policies implements OnInit {
 	userStore = inject(UserStore);
 	policiesStore = inject(PoliciesStore);
 	caseStore = inject(CaseStore);
@@ -35,6 +35,10 @@ export class Policies {
 				this.userStore.loadPolicyRecommendations(currentUser.id);
 			}
 		});
+	}
+
+	ngOnInit() {
+		this.policiesStore.loadPolicies();
 	}
 
 	status(policy: Policy) {
@@ -55,10 +59,9 @@ export class Policies {
 		this.policiesStore.policies().filter((policy) => policy.status === PolicyStatus.ACTIVE),
 	);
 	policiesInReview = computed(() => {
-		const policyCases = this.caseStore.userCases()?.filter(
-			(policyCase) =>
-				policyCase.status === PolicyCaseStatus.IN_REVIEW,
-		);
+		const policyCases = this.caseStore
+			.userCases()
+			?.filter((policyCase) => policyCase.status === PolicyCaseStatus.IN_REVIEW);
 		const policyIds = policyCases ? policyCases.map((policyCase) => policyCase.policyId) : [];
 		const policies =
 			policyIds.length > 0

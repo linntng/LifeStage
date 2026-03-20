@@ -1,5 +1,7 @@
 package com.loop.cases.model;
 
+import org.hibernate.envers.Audited;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -10,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
+@Audited
 @Table(name = "policy_cases")
 public class PolicyCase {
     @Id

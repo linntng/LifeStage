@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.loop.lifestage.dto.PolicyRecommendationDTO;
 import com.loop.lifestage.dto.UserDTO;
 import com.loop.lifestage.model.user.UserRole;
+import com.loop.lifestage.service.AuditService;
 import com.loop.lifestage.service.UserService;
 
 @RestController
@@ -24,14 +25,17 @@ import com.loop.lifestage.service.UserService;
 public class UserController {
 
   private final UserService userService;
+  private final AuditService auditService;
 
-  public UserController(UserService userService) {
+  public UserController(UserService userService, AuditService auditService) {
     this.userService = userService;
+    this.auditService = auditService;
   }
 
   @GetMapping
   public ResponseEntity<List<UserDTO>> getAllUsers(@AuthenticationPrincipal Jwt jwt) {
     String sub = jwt.getSubject();
+    auditService.logAccess("READ_LIST", "Users");
     return ResponseEntity.ok(userService.getAllUsers(sub));
   }
 

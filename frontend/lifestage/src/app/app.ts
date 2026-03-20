@@ -1,8 +1,6 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { LifeeventStore } from './features/lifeevents/state/lifeevent-store';
 import { Navbar } from './core/component/navbar/navbar';
-import { PoliciesStore } from './features/policies/state/policies-store';
 
 @Component({
 	selector: 'app-root',
@@ -10,13 +8,6 @@ import { PoliciesStore } from './features/policies/state/policies-store';
 	templateUrl: './app.html',
 	styleUrl: './app.css',
 })
-export class App implements OnInit {
+export class App {
 	protected readonly title = signal('lifestage');
-	lifeeventStore = inject(LifeeventStore);
-	policyStore = inject(PoliciesStore);
-
-	ngOnInit() {
-		this.lifeeventStore.loadLifeevents();
-		this.policyStore.loadPolicies();
-	}
 }

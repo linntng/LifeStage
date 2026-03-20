@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.loop.cases.client.LifestageClient;
+import com.loop.cases.dto.AuditRequestDTO;
 import com.loop.cases.dto.PolicyCaseDTO;
 import com.loop.cases.model.PolicyCase;
 import com.loop.cases.service.PolicyCaseService;
@@ -25,9 +27,11 @@ import com.loop.cases.service.PolicyCaseService;
 public class PolicyCaseController {
 
     private final PolicyCaseService policyCaseService;
+    private final LifestageClient lifestageClient;
 
-    public PolicyCaseController(PolicyCaseService policyCaseService) {
+    public PolicyCaseController(PolicyCaseService policyCaseService, LifestageClient lifestageClient) {
         this.policyCaseService = policyCaseService;
+        this.lifestageClient = lifestageClient;
     }
 
     @GetMapping
@@ -35,7 +39,17 @@ public class PolicyCaseController {
             Authentication authentication,
             @RequestHeader("Authorization") String token) {
         Jwt jwt = (Jwt) authentication.getPrincipal();
-        String userId = jwt.getClaim("sub");
+        String userId = jwt.getSubject();
+
+        lifestageClient.logAuditAccess(
+        token,
+        new AuditRequestDTO(
+            userId,
+            "READ_LIST",
+            "PolicyCase"
+        )
+    );
+            
         return ResponseEntity.ok(policyCaseService.getAllPolicyCases(userId, token));
     }
 

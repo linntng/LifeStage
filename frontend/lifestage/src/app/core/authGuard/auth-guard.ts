@@ -1,14 +1,13 @@
-import { CanActivateFn, Router } from '@angular/router';
-import { inject } from '@angular/core/primitives/di';
+import { CanActivateFn } from '@angular/router';
 import { Auth } from '../auth/auth';
+import { inject } from '@angular/core';
 
 export const authGuard: CanActivateFn = async () => {
 	const auth = inject(Auth);
-	const router = inject(Router);
 
 	if (!auth.authenticated()) {
 		auth.login();
-		return router.navigate(['/']);
+		return false;
 	}
 
 	return auth.authenticated();

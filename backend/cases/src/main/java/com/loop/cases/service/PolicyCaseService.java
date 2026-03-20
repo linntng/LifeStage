@@ -126,7 +126,7 @@ public class PolicyCaseService {
 
     private void authenticateCaseHandlerRole(String userId, String token) {
         LifestageUserDTO user = lifestageClient.getUserById(userId, token);
-        if (!user.getRole().equals("CASE_HANDLER") && !user.getRole().equals("ADMIN")) {
+        if (!user.getRole().equals("CASE_HANDLER")) {
             throw new NotAuthorizedException("User with id: " + userId + " does not have permission to access all policy cases");
         }
     }

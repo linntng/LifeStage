@@ -1,7 +1,12 @@
 package com.loop.lifestage.model.policy;
 
+import java.util.Set;
+
+import org.hibernate.envers.Audited;
+
 import com.loop.lifestage.model.LifeEvent;
 import com.loop.lifestage.model.user.User;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -13,9 +18,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
-import java.util.Set;
 
 @Entity
+@Audited
 @Table(name = "policies")
 public class Policy {
   @Id

@@ -1,7 +1,13 @@
 package com.loop.lifestage.model;
 
+import java.util.List;
+import java.util.Set;
+
+import org.hibernate.envers.Audited;
+
 import com.loop.lifestage.model.policy.Policy;
 import com.loop.lifestage.model.user.User;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,10 +15,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
-import java.util.List;
-import java.util.Set;
 
 @Entity
+@Audited
 @Table(name = "life_events")
 public class LifeEvent {
   @Id

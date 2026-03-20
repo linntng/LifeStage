@@ -1,12 +1,28 @@
 <header class="sticky top-0 z-100 p-4 shadow-xl flex justify-between items-center bg-primary">
 	<!-- Logo -->
 	<div class="">
-		<a
-			routerLink=""
-			class="font-serif text-3xl italic hover:bg-transparent text-shadow-md text-shadow-black hover:text-shadow-secondary"
-		>
-			LifeStage
-		</a>
+		@if (userStore.currentUser()?.role === 'CASE_HANDLER') {
+			<a
+				routerLink="/cases"
+				class="font-serif text-3xl italic hover:bg-transparent text-shadow-md text-shadow-black hover:text-shadow-secondary"
+			>
+				LifeStage
+			</a>
+		} @else if (userStore.currentUser()?.role === 'ADMIN') {
+			<a
+				routerLink="/admin"
+				class="font-serif text-3xl italic hover:bg-transparent text-shadow-md text-shadow-black hover:text-shadow-secondary"
+			>
+				LifeStage
+			</a>
+		} @else if (userStore.currentUser()?.role === 'USER') {
+			<a
+				routerLink="/"
+				class="font-serif text-3xl italic hover:bg-transparent text-shadow-md text-shadow-black hover:text-shadow-secondary"
+			>
+				LifeStage
+			</a>
+		}
 	</div>
 
 	<nav
@@ -21,10 +37,7 @@
 		@if (userStore.currentUser()?.role === 'USER') {
 			<a routerLink="/policies">Policies</a>
 		}
-		@if (
-			userStore.currentUser()?.role === 'CASE_HANDLER' ||
-			userStore.currentUser()?.role === 'ADMIN'
-		) {
+		@if (userStore.currentUser()?.role === 'CASE_HANDLER') {
 			<a routerLink="/cases">Manage cases</a>
 		}
 
