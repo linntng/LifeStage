@@ -14,6 +14,8 @@ import { ReviewPolicyDialog } from './policy-dialogs/review-policy-dialog/review
 export class PolicyManager {
 	policyStore = inject(PoliciesStore);
 	dialog = inject(MatDialog);
+	tab: 'active' | 'review' | 'rejected' = 'active';
+	selectedRejectedPolicy: any = null;
 
 	getActivePolicies() {
 		return this.policyStore.getPoliciesFilteredByStatus([PolicyStatus.ACTIVE]);
@@ -23,18 +25,39 @@ export class PolicyManager {
 		return this.policyStore.policiesToReview();
 	}
 
+	getRejectedPoliciesWithExplanation() {
+		const rejected = this.policyStore.policiesRejected();
+		const all = this.policyStore.policies();
+		if (rejected) {
+			const rejectionMap = new Map(
+				rejected
+					.filter((r) => r.rejectedPolicyId !== null)
+					.map((r) => [r.rejectedPolicyId, r.explanation]),
+			);
+
+			return all
+				.filter((p) => rejectionMap.has(p.id))
+				.map((p) => ({
+					...p,
+					explanation: rejectionMap.get(p.id),
+				}));
+		} else {
+			return [];
+		}
+	}
+
 	createOrUpdatePolicyDialog(policy?: Policy) {
 		const dialogRef = this.dialog.open(CreatePolicyDialog, {
 			width: '600px',
 			data: policy,
 		});
-		dialogRef.afterClosed().subscribe((resultPolicy) => {
-			if (!resultPolicy) {
+		dialogRef.afterClosed().subscribe((result) => {
+			if (!result) {
 				return;
 			} else if (!policy) {
-				this.policyStore.postPolicy(resultPolicy);
+				this.policyStore.postPolicy(result.policy);
 			} else {
-				this.policyStore.patchPolicy(resultPolicy);
+				this.policyStore.patchPolicy(result.policy, result.rejection);
 			}
 		});
 	}
@@ -44,8 +67,12 @@ export class PolicyManager {
 			width: '600px',
 			data: policy,
 		});
-		dialogRef.afterClosed().subscribe((resultPolicy) => {
-			this.policyStore.patchPolicy(resultPolicy);
+		dialogRef.afterClosed().subscribe((result) => {
+			if (!result) {
+				return;
+			} else {
+				this.policyStore.patchPolicy(result.policy, result.rejection);
+			}
 		});
 	}
 }

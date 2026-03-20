@@ -1,5 +1,5 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { Policy, PoliciesApi } from './policies-api';
+import { Policy, PoliciesApi, PolicyRejection } from './policies-api';
 import { PolicyStatus } from './policy-status.enum';
 import { forkJoin } from 'rxjs';
 
@@ -10,6 +10,7 @@ export class PoliciesStore {
 	private policiesApi = inject(PoliciesApi);
 	readonly policies = signal<Policy[]>([]);
 	readonly policiesToReview = signal<Policy[] | null>(null);
+	readonly policiesRejected = signal<PolicyRejection[] | null>(null);
 	readonly loading = signal(false);
 
 	loadPolicies() {
@@ -17,10 +18,12 @@ export class PoliciesStore {
 
 		forkJoin({
 			review: this.policiesApi.getReviewPolicies(),
+			rejected: this.policiesApi.getRejectedPolicies(),
 			all: this.policiesApi.getPolicies(),
 		}).subscribe({
-			next: ({ review, all }) => {
+			next: ({ review, rejected, all }) => {
 				this.policiesToReview.set(review);
+				this.policiesRejected.set(rejected);
 				this.policies.set(all);
 			},
 			error: (e) => {
@@ -47,8 +50,8 @@ export class PoliciesStore {
 		});
 	}
 
-	patchPolicy(policy: Policy) {
-		this.policiesApi.patchPolicy(policy).subscribe({
+	patchPolicy(policy: Policy, rejection: PolicyRejection) {
+		this.policiesApi.patchPolicy(policy, rejection).subscribe({
 			next: () => this.loadPolicies(),
 			error: (e) => console.error('Failed to patch policy', e),
 		});

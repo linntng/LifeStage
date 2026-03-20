@@ -13,6 +13,11 @@ export interface Policy {
 	inReview: boolean | null;
 }
 
+export interface PolicyRejection {
+	rejectedPolicyId: number | null;
+	explanation: string | null;
+}
+
 @Injectable({
 	providedIn: 'root',
 })
@@ -28,11 +33,15 @@ export class PoliciesApi {
 		return this.http.post<Policy>(this.policiesUrl, policy);
 	}
 
-	patchPolicy(policy: Policy): Observable<Policy> {
-		return this.http.patch<Policy>(this.policiesUrl, policy);
+	patchPolicy(policy: Policy, rejection: PolicyRejection): Observable<Policy> {
+		return this.http.patch<Policy>(this.policiesUrl, { policy: policy, rejection: rejection });
 	}
 
 	getReviewPolicies() {
 		return this.http.get<Policy[]>(`${this.policiesUrl}/review`);
+	}
+
+	getRejectedPolicies() {
+		return this.http.get<PolicyRejection[]>(`${this.policiesUrl}/rejected`);
 	}
 }

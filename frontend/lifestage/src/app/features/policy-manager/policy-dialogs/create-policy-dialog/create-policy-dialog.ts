@@ -45,12 +45,18 @@ export class CreatePolicyDialog {
 
 	submit() {
 		this.dialogRef.close({
-			id: this.id,
-			name: this.name,
-			premium: this.premium,
-			coveredLifeEvents: this.selectedLifeEvents,
-			status: this.status,
-			inReview: this.inReview,
+			policy: {
+				id: this.id,
+				name: this.name,
+				premium: this.premium,
+				coveredLifeEvents: this.selectedLifeEvents,
+				status: this.status,
+				inReview: this.inReview,
+			},
+			rejection: {
+				rejectedPolicyId: this.id,
+				explanation: null,
+			},
 		});
 	}
 
