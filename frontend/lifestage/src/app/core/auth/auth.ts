@@ -1,7 +1,7 @@
-import { computed, effect, inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import Keycloak, { KeycloakUserInfo } from 'keycloak-js';
-import { User } from '../../features/user/user-state/user-api';
-import { KEYCLOAK_EVENT_SIGNAL } from 'keycloak-angular';
+import { User, UserApi, UserRole } from '../../features/user/user-state/user-api';
+import { UserStore } from '../../features/user/user-state/user-store';
 
 @Injectable({
 	providedIn: 'root',
@@ -12,15 +12,11 @@ export class Auth {
 	readonly authenticated = computed(() => this.keycloak.authenticated ?? false);
 	readonly token = computed(() => this.keycloak.token);
 	keycloakName = signal('');
-
-	private readonly keycloakSignal = inject(KEYCLOAK_EVENT_SIGNAL);
+	currentUser = signal<User | null>(null);
+	userStore = inject(UserStore);
 
 	constructor() {
 		this.getGivenName();
-
-		effect(() => {
-			this.keycloakSignal();
-		});
 	}
 
 	login() {
