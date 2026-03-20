@@ -1,4 +1,4 @@
-import { Component, effect, inject } from '@angular/core';
+import { Component, effect, inject, OnInit } from '@angular/core';
 import { UserStore } from '../user/user-state/user-store';
 import { Auth } from '../../core/auth/auth';
 import { CapitalizePipe } from '../../shared/capitalize-pipe';
@@ -11,7 +11,7 @@ import { RouterLink, RouterModule } from '@angular/router';
 	imports: [CapitalizePipe, RouterLink, RouterModule],
 	templateUrl: './dashboard.html',
 })
-export class Dashboard {
+export class Dashboard implements OnInit {
 	userstore = inject(UserStore);
 	auth = inject(Auth);
 	policiesStore = inject(PoliciesStore);
@@ -34,6 +34,11 @@ export class Dashboard {
 				this.userstore.loadPolicyRecommendations(currentUser.id);
 			}
 		});
+	}
+
+	ngOnInit() {
+		this.policiesStore.loadPolicies();
+		this.lifeeventStore.loadLifeevents();
 	}
 
 	getPolicyName(policyId: number) {

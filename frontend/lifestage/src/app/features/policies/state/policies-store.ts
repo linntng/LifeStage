@@ -10,6 +10,8 @@ export class PoliciesStore {
 	readonly loading = signal(false);
 
 	loadPolicies() {
+		if (this.policies().length > 0) return;
+		if (this.loading()) return;
 		this.loading.set(true);
 		this.policiesApi.getPolicies().subscribe({
 			next: (policies) => {

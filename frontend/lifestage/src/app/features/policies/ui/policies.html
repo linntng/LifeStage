@@ -11,7 +11,7 @@
 					(keydown.enter)="openActivePolicyDialog(policy)"
 					(keydown.space)="openActivePolicyDialog(policy)"
 					[title]="policy.name"
-					[color]="status(policy).active ? 'bg-primary' : 'bg-pending'"
+					[color]="status(policy).active ? 'bg-secondary' : 'bg-pending'"
 				>
 					<p>{{ 'Premium: ' + (policy.premium ? policy.premium : 'No premium') }}</p>
 					<p>Coverage includes:</p>

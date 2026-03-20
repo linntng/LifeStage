@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { LifeeventStore } from '../state/lifeevent-store';
 import { CommonModule } from '@angular/common';
 import { UserStore } from '../../user/user-state/user-store';
@@ -10,13 +10,17 @@ import { CapitalizePipe } from '../../../shared/capitalize-pipe';
 	imports: [CommonModule, CapitalizePipe],
 	templateUrl: './lifeevents.html',
 })
-export class Lifeevents {
+export class Lifeevents implements OnInit {
 	private lifeeventStore = inject(LifeeventStore);
 	private userStore = inject(UserStore);
 
 	lifeevents = this.lifeeventStore.lifeevents;
 	userLifeevents = this.userStore.userLifeevents;
 	selectedEventInfoBar = signal<number | null>(null);
+
+	ngOnInit() {
+		this.lifeeventStore.loadLifeevents();
+	}
 
 	remainingLifeevents = computed(() => {
 		const userEventIds = new Set(this.userStore.currentUser()?.lifeEventIds || []);

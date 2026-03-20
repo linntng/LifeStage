@@ -10,6 +10,8 @@ export class LifeeventStore {
 	readonly loading = signal(false);
 
 	loadLifeevents() {
+		if (this.lifeevents().length > 0) return;
+		if (this.loading()) return;
 		this.loading.set(true);
 		this.lifeeventsApi.getLifeevents().subscribe({
 			next: (lifeevents) => {
