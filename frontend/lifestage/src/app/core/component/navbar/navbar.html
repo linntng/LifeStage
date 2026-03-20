@@ -10,8 +10,7 @@
 	</div>
 
 	<nav
-		class="absolute md:relative top-full md:top-0 right-0 items-end md:items-center z-10 w-fit md:w-full flex flex-col md:flex-row justify-around bg-primary/70 md:bg-transparent p-4 md:p-0 gap-2 md:gap-0 
-		transition-all  duration-0 transform"
+		class="absolute md:relative top-full md:top-0 right-0 items-end md:items-center z-10 w-fit md:w-full flex flex-col md:flex-row justify-around bg-primary/70 md:bg-transparent p-4 md:p-0 gap-2 md:gap-0 transition-all duration-0 transform"
 		[class]="menuOpen ? 'rounded-bl-2xl duration-300' : 'opacity-0 md:opacity-100'"
 	>
 		<!-- Navigation Links -->
@@ -32,9 +31,18 @@
 		@if (userStore.currentUser()?.role === 'ADMIN') {
 			<a routerLink="/admin">Admin</a>
 		}
+		@if (userStore.currentUser()?.role === 'POLICY_MANAGER') {
+			<a routerLink="/policy-manager">Policy management</a>
+		}
+
 		<app-login-button></app-login-button>
 	</nav>
 
 	<!-- Hamburger menu-->
-	<button class="md:hidden bg-transparent shadow-none text-white hover:text-secondary text-2xl p-0 mx-2" (click)="menuOpen = !menuOpen">☰</button>
+	<button
+		class="md:hidden bg-transparent shadow-none text-white hover:text-secondary text-2xl p-0 mx-2"
+		(click)="menuOpen = !menuOpen"
+	>
+		☰
+	</button>
 </header>

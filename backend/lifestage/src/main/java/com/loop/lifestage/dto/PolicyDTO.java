@@ -10,6 +10,8 @@ public class PolicyDTO {
   private float premium;
   private PolicyStatus status;
   private Set<Long> coveredLifeEvents;
+  private Boolean inReview = false;
+
 
   public Long getId() {
     return id;
@@ -17,6 +19,14 @@ public class PolicyDTO {
 
   public void setId(Long id) {
     this.id = id;
+  }
+
+  public Boolean getInReview() {
+    return this.inReview;
+  }
+
+  public void setInReview(Boolean inReview) {
+    this.inReview = inReview;
   }
 
   public String getName() {

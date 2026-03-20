@@ -1,0 +1,57 @@
+<section>
+	<button (click)="createOrUpdatePolicyDialog()">Create new policy</button>
+</section>
+
+<div class="flex flex-col lg:flex-row gap-4">
+	<section class="flex-1">
+		<h1>Active policies</h1>
+		<br />
+		<div class="scroll-container max-h-[40vh]">
+			<table class="info-table">
+				<thead>
+					<tr>
+						<th>Policy Id</th>
+						<th>Policy Name</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					@for (policy of getActivePolicies(); track policy) {
+						<tr>
+							<td>{{ policy.id }}</td>
+							<td>{{ policy.name }}</td>
+							<td>
+								<button (click)="createOrUpdatePolicyDialog(policy)">Update</button>
+							</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		</div>
+	</section>
+
+	<section class="flex-1">
+		<h1>Review policy updates</h1>
+		<br />
+		<div class="scroll-container max-h-[40vh]">
+			<table class="info-table">
+				<thead>
+					<tr>
+						<th>Status</th>
+						<th>Policy Name</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					@for (policy of getReviewPolicies(); track policy) {
+						<tr>
+							<td>{{ policy.status }}</td>
+							<td>{{ policy.name }}</td>
+							<td><button (click)="reviewPolicyDialog(policy)">Review</button></td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		</div>
+	</section>
+</div>

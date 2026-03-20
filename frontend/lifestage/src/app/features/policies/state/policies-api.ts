@@ -10,6 +10,7 @@ export interface Policy {
 	coveredLifeEvents: number[];
 	premium: number;
 	status: PolicyStatus;
+	inReview: boolean | null;
 }
 
 @Injectable({
@@ -21,5 +22,17 @@ export class PoliciesApi {
 
 	getPolicies(): Observable<Policy[]> {
 		return this.http.get<Policy[]>(this.policiesUrl);
+	}
+
+	postPolicy(policy: Policy): Observable<Policy> {
+		return this.http.post<Policy>(this.policiesUrl, policy);
+	}
+
+	patchPolicy(policy: Policy): Observable<Policy> {
+		return this.http.patch<Policy>(this.policiesUrl, policy);
+	}
+
+	getReviewPolicies() {
+		return this.http.get<Policy[]>(`${this.policiesUrl}/review`);
 	}
 }

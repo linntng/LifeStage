@@ -4,13 +4,15 @@ import { FormsModule } from '@angular/forms';
 import { User } from '../user/user-state/user-api';
 import { Adminstore } from './state/adminstore';
 
-export enum UserRoles {
-	Admin = 'ADMIN',
-	User = 'USER',
-	CaseHandler = 'CASE_HANDLER',
-	RiskAnalyst = 'RISK_ANALYST',
-	PolicyManager = 'POLICY_MANAGER',
-}
+export const UserRoles = {
+	ADMIN: 'ADMIN',
+	USER: 'USER',
+	CASE_HANDLER: 'CASE_HANDLER',
+	RISK_ANALYST: 'RISK_ANALYST',
+	POLICY_MANAGER: 'POLICY_MANAGER',
+} as const;
+
+export type UserRoles = (typeof UserRoles)[keyof typeof UserRoles];
 
 @Component({
 	selector: 'app-admin',

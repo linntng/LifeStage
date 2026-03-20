@@ -1,0 +1,46 @@
+<section class="flex flex-col gap-4 min-w-[400px]">
+	<h1>Review policy</h1>
+
+	<div class="grid grid-cols-[150px_1fr] gap-y-3 gap-x-4 items-center">
+		<label>Policy name</label>
+		<div class="readonly-field">{{ name }}</div>
+
+		<label>Premium</label>
+		<div class="readonly-field">{{ premium }}</div>
+
+		<label>Status</label>
+		<div class="readonly-field">{{ status }}</div>
+	</div>
+
+	<!-- Life events -->
+	<div>
+		<label>Life events</label>
+		<br />
+
+		<div class="scroll-container max-h-[150px]">
+			<table class="info-table">
+				<tbody>
+					@for (event of lifeEventStore.lifeevents(); track event) {
+						<tr>
+							<td>
+								<input
+									type="checkbox"
+									[checked]="selectedLifeEvents.includes(event.id)"
+									disabled
+								/>
+							</td>
+							<td>{{ event.name }}</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<!-- Actions -->
+	<div class="flex justify-end gap-2">
+		<button (click)="back()">Back</button>
+		<button (click)="deny()">Deny</button>
+		<button (click)="accept()">Accept</button>
+	</div>
+</section>
