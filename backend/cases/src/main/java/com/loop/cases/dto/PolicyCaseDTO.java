@@ -3,14 +3,24 @@ package com.loop.cases.dto;
 import com.loop.cases.model.PolicyCaseStatus;
 
 public class PolicyCaseDTO {
+    private Long id;
     private String userId;
     private Long policyId;
     private PolicyCaseStatus status;
 
-    public PolicyCaseDTO(String userId, Long policyId, PolicyCaseStatus status) {
+    public PolicyCaseDTO(Long id, String userId, Long policyId, PolicyCaseStatus status) {
+        this.id = id;
         this.userId = userId;
         this.policyId = policyId;
         this.status = status;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getUserId() {

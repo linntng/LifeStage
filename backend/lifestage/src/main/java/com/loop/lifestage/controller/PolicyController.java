@@ -1,7 +1,12 @@
 package com.loop.lifestage.controller;
 
 import java.util.List;
-
+import com.loop.lifestage.dto.PatchPolicyRequest;
+import com.loop.lifestage.dto.PolicyDTO;
+import com.loop.lifestage.dto.PolicyRejectionDTO;
+import com.loop.lifestage.service.PolicyService;
+import java.util.List;
+import java.util.Set;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -47,10 +52,21 @@ public class PolicyController {
 
   @PatchMapping("")
   public ResponseEntity<PolicyDTO> updatePolicy(
-    @RequestBody PolicyDTO policyDTO,
+    @RequestBody PatchPolicyRequest patchPolicyRequest,
     @AuthenticationPrincipal Jwt jwt) {
       String sub = jwt.getSubject();
-      return ResponseEntity.ok(policyService.updatePolicy(sub, policyDTO));
+      return ResponseEntity.ok(policyService.updatePolicy(sub, patchPolicyRequest.getPolicy(), patchPolicyRequest.getRejection()));
     }
-  
+
+  @GetMapping("/review")
+  public ResponseEntity<Set<PolicyDTO>> getReviewPoliciesForManager(@AuthenticationPrincipal Jwt jwt) {
+    String sub = jwt.getSubject();
+    return ResponseEntity.ok(policyService.getPoliciesToReviewForPolicyManager(sub));
+  }
+
+  @GetMapping("/rejected")
+  public ResponseEntity<Set<PolicyRejectionDTO>> getRejectedPoliciesForManager(@AuthenticationPrincipal Jwt jwt) {
+    String sub = jwt.getSubject();
+    return ResponseEntity.ok(policyService.getRejectedPoliciesForManager(sub));
+  }
 }

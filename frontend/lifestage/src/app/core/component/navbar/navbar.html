@@ -44,6 +44,10 @@
 		@if (userStore.currentUser()?.role === 'ADMIN') {
 			<a routerLink="/admin">Admin</a>
 		}
+		@if (userStore.currentUser()?.role === 'POLICY_MANAGER') {
+			<a routerLink="/policy-manager">Policy management</a>
+		}
+
 		<app-login-button></app-login-button>
 	</nav>
 

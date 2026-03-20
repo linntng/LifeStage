@@ -46,12 +46,22 @@ public class Policy {
   @ManyToMany(mappedBy = "policies")
   private Set<User> coveredUsers;
 
+  @Column private Boolean inReview = false;
+
   public Long getId() {
     return id;
   }
 
   public void setId(Long id) {
     this.id = id;
+  }
+
+  public Boolean getInReview() {
+    return this.inReview;
+  }
+
+  public void setInReview(Boolean inReview) {
+    this.inReview = inReview;
   }
 
   public String getName() {

@@ -1,4 +1,6 @@
 DELETE FROM life_events;
+DELETE FROM policies;
+DELETE FROM policy_life_events;
 
 INSERT INTO life_events (name, description)
 VALUES
@@ -9,8 +11,7 @@ VALUES
     ('temporary move abroad', 'Living abroad for a limited period of time');
 
     
-DELETE FROM policy_life_events;
-DELETE FROM policies;
+
 
 INSERT INTO policies (id, name, premium, status) VALUES
 -- Single life event policies
