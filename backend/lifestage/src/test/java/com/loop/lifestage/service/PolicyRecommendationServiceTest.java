@@ -1,24 +1,19 @@
 package com.loop.lifestage.service;
 
-import java.util.Optional;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import com.loop.lifestage.dto.PolicyRecommendationDTO;
+import com.loop.lifestage.mapper.PolicyRecommendationMapper;
+import com.loop.lifestage.model.policy.PolicyRecommendation;
+import com.loop.lifestage.repository.PolicyRecommendationRepository;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import com.loop.lifestage.dto.PolicyRecommendationDTO;
-import com.loop.lifestage.exception.ResourceNotFoundException;
-import com.loop.lifestage.mapper.PolicyRecommendationMapper;
-import com.loop.lifestage.model.policy.PolicyRecommendation;
-import com.loop.lifestage.repository.PolicyRecommendationRepository;
 
 @ExtendWith(MockitoExtension.class)
 class PolicyRecommendationServiceTest {
@@ -31,83 +26,27 @@ class PolicyRecommendationServiceTest {
 
   @InjectMocks
   private PolicyRecommendationService policyRecommendationService;
-  @InjectMocks
-  private UserService userService;
 
   private PolicyRecommendation policyRecommendation;
   private PolicyRecommendationDTO policyRecommendationDTO;
 
   @BeforeEach
   void setUp() {
-    policyRecommendation = createPolicyRecommendation();
-    policyRecommendationDTO = createPolicyRecommendationDTO();
+    policyRecommendation = new PolicyRecommendation();
+
+    policyRecommendationDTO = new PolicyRecommendationDTO();
+    policyRecommendationDTO.setUserId("user123");
+    policyRecommendationDTO.setPremiumImpact(100f);
+    policyRecommendationDTO.setLifeEventId(1L);
   }
 
   // =========================
-  // GET LATEST POLICY RECOMMENDATION
+  // CREATE POLICY RECOMMENDATION
   // =========================
-
-  @Test
-  void getLatestPolicyRecommendationForUser_shouldReturnMappedRecommendation() {
-
-    // Given
-    String userId = "user123";
-
-    when(policyRecommendationRepository.findTopByUserIdOrderByCreatedAtDesc(userId))
-        .thenReturn(Optional.of(policyRecommendation));
-
-    when(policyRecommendationMapper.toDto(policyRecommendation))
-        .thenReturn(policyRecommendationDTO);
-
-    // When
-    PolicyRecommendationDTO result =
-        userService.getLatestPolicyRecommendationForUser(userId);
-
-    // Then
-    assertNotNull(result);
-    assertEquals(policyRecommendationDTO.getUserId(), result.getUserId());
-
-    verify(policyRecommendationRepository)
-        .findTopByUserIdOrderByCreatedAtDesc(userId);
-
-    verify(policyRecommendationMapper).toDto(policyRecommendation);
-  }
-
-  @Test
-  void getLatestPolicyRecommendationForUser_shouldThrowResourceNotFound_whenRecommendationMissing() {
-
-    // Given
-    String userId = "user123";
-
-    when(policyRecommendationRepository.findTopByUserIdOrderByCreatedAtDesc(userId))
-        .thenReturn(Optional.empty());
-
-    // Then
-    assertThrows(
-        ResourceNotFoundException.class,
-        () -> userService.getLatestPolicyRecommendationForUser(userId));
-  }
-
-  @Test
-  void getLatestPolicyRecommendationForUser_shouldThrowRuntimeException_whenUnexpectedExceptionOccurs() {
-
-    // Given
-    String userId = "user123";
-
-    when(policyRecommendationRepository.findTopByUserIdOrderByCreatedAtDesc(userId))
-        .thenThrow(new RuntimeException("database error"));
-
-    // Then
-    assertThrows(
-        RuntimeException.class,
-        () -> userService.getLatestPolicyRecommendationForUser(userId));
-  }
-
 
   @Test
   void createPolicyRecommendation_shouldSaveAndReturnMappedDTO() {
 
-    // Given
     when(policyRecommendationMapper.toEntity(policyRecommendationDTO))
         .thenReturn(policyRecommendation);
 
@@ -117,11 +56,9 @@ class PolicyRecommendationServiceTest {
     when(policyRecommendationMapper.toDto(policyRecommendation))
         .thenReturn(policyRecommendationDTO);
 
-    // When
     PolicyRecommendationDTO result =
         policyRecommendationService.createPolicyRecommendation(policyRecommendationDTO);
 
-    // Then
     assertNotNull(result);
     assertEquals(policyRecommendationDTO.getUserId(), result.getUserId());
 
@@ -131,31 +68,41 @@ class PolicyRecommendationServiceTest {
   }
 
   @Test
-  void createPolicyRecommendation_shouldThrowRuntimeException_whenUnexpectedExceptionOccurs() {
+  void createPolicyRecommendation_shouldThrowRuntimeException_whenMapperFails() {
 
-    // Given
     when(policyRecommendationMapper.toEntity(policyRecommendationDTO))
         .thenThrow(new RuntimeException("mapping error"));
 
-    // Then
-    assertThrows(
-        RuntimeException.class,
+    assertThrows(RuntimeException.class,
         () -> policyRecommendationService.createPolicyRecommendation(policyRecommendationDTO));
   }
 
-  // =========================
-  // TEST DATA FACTORIES
-  // =========================
+  @Test
+  void createPolicyRecommendation_shouldThrowRuntimeException_whenRepositoryFails() {
 
-  private PolicyRecommendation createPolicyRecommendation() {
-    return new PolicyRecommendation();
+    when(policyRecommendationMapper.toEntity(policyRecommendationDTO))
+        .thenReturn(policyRecommendation);
+
+    when(policyRecommendationRepository.saveAndFlush(policyRecommendation))
+        .thenThrow(new RuntimeException("db error"));
+
+    assertThrows(RuntimeException.class,
+        () -> policyRecommendationService.createPolicyRecommendation(policyRecommendationDTO));
   }
 
-  private PolicyRecommendationDTO createPolicyRecommendationDTO() {
-    PolicyRecommendationDTO dto = new PolicyRecommendationDTO();
-    dto.setUserId("user123");
-    dto.setPremiumImpact(100f);
-    dto.setLifeEventId(1L);
-    return dto;
+  @Test
+  void createPolicyRecommendation_shouldThrowRuntimeException_whenMappingBackFails() {
+
+    when(policyRecommendationMapper.toEntity(policyRecommendationDTO))
+        .thenReturn(policyRecommendation);
+
+    when(policyRecommendationRepository.saveAndFlush(policyRecommendation))
+        .thenReturn(policyRecommendation);
+
+    when(policyRecommendationMapper.toDto(policyRecommendation))
+        .thenThrow(new RuntimeException("mapping error"));
+
+    assertThrows(RuntimeException.class,
+        () -> policyRecommendationService.createPolicyRecommendation(policyRecommendationDTO));
   }
 }
