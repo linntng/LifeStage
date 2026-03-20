@@ -1,17 +1,32 @@
 <header class="sticky top-0 z-100 p-4 shadow-xl flex justify-between items-center bg-primary">
 	<!-- Logo -->
 	<div class="">
-		<a
-			routerLink=""
-			class="font-serif text-3xl italic hover:bg-transparent text-shadow-md text-shadow-black hover:text-shadow-secondary"
-		>
-			LifeStage
-		</a>
+		@if (userStore.currentUser()?.role === 'CASE_HANDLER') {
+			<a
+				routerLink="/cases"
+				class="font-serif text-3xl italic hover:bg-transparent text-shadow-md text-shadow-black hover:text-shadow-secondary"
+			>
+				LifeStage
+			</a>
+		} @else if (userStore.currentUser()?.role === 'ADMIN') {
+			<a
+				routerLink="/admin"
+				class="font-serif text-3xl italic hover:bg-transparent text-shadow-md text-shadow-black hover:text-shadow-secondary"
+			>
+				LifeStage
+			</a>
+		} @else if (userStore.currentUser()?.role === 'USER') {
+			<a
+				routerLink="/"
+				class="font-serif text-3xl italic hover:bg-transparent text-shadow-md text-shadow-black hover:text-shadow-secondary"
+			>
+				LifeStage
+			</a>
+		}
 	</div>
 
 	<nav
-		class="absolute md:relative top-full md:top-0 right-0 items-end md:items-center z-10 w-fit md:w-full flex flex-col md:flex-row justify-around bg-primary/70 md:bg-transparent p-4 md:p-0 gap-2 md:gap-0 
-		transition-all  duration-0 transform"
+		class="absolute md:relative top-full md:top-0 right-0 items-end md:items-center z-10 w-fit md:w-full flex flex-col md:flex-row justify-around bg-primary/70 md:bg-transparent p-4 md:p-0 gap-2 md:gap-0 transition-all duration-0 transform"
 		[class]="menuOpen ? 'rounded-bl-2xl duration-300' : 'opacity-0 md:opacity-100'"
 	>
 		<!-- Navigation Links -->
@@ -22,10 +37,7 @@
 		@if (userStore.currentUser()?.role === 'USER') {
 			<a routerLink="/policies">Policies</a>
 		}
-		@if (
-			userStore.currentUser()?.role === 'CASE_HANDLER' ||
-			userStore.currentUser()?.role === 'ADMIN'
-		) {
+		@if (userStore.currentUser()?.role === 'CASE_HANDLER') {
 			<a routerLink="/cases">Manage cases</a>
 		}
 
@@ -36,5 +48,10 @@
 	</nav>
 
 	<!-- Hamburger menu-->
-	<button class="md:hidden bg-transparent shadow-none text-white hover:text-secondary text-2xl p-0 mx-2" (click)="menuOpen = !menuOpen">☰</button>
+	<button
+		class="md:hidden bg-transparent shadow-none text-white hover:text-secondary text-2xl p-0 mx-2"
+		(click)="menuOpen = !menuOpen"
+	>
+		☰
+	</button>
 </header>
