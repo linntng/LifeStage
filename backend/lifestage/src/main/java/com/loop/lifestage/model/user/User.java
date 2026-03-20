@@ -13,7 +13,10 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import java.util.Set;
 
+import org.hibernate.envers.Audited;
+
 @Entity
+@Audited
 @Table(name = "users")
 public class User {
 
