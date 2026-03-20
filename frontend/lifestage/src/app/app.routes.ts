@@ -31,11 +31,6 @@ export const routes: Routes = [
 		canActivate: [authGuard],
 	},
 	{
-		path: 'policy-cases',
-		redirectTo: 'cases',
-		pathMatch: 'full',
-	},
-	{
 		path: '**',
 		component: NotFound,
 	},
