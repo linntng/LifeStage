@@ -9,6 +9,7 @@ import {
 	PolicyRecommendation,
 	PolicyRecommendationApi,
 } from '../policy-recommendations/policy-recommendation-api';
+import { Router } from '@angular/router';
 
 @Injectable({
 	providedIn: 'root',
@@ -23,8 +24,8 @@ export class UserStore {
 
 	readonly currentUser = signal<User | null>(null);
 	readonly currentUserLoading = signal(false);
-	readonly userLifeevents = signal<Lifeevent[] | null>(null);
 	readonly userPolicyRec = signal<PolicyRecommendation | null>(null);
+	router = inject(Router);
 
 	readonly userPolicies = computed(() => {
 		const user = this.currentUser();
@@ -34,6 +35,16 @@ export class UserStore {
 
 		const policyIds = new Set(user.policyIds);
 		return allPolicies.filter((policy) => policyIds.has(policy.id));
+	});
+
+	userLifeevents = computed(() => {
+		const user = this.currentUser();
+		const allLifeevents = this.lifeEventStore.lifeevents() ?? [];
+
+		if (!user?.lifeEventIds?.length) return [];
+
+		const lifeeventIds = new Set(user.lifeEventIds);
+		return allLifeevents.filter((lifeevent) => lifeeventIds.has(lifeevent.id));
 	});
 
 	private setCurrentUser(user: User | null) {
@@ -60,8 +71,14 @@ export class UserStore {
 		this.userApi.getUserById(user.id).subscribe({
 			next: (user) => {
 				this.setCurrentUser(user);
-				console.log(user);
 				this.currentUserLoading.set(false);
+				if (user.role === 'CASE_HANDLER') {
+					this.router.navigate(['/cases']);
+				} else if (user.role === 'ADMIN') {
+					this.router.navigate(['/admin']);
+				} else {
+					this.router.navigate(['/']);
+				}
 			},
 			error: (err) => {
 				if (err.status === 404) {
@@ -73,23 +90,11 @@ export class UserStore {
 					this.currentUserLoading.set(false);
 				}
 			},
-			complete: () => {
-				this.loadUserLifeevents();
-			},
 		});
 	}
 
 	clearCurrentUser() {
 		this.setCurrentUser(null);
-		this.userLifeevents.set(null);
-	}
-
-	private loadUserLifeevents() {
-		this.userLifeevents.set(
-			this.currentUser()
-				?.lifeEventIds.map((eventId) => this.lifeEventStore.getLifeeventById(eventId))
-				.filter((event): event is Lifeevent => event !== undefined) || [],
-		);
 	}
 
 	addLifeEventToCurrentUser(lifeEventId: number) {
@@ -110,8 +115,6 @@ export class UserStore {
 						lifeEventIds: [...user.lifeEventIds, lifeEventId],
 					};
 				});
-
-				this.loadUserLifeevents();
 			},
 			error: (err) => {
 				console.error('Error adding life event to user', err);
@@ -139,8 +142,6 @@ export class UserStore {
 							lifeEventIds: user.lifeEventIds.filter((id) => id !== lifeEventId),
 						};
 					});
-
-					this.loadUserLifeevents();
 				},
 				error: (err) => {
 					console.error('Error removing life event from user', err);
@@ -229,4 +230,18 @@ export class UserStore {
 	readonly policiesToRemove = computed(
 		() => this.userPolicyRec()?.policyEditActions?.filter((a) => a.action === 'REMOVE') ?? [],
 	);
+	/*
+	redirectUser(router: Router) {
+		const user = this.currentUser();
+		if (!user) return;
+
+		if (user.role === 'ADMIN') {
+			router.navigate(['/admin']);
+		} else if (user.role === 'CASE_HANDLER') {
+			router.navigate(['/policy-cases']);
+		} else {
+			router.navigate(['/']);
+		}
+	}
+		*/
 }
