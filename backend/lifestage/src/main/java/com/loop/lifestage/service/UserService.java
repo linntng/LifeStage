@@ -60,7 +60,7 @@ public class UserService {
       User savedUser = userRepository.save(user);
       return userMapper.toUserDTO(savedUser);
     } catch (DataIntegrityViolationException e) {
-      throw new ResourceAlreadyExistsException("User with credentails already exists");
+      throw new ResourceAlreadyExistsException("User with credentials already exists");
     } catch (IllegalArgumentException e) {
       throw new BadRequestException("Invalid user data: " + e.getMessage());
     } catch (Exception e) {
