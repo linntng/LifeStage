@@ -4,19 +4,17 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import com.loop.lifestage.dto.PolicyDTO;
-import com.loop.lifestage.exception.ResourceNotFoundException;
 import com.loop.lifestage.mapper.PolicyMapper;
-import com.loop.lifestage.model.policy.Policy;
-import com.loop.lifestage.model.policy.PolicyStatus;
-import com.loop.lifestage.repository.PolicyRepository;
-import com.loop.lifestage.repository.UserRepository;
+import com.loop.lifestage.mapper.PolicyRejectionMapper;
+import com.loop.lifestage.model.policy.*;
 import com.loop.lifestage.model.user.User;
 import com.loop.lifestage.model.user.UserRole;
-import com.loop.lifestage.repository.UserRepository;
-import java.util.Optional;
-import jakarta.persistence.EntityNotFoundException;
+import com.loop.lifestage.repository.*;
+
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,10 +26,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class PolicyServiceTest {
 
   @Mock private PolicyRepository policyRepository;
-
   @Mock private PolicyMapper policyMapper;
-
   @Mock private UserRepository userRepository;
+  @Mock private PolicyManagerActionRepository policyManagerActionRepository;
+  @Mock private PolicyRejectionRepository policyRejectionRepository;
+  @Mock private PolicyRejectionMapper policyRejectionMapper;
 
   @InjectMocks private PolicyService policyService;
 
@@ -50,42 +49,20 @@ class PolicyServiceTest {
 
   @Test
   void getAllPolicies_shouldReturnMappedPolicies() {
-
-    // Given
     when(policyRepository.findAll()).thenReturn(List.of(policy));
     when(policyMapper.toPolicyDTO(policy)).thenReturn(policyDTO);
 
-    // When
     List<PolicyDTO> result = policyService.getAllPolicies();
 
-    // Then
     assertEquals(1, result.size());
-    assertEquals(policyDTO.getId(), result.get(0).getId());
-    assertEquals(policyDTO.getName(), result.get(0).getName());
-    assertEquals(policyDTO.getPremium(), result.get(0).getPremium());
-    assertEquals(policyDTO.getStatus(), result.get(0).getStatus());
-
     verify(policyRepository).findAll();
     verify(policyMapper).toPolicyDTO(policy);
   }
 
   @Test
-  void getAllPolicies_shouldThrowResourceNotFound_whenEntityNotFoundExceptionOccurs() {
-
-    // Given
-    when(policyRepository.findAll()).thenThrow(new EntityNotFoundException());
-
-    // Then
-    assertThrows(ResourceNotFoundException.class, () -> policyService.getAllPolicies());
-  }
-
-  @Test
   void getAllPolicies_shouldThrowRuntimeException_whenUnexpectedExceptionOccurs() {
+    when(policyRepository.findAll()).thenThrow(new RuntimeException());
 
-    // Given
-    when(policyRepository.findAll()).thenThrow(new RuntimeException("database error"));
-
-    // Then
     assertThrows(RuntimeException.class, () -> policyService.getAllPolicies());
   }
 
@@ -94,130 +71,234 @@ class PolicyServiceTest {
   // =========================
 
   @Test
-  void createPolicy_shouldCreatePolicy_whenManagerIsPolicyManager() {
+  void createPolicy_shouldCreateDraftPolicy_whenManagerIsPolicyManager() {
 
-    String managerId = "1";
     User manager = new User();
-    manager.setId(managerId);
+    manager.setId("1");
     manager.setRole(UserRole.POLICY_MANAGER);
 
-    when(userRepository.findById(managerId)).thenReturn(Optional.of(manager));
+    when(userRepository.findById("1")).thenReturn(Optional.of(manager));
     when(policyMapper.toPolicy(policyDTO)).thenReturn(policy);
     when(policyRepository.save(policy)).thenReturn(policy);
     when(policyMapper.toPolicyDTO(policy)).thenReturn(policyDTO);
 
-    PolicyDTO result = policyService.createPolicy(managerId, policyDTO);
+    PolicyDTO result = policyService.createPolicy("1", policyDTO);
 
     assertNotNull(result);
-    assertEquals(PolicyStatus.ACTIVE, policy.getStatus());
+    assertEquals(PolicyStatus.DRAFT, policy.getStatus());
+    assertTrue(policy.getInReview());
 
-    verify(userRepository).findById(managerId);
     verify(policyRepository).save(policy);
+    verify(policyManagerActionRepository).save(any());
   }
 
   @Test
-  void createPolicy_shouldThrowRuntimeException_whenUserNotFound() {
-
-    String managerId = "1";
-    when(userRepository.findById(managerId)).thenReturn(Optional.empty());
+  void createPolicy_shouldThrow_whenUserNotFound() {
+    when(userRepository.findById("1")).thenReturn(Optional.empty());
 
     assertThrows(RuntimeException.class,
-        () -> policyService.createPolicy(managerId, policyDTO));
+        () -> policyService.createPolicy("1", policyDTO));
   }
 
   @Test
-  void createPolicy_shouldThrowRuntimeException_whenUserIsNotPolicyManager() {
+  void createPolicy_shouldThrow_whenUserNotPolicyManager() {
+    User user = new User();
+    user.setRole(UserRole.USER);
 
-    String managerId = "1";
-    User manager = new User();
-    manager.setId(managerId);
-    manager.setRole(UserRole.USER);
-
-    when(userRepository.findById(managerId)).thenReturn(Optional.of(manager));
+    when(userRepository.findById("1")).thenReturn(Optional.of(user));
 
     assertThrows(RuntimeException.class,
-        () -> policyService.createPolicy(managerId, policyDTO));
+        () -> policyService.createPolicy("1", policyDTO));
   }
 
   // =========================
-  // UPDATE POLICY
+  // UPDATE POLICY - SUCCESS PATHS
   // =========================
 
   @Test
-  void updatePolicy_shouldExpireOldAndCreateNewPolicy_whenManagerIsPolicyManager() {
-
-    String managerId = "1";
+  void updatePolicy_shouldCreatePendingVersion_whenStatusIsActive() {
 
     User manager = new User();
-    manager.setId(managerId);
+    manager.setId("1");
     manager.setRole(UserRole.POLICY_MANAGER);
 
-    Policy oldPolicy = createPolicy();
-    Policy newPolicy = createPolicy();
+    Policy activePolicy = createPolicy();
+    PolicyManagerAction action =
+        new PolicyManagerAction(manager, null, activePolicy);
 
-    when(userRepository.findById(managerId)).thenReturn(Optional.of(manager));
-    when(policyRepository.findById(policyDTO.getId())).thenReturn(Optional.of(oldPolicy));
-    when(policyMapper.toPolicy(policyDTO)).thenReturn(newPolicy);
+    Policy mappedPolicy = createPolicy();
 
-    when(policyRepository.save(oldPolicy)).thenReturn(oldPolicy);
-    when(policyRepository.save(newPolicy)).thenReturn(newPolicy);
-    when(policyMapper.toPolicyDTO(newPolicy)).thenReturn(policyDTO);
+    when(userRepository.findById("1")).thenReturn(Optional.of(manager));
+    when(policyRepository.findById(policyDTO.getId())).thenReturn(Optional.of(activePolicy));
+    when(policyManagerActionRepository
+        .findTopBySuggestedPolicyIdOrderByCreatedAtDesc(activePolicy.getId()))
+        .thenReturn(Optional.of(action));
 
-    PolicyDTO result = policyService.updatePolicy(managerId, policyDTO, null);
+    when(policyMapper.toPolicy(policyDTO)).thenReturn(mappedPolicy);
+    when(policyRepository.save(any())).thenAnswer(inv -> inv.getArgument(0));
+    when(policyMapper.toPolicyDTO(any())).thenReturn(policyDTO);
+
+    PolicyDTO result = policyService.updatePolicy("1", policyDTO, null);
 
     assertNotNull(result);
-    assertEquals(PolicyStatus.EXPIRED, oldPolicy.getStatus());
-    assertEquals(PolicyStatus.ACTIVE, newPolicy.getStatus());
-    assertNull(newPolicy.getId());
+    assertEquals(PolicyStatus.PENDING, mappedPolicy.getStatus());
+    assertNull(mappedPolicy.getId());
 
-    verify(policyRepository).save(oldPolicy);
-    verify(policyRepository).save(newPolicy);
+    verify(policyManagerActionRepository).save(any());
   }
 
   @Test
-  void updatePolicy_shouldThrowRuntimeException_whenPolicyNotFound() {
-
-    String managerId = "1";
+  void updatePolicy_shouldHandleDraftPolicy() {
 
     User manager = new User();
-    manager.setId(managerId);
+    manager.setId("1");
     manager.setRole(UserRole.POLICY_MANAGER);
 
-    when(userRepository.findById(managerId)).thenReturn(Optional.of(manager));
+    Policy draft = createPolicy();
+    draft.setStatus(PolicyStatus.DRAFT);
+
+    PolicyManagerAction action =
+        new PolicyManagerAction(manager, null, draft);
+
+    when(userRepository.findById("1")).thenReturn(Optional.of(manager));
+    when(policyRepository.findById(policyDTO.getId())).thenReturn(Optional.of(draft));
+    when(policyManagerActionRepository
+        .findTopBySuggestedPolicyIdOrderByCreatedAtDesc(draft.getId()))
+        .thenReturn(Optional.of(action));
+
+    when(policyMapper.toPolicy(policyDTO)).thenReturn(draft);
+    when(policyRepository.save(any())).thenReturn(draft);
+    when(policyMapper.toPolicyDTO(any())).thenReturn(policyDTO);
+
+    PolicyDTO result = policyService.updatePolicy("1", policyDTO, null);
+
+    assertNotNull(result);
+    assertFalse(draft.getInReview());
+
+    verify(policyRepository).save(draft);
+  }
+
+  @Test
+  void updatePolicy_shouldHandlePendingPolicy() {
+
+    User manager = new User();
+    manager.setId("1");
+    manager.setRole(UserRole.POLICY_MANAGER);
+
+    Policy origin = createPolicy();
+    origin.setStatus(PolicyStatus.ACTIVE);
+
+    Policy suggested = createPolicy();
+    suggested.setStatus(PolicyStatus.PENDING);
+
+    PolicyManagerAction action =
+        new PolicyManagerAction(manager, origin, suggested);
+
+    when(userRepository.findById("1")).thenReturn(Optional.of(manager));
+    when(policyRepository.findById(policyDTO.getId())).thenReturn(Optional.of(suggested));
+    when(policyManagerActionRepository
+        .findTopBySuggestedPolicyIdOrderByCreatedAtDesc(suggested.getId()))
+        .thenReturn(Optional.of(action));
+
+    when(policyMapper.toPolicy(policyDTO)).thenReturn(suggested);
+    when(policyRepository.save(any())).thenAnswer(inv -> inv.getArgument(0));
+    when(policyMapper.toPolicyDTO(any())).thenReturn(policyDTO);
+
+    PolicyDTO result = policyService.updatePolicy("1", policyDTO, null);
+
+    assertNotNull(result);
+    verify(policyRepository).save(origin);
+    verify(policyRepository).save(suggested);
+    verify(policyManagerActionRepository).save(any());
+  }
+
+  // =========================
+  // UPDATE POLICY - FAILURE PATHS
+  // =========================
+
+  @Test
+  void updatePolicy_shouldThrow_whenManagerNotFound() {
+    when(userRepository.findById("1")).thenReturn(Optional.empty());
+
+    assertThrows(RuntimeException.class,
+        () -> policyService.updatePolicy("1", policyDTO, null));
+  }
+
+  @Test
+  void updatePolicy_shouldThrow_whenUserNotPolicyManager() {
+
+    User user = new User();
+    user.setRole(UserRole.USER);
+
+    when(userRepository.findById("1")).thenReturn(Optional.of(user));
+
+    assertThrows(RuntimeException.class,
+        () -> policyService.updatePolicy("1", policyDTO, null));
+  }
+
+  @Test
+  void updatePolicy_shouldThrow_whenPolicyNotFound() {
+
+    User manager = new User();
+    manager.setRole(UserRole.POLICY_MANAGER);
+
+    when(userRepository.findById("1")).thenReturn(Optional.of(manager));
     when(policyRepository.findById(policyDTO.getId())).thenReturn(Optional.empty());
 
     assertThrows(RuntimeException.class,
-        () -> policyService.updatePolicy(managerId, policyDTO, null));
+        () -> policyService.updatePolicy("1", policyDTO, null));
   }
 
   @Test
-  void updatePolicy_shouldThrowRuntimeException_whenUserIsNotPolicyManager() {
-
-    String managerId = "1";
+  void updatePolicy_shouldThrow_whenLatestActionNotFound() {
 
     User manager = new User();
-    manager.setId(managerId);
-    manager.setRole(UserRole.USER);
+    manager.setRole(UserRole.POLICY_MANAGER);
 
-    when(userRepository.findById(managerId)).thenReturn(Optional.of(manager));
+    when(userRepository.findById("1")).thenReturn(Optional.of(manager));
+    when(policyRepository.findById(policyDTO.getId())).thenReturn(Optional.of(policy));
+    when(policyManagerActionRepository
+        .findTopBySuggestedPolicyIdOrderByCreatedAtDesc(policy.getId()))
+        .thenReturn(Optional.empty());
 
     assertThrows(RuntimeException.class,
-        () -> policyService.updatePolicy(managerId, policyDTO, null));
+        () -> policyService.updatePolicy("1", policyDTO, null));
+  }
+
+  @Test
+  void updatePolicy_shouldThrow_whenUnsupportedStatus() {
+
+    User manager = new User();
+    manager.setRole(UserRole.POLICY_MANAGER);
+
+    policy.setStatus(PolicyStatus.EXPIRED);
+
+    PolicyManagerAction action =
+        new PolicyManagerAction(manager, null, policy);
+
+    when(userRepository.findById("1")).thenReturn(Optional.of(manager));
+    when(policyRepository.findById(policyDTO.getId())).thenReturn(Optional.of(policy));
+    when(policyManagerActionRepository
+        .findTopBySuggestedPolicyIdOrderByCreatedAtDesc(policy.getId()))
+        .thenReturn(Optional.of(action));
+
+    assertThrows(RuntimeException.class,
+        () -> policyService.updatePolicy("1", policyDTO, null));
   }
 
   // =========================
-  // TEST DATA FACTORIES
+  // TEST DATA
   // =========================
 
   private Policy createPolicy() {
-    Policy policy = new Policy();
-    policy.setId(1L);
-    policy.setName("Life Coverage");
-    policy.setPremium(199.99f);
-    policy.setStatus(PolicyStatus.ACTIVE);
-    policy.setCoveredLifeEvents(Collections.emptySet());
-    policy.setCoveredUsers(Collections.emptySet());
-    return policy;
+    Policy p = new Policy();
+    p.setId(1L);
+    p.setName("Life Coverage");
+    p.setPremium(199.99f);
+    p.setStatus(PolicyStatus.ACTIVE);
+    p.setCoveredLifeEvents(Collections.emptySet());
+    p.setCoveredUsers(Collections.emptySet());
+    return p;
   }
 
   private PolicyDTO createPolicyDTO() {

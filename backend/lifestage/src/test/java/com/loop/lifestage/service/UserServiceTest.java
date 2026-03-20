@@ -358,6 +358,136 @@ class UserServiceTest {
   }
 
   // =========================
+// ADDITIONAL COVERAGE (FIXED)
+// =========================
+
+@Nested
+class AdditionalCoverage {
+
+  @Test
+  void addLifeEventToUser_shouldThrow_whenLifeEventNotFound() {
+
+    Long eventId = 10L;
+
+    when(lifeEventRepository.findById(eventId)).thenReturn(Optional.empty());
+
+    assertThrows(RuntimeException.class,
+        () -> userService.addLifeEventToUser(userDTO, eventId));
+
+    verify(lifeEventRepository).findById(eventId);
+  }
+
+  @Test
+  void addPolicyToUser_shouldGenerateNewRecommendation_whenPreviousExists() {
+
+    Long policyId = 1L;
+
+    PolicyRecommendation existingRecommendation = new PolicyRecommendation();
+    LifeEvent lifeEvent = new LifeEvent();
+    existingRecommendation.setLifeEvent(lifeEvent);
+
+    PolicyRecommendation newRecommendation = new PolicyRecommendation();
+
+    // REQUIRED because updateUser() is called internally
+    when(userMapper.toUser(userDTO)).thenReturn(user);
+    when(userRepository.save(user)).thenReturn(user);
+    when(userMapper.toUserDTO(user)).thenReturn(userDTO);
+
+    when(policyRecommendationRepository
+        .findTopByUserIdOrderByCreatedAtDesc(userDTO.getId()))
+        .thenReturn(Optional.of(existingRecommendation));
+
+    when(recommendationEngine.generateRecommendation(eq(user), eq(lifeEvent), any()))
+        .thenReturn(newRecommendation);
+
+    UserDTO result = userService.addPolicyToUser(userDTO, policyId);
+
+    assertEquals(userDTO, result);
+    verify(policyRecommendationRepository).save(newRecommendation);
+  }
+
+  @Test
+  void addPolicyToUser_shouldNotGenerateRecommendation_whenNoPreviousExists() {
+
+    Long policyId = 1L;
+
+    // REQUIRED because updateUser() is called internally
+    when(userMapper.toUser(userDTO)).thenReturn(user);
+    when(userRepository.save(user)).thenReturn(user);
+    when(userMapper.toUserDTO(user)).thenReturn(userDTO);
+
+    when(policyRecommendationRepository
+        .findTopByUserIdOrderByCreatedAtDesc(userDTO.getId()))
+        .thenReturn(Optional.empty());
+
+    UserDTO result = userService.addPolicyToUser(userDTO, policyId);
+
+    assertEquals(userDTO, result);
+    verify(policyRecommendationRepository, never()).save(any());
+  }
+
+  @Test
+  void changeRoleOfUser_shouldUpdateRole_whenAdmin() {
+
+    User admin = createUser();
+    admin.setRole(UserRole.ADMIN);
+
+    User targetUser = createUser();
+
+    when(userRepository.findById("user1")).thenReturn(Optional.of(targetUser));
+    when(userRepository.findById("admin1")).thenReturn(Optional.of(admin));
+    when(userMapper.toUserDTO(targetUser)).thenReturn(userDTO);
+
+    UserDTO result =
+        userService.changeRoleOfUser("user1", "admin1", UserRole.POLICY_MANAGER);
+
+    assertEquals(UserRole.POLICY_MANAGER, targetUser.getRole());
+    assertEquals(userDTO, result);
+
+    verify(userRepository).save(targetUser);
+  }
+
+  @Test
+  void changeRoleOfUser_shouldThrow_whenAdminIsNotAdmin() {
+
+    User notAdmin = createUser();
+    notAdmin.setRole(UserRole.USER);
+
+    User targetUser = createUser();
+
+    when(userRepository.findById("user1")).thenReturn(Optional.of(targetUser));
+    when(userRepository.findById("admin1")).thenReturn(Optional.of(notAdmin));
+
+    assertThrows(RuntimeException.class,
+        () -> userService.changeRoleOfUser("user1", "admin1", UserRole.ADMIN));
+  }
+
+  @Test
+  void changeRoleOfUser_shouldThrow_whenUserNotFound() {
+
+    when(userRepository.findById("user1")).thenReturn(Optional.empty());
+
+    assertThrows(RuntimeException.class,
+        () -> userService.changeRoleOfUser("user1", "admin1", UserRole.ADMIN));
+
+    verify(userRepository).findById("user1");
+  }
+
+  @Test
+  void getLatestPolicyRecommendation_shouldThrowRuntimeException_whenUnexpectedErrorOccurs() {
+
+    String userId = "1";
+
+    when(policyRecommendationRepository
+        .findTopByUserIdOrderByCreatedAtDesc(userId))
+        .thenThrow(new RuntimeException("db error"));
+
+    assertThrows(RuntimeException.class,
+        () -> userService.getLatestPolicyRecommendationForUser(userId));
+  }
+}
+
+  // =========================
   // TEST DATA FACTORIES
   // =========================
 
@@ -368,6 +498,9 @@ class UserServiceTest {
   }
 
   private UserDTO createUserDTO() {
-    return new UserDTO("1", "testuser");
+    UserDTO dto = new UserDTO("1", "testuser");
+    dto.setLifeEventIds(new java.util.HashSet<>());
+    dto.setPolicyIds(new java.util.HashSet<>());
+    return dto;
   }
 }

@@ -1,6 +1,7 @@
 package com.loop.lifestage.service;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import com.loop.lifestage.dto.LifeEventDTO;
@@ -77,6 +78,20 @@ class LifeEventServiceTest {
 
     // Then
     assertThrows(RuntimeException.class, () -> lifeEventService.getAllLifeEvents());
+  }
+
+  @Test
+  void getAllLifeEvents_shouldReturnEmptyList_whenNoEventsExist() {
+
+    when(lifeEventRepository.findAll()).thenReturn(List.of());
+
+    List<LifeEventDTO> result = lifeEventService.getAllLifeEvents();
+
+    assertNotNull(result);
+    assertTrue(result.isEmpty());
+
+    verify(lifeEventRepository).findAll();
+    verify(lifeEventMapper, never()).toLifeEventDTO(any());
   }
 
   // =========================
