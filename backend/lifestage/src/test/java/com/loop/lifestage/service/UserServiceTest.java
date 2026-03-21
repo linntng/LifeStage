@@ -45,11 +45,13 @@ class UserServiceTest {
 
   private User user;
   private UserDTO userDTO;
+  private User caseHandler;
 
   @BeforeEach
   void setup() {
     user = createUser();
     userDTO = createUserDTO();
+    caseHandler = createCaseHandler();
   }
 
   // =========================
@@ -399,8 +401,12 @@ class AdditionalCoverage {
 
     when(recommendationEngine.generateRecommendation(eq(user), eq(lifeEvent), any()))
         .thenReturn(newRecommendation);
+    
+    // Ensure the user adding the policy has the CASE_HANDLER role
+    when(userRepository.findById(caseHandler.getId()))
+      .thenReturn(Optional.of(caseHandler));
 
-    UserDTO result = userService.addPolicyToUser(userDTO, policyId);
+    UserDTO result = userService.addPolicyToUser(userDTO, policyId, caseHandler.getId());
 
     assertEquals(userDTO, result);
     verify(policyRecommendationRepository).save(newRecommendation);
@@ -419,8 +425,12 @@ class AdditionalCoverage {
     when(policyRecommendationRepository
         .findTopByUserIdOrderByCreatedAtDesc(userDTO.getId()))
         .thenReturn(Optional.empty());
+  
+    // Ensure the user adding the policy has the CASE_HANDLER role
+    when(userRepository.findById(caseHandler.getId()))
+      .thenReturn(Optional.of(caseHandler));
 
-    UserDTO result = userService.addPolicyToUser(userDTO, policyId);
+    UserDTO result = userService.addPolicyToUser(userDTO, policyId, caseHandler.getId());
 
     assertEquals(userDTO, result);
     verify(policyRecommendationRepository, never()).save(any());
@@ -502,5 +512,12 @@ class AdditionalCoverage {
     dto.setLifeEventIds(new java.util.HashSet<>());
     dto.setPolicyIds(new java.util.HashSet<>());
     return dto;
+  }
+
+  private User createCaseHandler() {
+    User caseHandler = new User();
+    caseHandler.setId("mockCaseHandlerSub");
+    caseHandler.setRole(UserRole.CASE_HANDLER);
+    return caseHandler;
   }
 }
