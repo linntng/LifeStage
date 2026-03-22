@@ -2,7 +2,15 @@
 
 This guide is created for learning purposes, to keep track of and remember what we're doing.
 
-## Docker compose
+## Running the backend in docker
+Before building the project, ensure that you have the .env file with postgreSQL name, username and password. 
+
+To create a container of the whole the backend running together, run:
+```bash
+docker compose up
+```
+
+## Understanding Docker compose
 
 ### Bridge app network
 
