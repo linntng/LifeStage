@@ -1,7 +1,6 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { User, UserApi } from './user-api';
 import { LifeeventStore } from '../../lifeevents/state/lifeevent-store';
-import { Lifeevent } from '../../lifeevents/state/lifeevent-api';
 import { PoliciesStore } from '../../policies/state/policies-store';
 import { UserLifeeventApi } from '../user-lifeevent/user-lifeevent-api';
 import { UserPolicyApi } from '../user-policy/user-policy-api';
@@ -76,6 +75,8 @@ export class UserStore {
 					this.router.navigate(['/cases']);
 				} else if (user.role === 'ADMIN') {
 					this.router.navigate(['/admin']);
+				} else if (user.role === 'POLICY_MANAGER') {
+					this.router.navigate(['/policy-manager']);
 				} else {
 					this.router.navigate(['/']);
 				}

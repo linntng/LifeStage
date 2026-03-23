@@ -22,8 +22,8 @@ export class ReviewPolicyDialog {
 	selectedLifeEvents = this.policy?.coveredLifeEvents ?? [];
 	status = this.policy?.status ?? null;
 	inReview = this.policy?.inReview ?? null;
-	explanation: string = '';
-	isDenying: boolean = false;
+	explanation = '';
+	isDenying = false;
 
 	back() {
 		this.dialogRef.close();

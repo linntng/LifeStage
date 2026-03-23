@@ -1,6 +1,6 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import Keycloak, { KeycloakUserInfo } from 'keycloak-js';
-import { User, UserApi, UserRole } from '../../features/user/user-state/user-api';
+import { User } from '../../features/user/user-state/user-api';
 import { UserStore } from '../../features/user/user-state/user-store';
 
 @Injectable({
