@@ -13,35 +13,33 @@ export class PoliciesStore {
 	readonly getAllPoliciesLoading = signal(false);
 	readonly getReviewPoliciesLoading = signal(false);
 	readonly getRejectedPoliciesLoading = signal(false);
-	readonly loading = computed(() => 
-		this.getAllPoliciesLoading() 
-		&& this.getReviewPoliciesLoading() 
-		&& this.getRejectedPoliciesLoading()
+	readonly loading = computed(
+		() =>
+			this.getAllPoliciesLoading() ||
+			this.getReviewPoliciesLoading() ||
+			this.getRejectedPoliciesLoading(),
 	);
 
 	loadPolicies() {
-		if (this.policies().length > 0) return;
 		if (this.loading()) return;
 		this.getAllPoliciesLoading.set(true);
 		this.getReviewPoliciesLoading.set(true);
 		this.getRejectedPoliciesLoading.set(true);
 
-		this.policiesApi.getReviewPolicies()
-			.subscribe({
-				next: (reviewPolicies) => {
+		this.policiesApi.getReviewPolicies().subscribe({
+			next: (reviewPolicies) => {
 				this.policiesToReview.set(reviewPolicies);
-				},
+			},
 			error: (err) => {
 				console.error('Failed to fetch policies for review', err);
 			},
 			complete: () => this.getReviewPoliciesLoading.set(false),
 		});
 
-		this.policiesApi.getRejectedPolicies()
-			.subscribe({
-				next: (rejectedPolicies) => {
+		this.policiesApi.getRejectedPolicies().subscribe({
+			next: (rejectedPolicies) => {
 				this.policiesRejected.set(rejectedPolicies);
-				},
+			},
 			error: (err) => {
 				console.error('Failed to fetch rejected policies', err);
 			},
@@ -49,9 +47,9 @@ export class PoliciesStore {
 		});
 
 		this.policiesApi.getPolicies().subscribe({
-				next: (policies) => {
+			next: (policies) => {
 				this.policies.set(policies);
-				},
+			},
 			error: (err) => {
 				console.error('Failed to fetch policies for review', err);
 			},
