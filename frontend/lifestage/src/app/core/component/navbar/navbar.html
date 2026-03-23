@@ -1,29 +1,11 @@
 <header class="sticky top-0 z-100 p-4 shadow-xl flex justify-between items-center bg-primary">
 	<!-- Logo -->
-	<div class="">
-		@if (userStore.currentUser()?.role === 'CASE_HANDLER') {
-			<a
-				routerLink="/cases"
-				class="font-serif text-3xl italic hover:bg-transparent text-shadow-md text-shadow-black hover:text-shadow-secondary"
-			>
-				LifeStage
-			</a>
-		} @else if (userStore.currentUser()?.role === 'ADMIN') {
-			<a
-				routerLink="/admin"
-				class="font-serif text-3xl italic hover:bg-transparent text-shadow-md text-shadow-black hover:text-shadow-secondary"
-			>
-				LifeStage
-			</a>
-		} @else if (userStore.currentUser()?.role === 'USER') {
-			<a
-				routerLink="/"
-				class="font-serif text-3xl italic hover:bg-transparent text-shadow-md text-shadow-black hover:text-shadow-secondary"
-			>
-				LifeStage
-			</a>
-		}
-	</div>
+	<a
+		[routerLink]="homeRoute()"
+		class="font-serif text-3xl italic hover:bg-transparent text-shadow-md text-shadow-black hover:text-shadow-secondary"
+	>
+		LifeStage
+	</a>
 
 	<nav
 		class="absolute md:relative top-full md:top-0 right-0 items-end md:items-center z-10 w-fit md:w-full flex flex-col md:flex-row justify-around bg-primary/70 md:bg-transparent p-4 md:p-0 gap-2 md:gap-0 transition-all duration-0 transform"

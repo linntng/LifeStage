@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { LoginButton } from '../../../features/auth/login-button/login-button';
 import { CommonModule } from '@angular/common';
@@ -12,4 +12,19 @@ import { UserStore } from '../../../features/user/user-state/user-store';
 export class Navbar {
 	menuOpen = false;
 	userStore = inject(UserStore);
+
+	readonly homeRoute = computed(() => {
+		const role = this.userStore.currentUser()?.role;
+
+		switch (role) {
+			case 'CASE_HANDLER':
+				return '/cases';
+			case 'ADMIN':
+				return '/admin';
+			case 'USER':
+				return '/';
+			default:
+				return '/';
+		}
+	});
 }
