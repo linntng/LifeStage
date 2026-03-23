@@ -1,4 +1,4 @@
-<section class="flex flex-col gap-4 min-w-[400px]">
+<section class="flex flex-col gap-4 min-w-100">
 	@if (policy) {
 		<h1>Update policy</h1>
 	} @else {
@@ -7,7 +7,7 @@
 
 	<!-- Name -->
 	<div>
-		<label class="block mb-1">Policy name</label>
+		<p class="block mb-1">Policy name</p>
 		<input
 			type="text"
 			name="name"
@@ -18,7 +18,7 @@
 
 	<!-- Premium -->
 	<div>
-		<label class="block mb-1">Premium</label>
+		<p class="block mb-1">Premium</p>
 		<input
 			type="text"
 			name="premium"
@@ -29,10 +29,10 @@
 
 	<!-- Life events -->
 	<div>
-		<label>Life events</label>
+		<p>Life events</p>
 		<br />
 
-		<div class="scroll-container max-h-[150px]">
+		<div class="scroll-container max-h-37.5">
 			<table class="info-table">
 				<tbody>
 					@for (event of lifeEventStore.lifeevents(); track event) {

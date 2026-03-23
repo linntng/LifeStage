@@ -3,6 +3,8 @@
 	<nav class="w-full flex justify-center gap-8 px-6 py-3 text-white">
 		<a
 			(click)="tab = 'active'"
+			tabindex="0"
+			role="button"
 			[class.text-secondary]="tab === 'active'"
 			class="pb-1 cursor-pointer"
 		>
@@ -11,6 +13,8 @@
 
 		<a
 			(click)="tab = 'review'"
+			tabindex="0"
+			role="button"
 			[class.text-secondary]="tab === 'review'"
 			class="pb-1 cursor-pointer"
 		>
@@ -19,6 +23,8 @@
 
 		<a
 			(click)="tab = 'rejected'"
+			tabindex="0"
+			role="button"
 			[class.text-secondary]="tab === 'rejected'"
 			class="pb-1 cursor-pointer"
 		>
@@ -83,7 +89,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							@for (policy of getReviewPolicies(); track policy) {
+							@for (policy of reviewPolicies(); track policy) {
 								<tr>
 									<td>{{ policy.status }}</td>
 									<td>{{ policy.name }}</td>
@@ -105,7 +111,7 @@
 	<section>
 		<div class="flex flex-col gap-4">
 			<section>
-				<h1>Rejected policy updates</h1>
+				<h1>Your rejected policy updates</h1>
 				<br />
 
 				<div class="scroll-container max-h-[40vh]">
@@ -120,7 +126,7 @@
 						</thead>
 
 						<tbody>
-							@for (policy of getRejectedPoliciesWithExplanation(); track policy.id) {
+							@for (policy of rejectedPoliciesWithExplanation(); track policy.id) {
 								<tr>
 									<td>{{ policy.id }}</td>
 									<td>{{ policy.status }}</td>
