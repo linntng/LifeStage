@@ -19,12 +19,19 @@
 	<!-- Premium -->
 	<div>
 		<p class="block mb-1">Premium</p>
-		<input
-			type="text"
-			name="premium"
-			[(ngModel)]="premium"
-			class="w-full border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:border-black"
-		/>
+		<div class="relative">
+			<input
+				type="text"
+				name="premium"
+				[(ngModel)]="premium"
+				class="w-full border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:border-black"
+			/>
+			<span
+				class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"
+			>
+				kr/month
+			</span>
+		</div>
 	</div>
 
 	<!-- Life events -->
