@@ -1,59 +1,65 @@
-<h1 class="mt-5">{{ 'Hello, ' + auth.keycloakName() + '!' }}</h1>
-<section class="flex flex-row justify-around bg-blue-200 mb-20">
-	<img
-		src="/images/image1.png"
-		class="hidden md:block w-120 rounded-4xl shadow justify-start"
-		alt="happy people with life events covered"
-	/>
-	@if (alreadyCovered()) {
-		<div>
-			<h3>You're well covered!</h3>
-			<p>Your current policies cover your life events.</p>
-		</div>
-	} @else {
-		<div>
-			<p class="font-bold">Based on your newly added life event:</p>
-			<p>{{ getLifeeventName(userPolicyRec()?.lifeEventId) | capitalize }}</p>
-			<p class="font-bold">We recommend:</p>
-			@for (policy of policiesToAdd(); track policy.policyId) {
-				<p>Add: {{ getPolicyName(policy.policyId) }}</p>
-			}
+@if (!isLoggedIn()) {
+	<app-not-logged-in></app-not-logged-in>
+} @else {
+	<h1 class="mt-5">{{ 'Hello, ' + auth.keycloakName() + '!' }}</h1>
+	<section class="flex flex-row justify-around bg-blue-200 mb-20">
+		<img
+			src="/images/image1.png"
+			class="hidden md:block w-120 rounded-4xl shadow justify-start"
+			alt="happy people with life events covered"
+		/>
+		@if (alreadyCovered()) {
+			<div>
+				<h3>You're well covered!</h3>
+				<p>Your current policies cover your life events.</p>
+			</div>
+		} @else {
+			<div>
+				<p class="font-bold">Based on your newly added life event:</p>
+				<p>{{ getLifeeventName(userPolicyRec()?.lifeEventId) | capitalize }}</p>
+				<p class="font-bold">We recommend:</p>
+				@for (policy of policiesToAdd(); track policy.policyId) {
+					<p>Add: {{ getPolicyName(policy.policyId) }}</p>
+				}
 
-			@for (removepolicy of policiesToRemove(); track removepolicy.policyId) {
-				<p>Remove: {{ getPolicyName(removepolicy.policyId) }}</p>
-			}
-			<p class="font-bold">Estimated premium change: {{ userPolicyRec()?.premiumImpact }}</p>
-			<button class="mt-3" [routerLink]="['/policies']">Check it out</button>
+				@for (removepolicy of policiesToRemove(); track removepolicy.policyId) {
+					<p>Remove: {{ getPolicyName(removepolicy.policyId) }}</p>
+				}
+				<p class="font-bold">
+					Estimated premium change: {{ userPolicyRec()?.premiumImpact }}
+				</p>
+				<button class="mt-3" [routerLink]="['/policies']">Check it out</button>
+			</div>
+		}
+	</section>
+	<div class="grid grid-cols-2">
+		<div>
+			<h2>Your life events</h2>
+			<section>
+				@for (event of userLifeevents(); track event) {
+					<div class="info-bar">{{ event.name | capitalize }}</div>
+				}
+				<button
+					class="bg-secondary-active hover:bg-secondary-hover"
+					[routerLink]="['/lifeevents']"
+				>
+					Manage life events
+				</button>
+			</section>
 		</div>
-	}
-</section>
-<div class="grid grid-cols-2">
-	<div>
-		<h2>Your life events</h2>
-		<section>
-			@for (event of userLifeevents(); track event) {
-				<div class="info-bar">{{ event.name | capitalize }}</div>
-			}
-			<button
-				class="bg-secondary-active hover:bg-secondary-hover"
-				[routerLink]="['/lifeevents']"
-			>
-				Manage life events
-			</button>
-		</section>
+		<div>
+			<h2>Your policies</h2>
+			<section>
+				@for (policy of userPolicies(); track policy) {
+					<div class="info-bar">{{ policy.name | capitalize }}</div>
+				}
+				<button
+					class="bg-secondary-active hover:bg-secondary-hover"
+					[routerLink]="['/policies']"
+				>
+					Manage policies
+				</button>
+			</section>
+		</div>
 	</div>
-	<div>
-		<h2>Your policies</h2>
-		<section>
-			@for (policy of userPolicies(); track policy) {
-				<div class="info-bar">{{ policy.name | capitalize }}</div>
-			}
-			<button
-				class="bg-secondary-active hover:bg-secondary-hover"
-				[routerLink]="['/policies']"
-			>
-				Manage policies
-			</button>
-		</section>
-	</div>
-</div>
+}

@@ -2,7 +2,7 @@
 	<section>
 		<h2>Your policies</h2>
 		@if (userPolicies().length === 0) {
-			<p class="p-5">You have no policies D:</p>
+			<p class="p-5">You have no policies.</p>
 		}
 		<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
 			@for (policy of userPolicies(); track policy) {
