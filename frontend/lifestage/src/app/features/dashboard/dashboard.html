@@ -22,7 +22,7 @@
 			@for (removepolicy of policiesToRemove(); track removepolicy.policyId) {
 				<p>Remove: {{ getPolicyName(removepolicy.policyId) }}</p>
 			}
-			<p class="font-bold">Estimated premium change: {{ userPolicyRec()?.premiumImpact }}</p>
+			<p class="font-bold">Estimated premium change: {{ userPolicyRec()?.premiumImpact + 'kr/month' }}</p>
 			<button class="mt-3" [routerLink]="['/policies']">Check it out</button>
 		</div>
 	}

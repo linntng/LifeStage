@@ -13,7 +13,7 @@
 					[title]="policy.name"
 					[color]="status(policy).active ? 'bg-secondary' : 'bg-pending'"
 				>
-					<p>{{ 'Premium: ' + (policy.premium ? policy.premium : 'No premium') }}</p>
+					<p>{{ 'Premium: ' + (policy.premium ? policy.premium : 'No premium') }}&nbsp;kr/month</p>
 					<p>Coverage includes:</p>
 					@for (lifeeventIds of policy.coveredLifeEvents; track lifeeventIds) {
 						<ul>
@@ -51,7 +51,7 @@
 					(keydown.space)="openRemainingPolicyDialog(policy)"
 					[title]="policy.name"
 				>
-					<p>{{ 'Premium: ' + (policy.premium ? policy.premium : 'No premium') }}</p>
+					<p>{{ 'Premium: ' + (policy.premium ? policy.premium: 'No premium') }}&nbsp;kr/month</p>
 					<p>Coverage includes:</p>
 					@for (lifeeventIds of policy.coveredLifeEvents; track lifeeventIds) {
 						<ul>
