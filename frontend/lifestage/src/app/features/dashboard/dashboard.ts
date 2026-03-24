@@ -1,14 +1,15 @@
-import { Component, effect, inject, OnInit } from '@angular/core';
+import { Component, computed, effect, inject, OnInit } from '@angular/core';
 import { UserStore } from '../user/user-state/user-store';
 import { Auth } from '../../core/auth/auth';
 import { CapitalizePipe } from '../../shared/capitalize-pipe';
 import { PoliciesStore } from '../policies/state/policies-store';
 import { LifeeventStore } from '../lifeevents/state/lifeevent-store';
 import { RouterLink, RouterModule } from '@angular/router';
+import { NotLoggedIn } from './not-logged-in/not-logged-in';
 
 @Component({
 	selector: 'app-dashboard',
-	imports: [CapitalizePipe, RouterLink, RouterModule],
+	imports: [CapitalizePipe, RouterLink, RouterModule, NotLoggedIn],
 	templateUrl: './dashboard.html',
 })
 export class Dashboard implements OnInit {
@@ -50,4 +51,6 @@ export class Dashboard implements OnInit {
 		const lifeevent = this.allLifeevents()?.find((l) => l.id === lifeeventId);
 		return lifeevent?.name ?? 'Unknown lifeevent';
 	}
+
+	readonly isLoggedIn = computed(() => !!this.user());
 }
