@@ -12,10 +12,11 @@
 			</thead>
 			<tbody>
 				@for (case of activeCases(); track case.id) {
+					@let user = users().find(user => user.id == case.userId);
 					<tr>
 						<td>{{ case.userId }}</td>
 						<td>{{ case.policyId }}</td>
-						<td><button (click)="openDialog(case)">Review</button></td>
+						<td><button (click)="openDialog(case, user)">Review</button></td>
 					</tr>
 				}
 			</tbody>

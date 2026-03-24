@@ -24,6 +24,7 @@ export class UserStore {
 	readonly currentUser = signal<User | null>(null);
 	readonly currentUserLoading = signal(false);
 	readonly userPolicyRec = signal<PolicyRecommendation | null>(null);
+	readonly users = signal<User[]>([]);
 	router = inject(Router);
 
 	readonly userPolicies = computed(() => {
@@ -62,6 +63,13 @@ export class UserStore {
 			complete: () => {
 				this.currentUserLoading.set(false);
 			},
+		});
+	}
+
+	loadAllUsers() {
+		this.userApi.getAllUsers().subscribe({
+			next: (users) => this.users.set(users),
+			error: (err) => console.error('Error loading all users', err),
 		});
 	}
 
