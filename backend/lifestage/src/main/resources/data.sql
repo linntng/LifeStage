@@ -22,18 +22,18 @@ VALUES
 
 INSERT INTO policies (name, premium, status, in_review) VALUES
 -- Single life event policies
-('Marriage Protection', 2900.00, 'ACTIVE', false),
-('Childbirth Support', 4500.00, 'ACTIVE', false),
-('Property Purchase Security', 20000.00, 'ACTIVE', false),
-('Career Change Safety Net', 30000.00, 'ACTIVE', false),
-('Temporary Relocation Cover', 4500.00, 'ACTIVE', false),
+('Marriage Protection', 290.00, 'ACTIVE', false),
+('Childbirth Support', 450.00, 'ACTIVE', false),
+('Property Purchase Security', 2000.00, 'ACTIVE', false),
+('Career Change Safety Net', 3000.00, 'ACTIVE', false),
+('Temporary Relocation Cover', 450.00, 'ACTIVE', false),
 
 -- Compound policies
-('Family Bundle', 5700.00, 'ACTIVE', false),
-('Home & Career Package', 39000.00, 'ACTIVE', false),
-('International Transition Plan', 32000.00, 'ACTIVE', false),
-('Major Life Changes Package', 23900.00, 'ACTIVE', false),
-('Complete Life Protection', 56000.00, 'ACTIVE', false);
+('Family Bundle', 570.00, 'ACTIVE', false),
+('Home & Career Package', 3900.00, 'ACTIVE', false),
+('International Transition Plan', 3200.00, 'ACTIVE', false),
+('Major Life Changes Package', 2390.00, 'ACTIVE', false),
+('Complete Life Protection', 5600.00, 'ACTIVE', false);
 
 INSERT INTO policy_life_events (policy_id, life_event_id) VALUES
 
