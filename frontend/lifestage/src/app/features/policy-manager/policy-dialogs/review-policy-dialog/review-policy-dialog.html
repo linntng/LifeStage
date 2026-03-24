@@ -6,7 +6,7 @@
 		<div class="readonly-field">{{ name }}</div>
 
 		<p>Premium</p>
-		<div class="readonly-field">{{ premium}}&nbsp;kr/month</div>
+		<div class="readonly-field">{{ premium }}&nbsp;kr/month</div>
 
 		<p>Status</p>
 		<div class="readonly-field">{{ status }}</div>
@@ -49,16 +49,19 @@
 		}
 
 		<div class="flex justify-end gap-2">
-			<button (click)="back()">Back</button>
+			<button (click)="accept()" class="bg-green-200 hover:bg-green-400" [hidden]="isDenying">
+				Accept
+			</button>
 
 			<button
 				(click)="isDenying ? deny() : (isDenying = true)"
 				[disabled]="isDenying && !explanation.trim()"
+				class="bg-red-200 hover:bg-red-400"
 			>
 				{{ isDenying ? 'Confirm Deny' : 'Deny' }}
 			</button>
 
-			<button (click)="accept()">Accept</button>
+			<button (click)="back()" class="bg-gray-200 hover:bg-gray-400">Back</button>
 		</div>
 	</div>
 </section>

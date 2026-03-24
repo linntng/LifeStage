@@ -61,9 +61,12 @@
 
 	<!-- Actions -->
 	<div class="flex justify-end gap-2">
-		<button (click)="close()">Cancel</button>
 		<span class="relative inline-block group">
-			<button color="primary" (click)="submit()" [disabled]="inReview">
+			<button
+				class="bg-green-200 hover:bg-green-400"
+				(click)="submit()"
+				[disabled]="inReview"
+			>
 				@if (policy) {
 					Update
 				} @else {
@@ -82,5 +85,6 @@
 				></span>
 			</span>
 		</span>
+		<button (click)="close()" class="bg-gray-200 hover:bg-gray-400">Back</button>
 	</div>
 </section>
