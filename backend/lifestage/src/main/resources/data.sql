@@ -3,11 +3,11 @@ DELETE FROM policies;
 DELETE FROM policy_life_events;
 
 INSERT INTO users (id, role, username) VALUES
-('fa44cb5f-78d3-4b26-9e71-02268106af2e', 'USER', 'evillinn'),
-('e2f63b33-c182-49b2-a56e-a032ef91db93', 'ADMIN', 'evilmartin'),
-('e30a72fb-6928-4ed0-a6cf-897ac71b6ea4', 'CASE_HANDLER', 'eviloskar'),
-('5581809f-6205-4e13-bf7d-b9d094c31953', 'POLICY_MANAGER', 'chaososkar'),
-('438573b2-e2ec-401f-8896-b70b24848ddc', 'POLICY_MANAGER', 'chaosmartin');
+('4d6164c5-4dae-4af3-8d24-ef11b88f7429', 'USER', 'userlinn'),
+('ecd0b988-070d-48e5-8381-346530b0e9fa', 'ADMIN', 'adminoskar'),
+('836c725f-bdc2-48f9-a304-f97460c2a626', 'CASE_HANDLER', 'casemartin'),
+('22a19cc2-45a3-4d5d-8b5a-fd0d03ac8978', 'POLICY_MANAGER', 'polmantin'),
+('c3a92ff4-b718-4ef9-b11f-b151fda617da', 'POLICY_MANAGER', 'polmankar');
 
 INSERT INTO life_events (name, description)
 VALUES
@@ -82,7 +82,7 @@ INSERT INTO policy_manager_actions (
 
 SELECT
 
-   '5581809f-6205-4e13-bf7d-b9d094c31953',   
+   '22a19cc2-45a3-4d5d-8b5a-fd0d03ac8978',   
 
     NULL,
 
