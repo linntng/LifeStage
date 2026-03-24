@@ -1,40 +1,79 @@
 <div>
 	<section>
-		<h2>Your policies</h2>
+		<h2 class="text-xl font-semibold mb-4">Your policies</h2>
+
 		@if (userPolicies().length === 0) {
-			<p class="p-5">You have no policies.</p>
+			<p class="p-5 text-gray-500">You have no policies.</p>
 		}
-		<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+
+		<div
+			class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 items-stretch"
+		>
 			@for (policy of userPolicies(); track policy) {
 				<app-info-card
+					class="h-full cursor-pointer hover:-translate-y-1 transition-transform"
 					(click)="openActivePolicyDialog(policy)"
 					(keydown.enter)="openActivePolicyDialog(policy)"
 					(keydown.space)="openActivePolicyDialog(policy)"
 					[title]="policy.name"
 					[color]="status(policy).active ? 'bg-secondary' : 'bg-pending'"
 				>
-					<p>{{ 'Premium: ' + (policy.premium ? policy.premium : 'No premium') }}&nbsp;kr/month</p>
-					<p>Coverage includes:</p>
-					@for (lifeeventIds of policy.coveredLifeEvents; track lifeeventIds) {
-						<ul>
-							<li class="ml-7">
-								{{ getLifeeventName(lifeeventIds)?.name | capitalize }}
-							</li>
-						</ul>
-					}
-					<div class="flex flex-col items-center justify-center">
-						<span
-							class="mt-3 w-full py-2 text-center rounded-full text-sm font-semibold bg-dark-glow"
-						>
-							{{ status(policy).active ? 'Active' : 'In review' }}
-						</span>
-						@if (status(policy).remove) {
-							<span
-								class="mt-2 px-4 py-2 rounded-full text-xs font-medium bg-red-200 text-center flex items-center justify-center w-fit min-w-48"
-							>
-								Recommended for removal
+					<div class="flex flex-col gap-3 h-full">
+						<!-- Premium -->
+						<div class="text-sm text-gray-600">
+							<span class="font-medium text-gray-900">
+								{{ policy.premium ? policy.premium : '—' }}
 							</span>
-						}
+							kr/month
+						</div>
+
+						<!-- Coverage -->
+						<div>
+							<p class="text-xs uppercase tracking-wide text-gray-500 mb-1">
+								Coverage
+							</p>
+
+							<ul class="space-y-1 text-sm text-gray-700">
+								@for (
+									lifeeventIds of policy.coveredLifeEvents;
+									track lifeeventIds
+								) {
+									<li class="flex items-start gap-2">
+										<span
+											class="mt-1 h-1.5 w-1.5 rounded-full bg-gray-400"
+										></span>
+										{{ getLifeeventName(lifeeventIds)?.name | capitalize }}
+									</li>
+								}
+							</ul>
+						</div>
+
+						<!-- Spacer -->
+						<div class="flex-grow"></div>
+
+						<!-- Status section -->
+						<div class="flex flex-col gap-2">
+							<!-- Active / In review -->
+							<span
+								class="w-full py-2 text-center rounded-full text-sm font-semibold"
+								[ngClass]="
+									status(policy).active
+										? 'bg-green-100 text-green-800'
+										: 'bg-yellow-100 text-yellow-800'
+								"
+							>
+								{{ status(policy).active ? 'Active' : 'In review' }}
+							</span>
+
+							<!-- Removal warning -->
+							@if (status(policy).remove) {
+								<span
+									class="px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-700 text-center self-start"
+								>
+									Recommended for removal
+								</span>
+							}
+						</div>
 					</div>
 				</app-info-card>
 			}
@@ -42,31 +81,61 @@
 	</section>
 
 	<section>
-		<h2>Policies</h2>
-		<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+		<h2 class="text-xl font-semibold mb-4">Policies</h2>
+
+		<div
+			class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 items-stretch"
+		>
 			@for (policy of remainingPolicies(); track policy.id) {
 				<app-info-card
+					class="h-full cursor-pointer hover:-translate-y-1 transition-transform"
 					(click)="openRemainingPolicyDialog(policy)"
 					(keydown.enter)="openRemainingPolicyDialog(policy)"
 					(keydown.space)="openRemainingPolicyDialog(policy)"
 					[title]="policy.name"
 				>
-					<p>{{ 'Premium: ' + (policy.premium ? policy.premium: 'No premium') }}&nbsp;kr/month</p>
-					<p>Coverage includes:</p>
-					@for (lifeeventIds of policy.coveredLifeEvents; track lifeeventIds) {
-						<ul>
-							<li class="ml-7">
-								{{ getLifeeventName(lifeeventIds)?.name | capitalize }}
-							</li>
-						</ul>
-					}
-					@if (status(policy).recommended) {
-						<span
-							class="mt-3 inline-block px-4 py-2 rounded-full text-sm font-semibold bg-green-100"
-						>
-							Recommended
-						</span>
-					}
+					<div class="flex flex-col gap-3 h-full">
+						<!-- Premium -->
+						<div class="text-sm text-gray-600">
+							<span class="font-medium text-gray-900">
+								{{ policy.premium ? policy.premium : '—' }}
+							</span>
+							kr/month
+						</div>
+
+						<!-- Coverage -->
+						<div>
+							<p class="text-xs uppercase tracking-wide text-gray-500 mb-1">
+								Coverage
+							</p>
+
+							<ul class="space-y-1 text-sm text-gray-700">
+								@for (
+									lifeeventIds of policy.coveredLifeEvents;
+									track lifeeventIds
+								) {
+									<li class="flex items-start gap-2">
+										<span
+											class="mt-1 h-1.5 w-1.5 rounded-full bg-gray-400"
+										></span>
+										{{ getLifeeventName(lifeeventIds)?.name | capitalize }}
+									</li>
+								}
+							</ul>
+						</div>
+
+						<!-- Spacer to push badge down -->
+						<div class="flex-grow"></div>
+
+						<!-- Recommended badge -->
+						@if (status(policy).recommended) {
+							<span
+								class="self-start px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800"
+							>
+								Recommended
+							</span>
+						}
+					</div>
 				</app-info-card>
 			}
 		</div>
