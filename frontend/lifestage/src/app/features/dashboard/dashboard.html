@@ -1,5 +1,5 @@
 <h1 class="mt-5">{{ 'Hello, ' + auth.keycloakName() + '!' }}</h1>
-<section class="flex flex-row justify-around bg-blue-200 mb-30">
+<section class="flex flex-row justify-around bg-blue-200 mb-20">
 	<img
 		src="/images/image1.png"
 		class="hidden md:block w-120 rounded-4xl shadow justify-start"
@@ -27,19 +27,33 @@
 		</div>
 	}
 </section>
-<div class="mb-30">
-	<h2>Life events</h2>
-	<section>
-		@for (event of userLifeevents(); track event) {
-			<li>{{ event.name | capitalize }}</li>
-		}
-	</section>
-</div>
-<div>
-	<h2>Policies</h2>
-	<section>
-		@for (policy of userPolicies(); track policy) {
-			<li>{{ policy.name | capitalize }}</li>
-		}
-	</section>
+<div class="grid grid-cols-2">
+	<div>
+		<h2>Your life events</h2>
+		<section>
+			@for (event of userLifeevents(); track event) {
+				<div class="info-bar">{{ event.name | capitalize }}</div>
+			}
+			<button
+				class="bg-secondary-active hover:bg-secondary-hover"
+				[routerLink]="['/lifeevents']"
+			>
+				Manage life events
+			</button>
+		</section>
+	</div>
+	<div>
+		<h2>Your policies</h2>
+		<section>
+			@for (policy of userPolicies(); track policy) {
+				<div class="info-bar">{{ policy.name | capitalize }}</div>
+			}
+			<button
+				class="bg-secondary-active hover:bg-secondary-hover"
+				[routerLink]="['/policies']"
+			>
+				Manage policies
+			</button>
+		</section>
+	</div>
 </div>
