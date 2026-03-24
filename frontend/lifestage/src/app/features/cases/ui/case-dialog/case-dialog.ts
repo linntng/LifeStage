@@ -22,9 +22,9 @@ import { PoliciesStore } from '../../../policies/state/policies-store';
 		</mat-dialog-content>
 
 		<mat-dialog-actions>
-			<button (click)="accept()" class="bg-green-200">Accept</button>
-			<button (click)="deny()" class="bg-red-200">Deny</button>
-			<button mat-dialog-close class="bg-gray-200">Close</button>
+			<button (click)="accept()" class="bg-green-200 m-1">Accept</button>
+			<button (click)="deny()" class="bg-red-200 m-1">Deny</button>
+			<button mat-dialog-close class="bg-gray-200 m-1">Close</button>
 		</mat-dialog-actions>
 	`,
 })
