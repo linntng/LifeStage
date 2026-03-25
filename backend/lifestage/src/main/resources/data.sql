@@ -3,11 +3,11 @@ DELETE FROM policies;
 DELETE FROM policy_life_events;
 
 INSERT INTO users (id, role, username) VALUES
-('4d6164c5-4dae-4af3-8d24-ef11b88f7429', 'USER', 'userlinn'),
-('54d914f0-b63e-4d3a-858a-01fe52c52391', 'ADMIN', 'maria'),
-('fbe9753d-d2b0-4ef8-b559-ea2ec25cd09d', 'CASE_HANDLER', 'martin')
-('417f8841-7d92-4cb4-9cee-36bc5ec47501', 'POLICY_MANAGER', 'kjell'),
-('f04e2270-76bb-4e31-b755-0c08d7bc14d2', 'POLICY_MANAGER', 'oskar')
+    ('4d6164c5-4dae-4af3-8d24-ef11b88f7429', 'USER', 'linnngu'),
+    ('54d914f0-b63e-4d3a-858a-01fe52c52391', 'ADMIN', 'mariamag'),
+    ('fbe9753d-d2b0-4ef8-b559-ea2ec25cd09d', 'CASE_HANDLER', 'martinhat'),
+    ('417f8841-7d92-4cb4-9cee-36bc5ec47501', 'POLICY_MANAGER', 'kjelleik'),
+    ('f04e2270-76bb-4e31-b755-0c08d7bc14d2', 'POLICY_MANAGER', 'oskarjan');
 
 INSERT INTO life_events (name, description)
 VALUES
@@ -82,15 +82,22 @@ INSERT INTO policy_manager_actions (
 
 SELECT
 
-   '22a19cc2-45a3-4d5d-8b5a-fd0d03ac8978',   
+    pm.id,
 
     NULL,
 
     p.id,
 
-    NOW()                
+    NOW()
 
-FROM policies p;
+FROM policies p
+CROSS JOIN LATERAL (
+    SELECT id
+    FROM users
+    WHERE role = 'POLICY_MANAGER'
+    ORDER BY username
+    LIMIT 1
+) pm;
 
 -- No delete on policy table
 CREATE OR REPLACE FUNCTION prevent_delete()
