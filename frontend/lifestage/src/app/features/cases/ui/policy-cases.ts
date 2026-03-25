@@ -7,6 +7,7 @@ import { Case } from '../state/case-api';
 import { UserStore } from '../../user/user-state/user-store';
 import { User } from '../../user/user-state/user-api';
 import { LifeeventStore } from '../../lifeevents/state/lifeevent-store';
+import { PoliciesStore } from '../../policies/state/policies-store';
 
 @Component({
 	selector: 'app-policy-cases',
@@ -17,6 +18,7 @@ export class PolicyCases implements OnInit {
 	policyCaseStore = inject(CaseStore);
 	userStore = inject(UserStore);
 	lifeEventStore = inject(LifeeventStore);
+	policyStore = inject(PoliciesStore);
 	cases = this.policyCaseStore.cases;
 	users = this.userStore.users;
 	activeCases = computed(() =>
@@ -31,6 +33,7 @@ export class PolicyCases implements OnInit {
 		this.policyCaseStore.loadAllCases();
 		this.userStore.loadAllUsers();
 		this.lifeEventStore.loadLifeevents();
+		this.policyStore.loadPolicies();
 	}
 
 	acceptCase(caseId: number) {
