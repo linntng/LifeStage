@@ -46,6 +46,9 @@ type CaseDialogData = {
 								</li>
 							}
 						</ul>
+						@if (userLifeEvents.length === 0) {
+							<p class="text-sm text-gray-500 italic">User has no life events</p>
+						}
 					</div>
 
 					<!-- Policy coverage -->
@@ -67,6 +70,9 @@ type CaseDialogData = {
 								</li>
 							}
 						</ul>
+						@if (policyLifeEvents.length === 0) {
+							<p class="text-sm text-gray-500 italic">User has no policies</p>
+						}
 					</div>
 				</div>
 
