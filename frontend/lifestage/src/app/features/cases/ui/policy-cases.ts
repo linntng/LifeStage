@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Case } from '../state/case-api';
 import { UserStore } from '../../user/user-state/user-store';
 import { User } from '../../user/user-state/user-api';
+import { LifeeventStore } from '../../lifeevents/state/lifeevent-store';
 
 @Component({
 	selector: 'app-policy-cases',
@@ -15,6 +16,7 @@ import { User } from '../../user/user-state/user-api';
 export class PolicyCases implements OnInit {
 	policyCaseStore = inject(CaseStore);
 	userStore = inject(UserStore);
+	lifeEventStore = inject(LifeeventStore);
 	cases = this.policyCaseStore.cases;
 	users = this.userStore.users;
 	activeCases = computed(() =>
@@ -28,6 +30,7 @@ export class PolicyCases implements OnInit {
 	ngOnInit() {
 		this.policyCaseStore.loadAllCases();
 		this.userStore.loadAllUsers();
+		this.lifeEventStore.loadLifeevents();
 	}
 
 	acceptCase(caseId: number) {
