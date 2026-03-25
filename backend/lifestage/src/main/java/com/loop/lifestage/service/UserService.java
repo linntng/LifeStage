@@ -99,13 +99,13 @@ public class UserService {
   }
 
   @Transactional(readOnly = true)
-  public List<UserDTO> getAllUsers(String adminId) {
+  public List<UserDTO> getAllUsers(String id) {
     try {
-      User admin =
+      User user =
           userRepository
-              .findById(adminId)
+              .findById(id)
               .orElseThrow(() -> new RuntimeException("Admin not found"));
-      if (admin.getRole() == UserRole.ADMIN) {
+      if (user.getRole() == UserRole.ADMIN || user.getRole() == UserRole.CASE_HANDLER) {
         List<User> users = userRepository.findAll();
         return users.stream().map(userMapper::toUserDTO).collect(Collectors.toList());
       } else {

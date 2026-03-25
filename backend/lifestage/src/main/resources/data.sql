@@ -3,11 +3,11 @@ DELETE FROM policies;
 DELETE FROM policy_life_events;
 
 INSERT INTO users (id, role, username) VALUES
-('fa44cb5f-78d3-4b26-9e71-02268106af2e', 'USER', 'evillinn'),
-('e2f63b33-c182-49b2-a56e-a032ef91db93', 'ADMIN', 'evilmartin'),
-('e30a72fb-6928-4ed0-a6cf-897ac71b6ea4', 'CASE_HANDLER', 'eviloskar'),
-('5581809f-6205-4e13-bf7d-b9d094c31953', 'POLICY_MANAGER', 'chaososkar'),
-('438573b2-e2ec-401f-8896-b70b24848ddc', 'POLICY_MANAGER', 'chaosmartin');
+('4d6164c5-4dae-4af3-8d24-ef11b88f7429', 'USER', 'userlinn'),
+('54d914f0-b63e-4d3a-858a-01fe52c52391', 'ADMIN', 'maria'),
+('fbe9753d-d2b0-4ef8-b559-ea2ec25cd09d', 'CASE_HANDLER', 'martin')
+('417f8841-7d92-4cb4-9cee-36bc5ec47501', 'POLICY_MANAGER', 'kjell'),
+('f04e2270-76bb-4e31-b755-0c08d7bc14d2', 'POLICY_MANAGER', 'oskar')
 
 INSERT INTO life_events (name, description)
 VALUES
@@ -22,18 +22,18 @@ VALUES
 
 INSERT INTO policies (name, premium, status, in_review) VALUES
 -- Single life event policies
-('Marriage Protection', 25.00, 'ACTIVE', false),
-('Childbirth Support', 35.00, 'ACTIVE', false),
-('Property Purchase Security', 40.00, 'ACTIVE', false),
-('Career Change Safety Net', 30.00, 'ACTIVE', false),
-('Temporary Relocation Cover', 45.00, 'ACTIVE', false),
+('Marriage Protection', 290.00, 'ACTIVE', false),
+('Childbirth Support', 450.00, 'ACTIVE', false),
+('Property Purchase Security', 2000.00, 'ACTIVE', false),
+('Career Change Safety Net', 3000.00, 'ACTIVE', false),
+('Temporary Relocation Cover', 450.00, 'ACTIVE', false),
 
 -- Compound policies
-('Family Bundle', 65.00, 'ACTIVE', false),
-('Home & Career Package', 70.00, 'ACTIVE', false),
-('International Transition Plan', 80.00, 'ACTIVE', false),
-('Major Life Changes Package', 95.00, 'ACTIVE', false),
-('Complete Life Protection', 120.00, 'ACTIVE', false);
+('Family Bundle', 570.00, 'ACTIVE', false),
+('Home & Career Package', 3900.00, 'ACTIVE', false),
+('International Transition Plan', 3200.00, 'ACTIVE', false),
+('Major Life Changes Package', 2390.00, 'ACTIVE', false),
+('Complete Life Protection', 5600.00, 'ACTIVE', false);
 
 INSERT INTO policy_life_events (policy_id, life_event_id) VALUES
 
@@ -82,7 +82,7 @@ INSERT INTO policy_manager_actions (
 
 SELECT
 
-   '5581809f-6205-4e13-bf7d-b9d094c31953',   
+   '22a19cc2-45a3-4d5d-8b5a-fd0d03ac8978',   
 
     NULL,
 

@@ -19,12 +19,19 @@
 	<!-- Premium -->
 	<div>
 		<p class="block mb-1">Premium</p>
-		<input
-			type="text"
-			name="premium"
-			[(ngModel)]="premium"
-			class="w-full border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:border-black"
-		/>
+		<div class="relative">
+			<input
+				type="text"
+				name="premium"
+				[(ngModel)]="premium"
+				class="w-full border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:border-black"
+			/>
+			<span
+				class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"
+			>
+				kr/month
+			</span>
+		</div>
 	</div>
 
 	<!-- Life events -->
@@ -54,9 +61,12 @@
 
 	<!-- Actions -->
 	<div class="flex justify-end gap-2">
-		<button (click)="close()">Cancel</button>
 		<span class="relative inline-block group">
-			<button color="primary" (click)="submit()" [disabled]="inReview">
+			<button
+				class="bg-green-200 hover:bg-green-400"
+				(click)="submit()"
+				[disabled]="inReview"
+			>
 				@if (policy) {
 					Update
 				} @else {
@@ -75,5 +85,6 @@
 				></span>
 			</span>
 		</span>
+		<button (click)="close()" class="bg-gray-200 hover:bg-gray-400">Back</button>
 	</div>
 </section>

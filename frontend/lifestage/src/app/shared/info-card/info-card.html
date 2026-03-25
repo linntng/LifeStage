@@ -1,10 +1,22 @@
-<article [class]="color + ' hover:' + color + '/50 p-4 rounded-lg w-full  hover:cursor-pointer'">
-	<mat-card class="rounded-lg shadow-lg mb-4 w-full">
+<article
+	[class]="
+		color +
+		' hover:' +
+		color +
+		'/50 p-4 rounded-lg w-full h-full flex flex-col hover:cursor-pointer transition'
+	"
+>
+	<mat-card class="rounded-lg shadow-lg w-full h-full flex flex-col">
+		<!-- Header -->
 		<mat-card-header class="flex flex-col items-start">
-			<h2 class="text-lg">{{ title ? title : 'Untitled' }}</h2>
+			<h2 class="text-lg font-semibold">
+				{{ title ? title : 'Untitled' }}
+			</h2>
 		</mat-card-header>
-		<mat-card-content>
-			<ng-content />
+
+		<!-- Content -->
+		<mat-card-content class="flex flex-col flex-1">
+			<ng-content></ng-content>
 		</mat-card-content>
 	</mat-card>
 </article>

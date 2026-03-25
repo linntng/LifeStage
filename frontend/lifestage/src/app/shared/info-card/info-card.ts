@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, HostBinding } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 
 @Component({
@@ -9,4 +9,7 @@ import { MatCardModule } from '@angular/material/card';
 export class InfoCard {
 	@Input() title = '';
 	@Input() color = 'bg-secondary';
+
+	@HostBinding('class')
+	hostClasses = 'block h-full';
 }

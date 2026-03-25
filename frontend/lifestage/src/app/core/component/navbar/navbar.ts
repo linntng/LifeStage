@@ -21,6 +21,8 @@ export class Navbar {
 				return '/cases';
 			case 'ADMIN':
 				return '/admin';
+			case 'POLICY_MANAGER':
+				return '/policy-manager';
 			case 'USER':
 				return '/';
 			default:
