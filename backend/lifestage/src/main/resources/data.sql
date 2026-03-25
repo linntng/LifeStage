@@ -4,10 +4,10 @@ DELETE FROM policy_life_events;
 
 INSERT INTO users (id, role, username) VALUES
 ('4d6164c5-4dae-4af3-8d24-ef11b88f7429', 'USER', 'userlinn'),
-('ecd0b988-070d-48e5-8381-346530b0e9fa', 'ADMIN', 'adminoskar'),
-('836c725f-bdc2-48f9-a304-f97460c2a626', 'CASE_HANDLER', 'casemartin'),
-('22a19cc2-45a3-4d5d-8b5a-fd0d03ac8978', 'POLICY_MANAGER', 'polmantin'),
-('c3a92ff4-b718-4ef9-b11f-b151fda617da', 'POLICY_MANAGER', 'polmankar');
+('54d914f0-b63e-4d3a-858a-01fe52c52391', 'ADMIN', 'maria'),
+('fbe9753d-d2b0-4ef8-b559-ea2ec25cd09d', 'CASE_HANDLER', 'martin')
+('417f8841-7d92-4cb4-9cee-36bc5ec47501', 'POLICY_MANAGER', 'kjell'),
+('f04e2270-76bb-4e31-b755-0c08d7bc14d2', 'POLICY_MANAGER', 'oskar')
 
 INSERT INTO life_events (name, description)
 VALUES
