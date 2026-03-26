@@ -37,6 +37,12 @@ export const routes: Routes = [
 		canActivate: [authGuard],
 	},
 	{
+		path: 'auditing',
+		loadComponent: () =>
+			import('./features/auditing-page/auditing-page').then((a) => a.AuditingPage),
+		canActivate: [authGuard],
+	},
+	{
 		path: '**',
 		component: NotFound,
 	},

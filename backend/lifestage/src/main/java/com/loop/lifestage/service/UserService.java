@@ -34,6 +34,7 @@ public class UserService {
   private final LifeEventRepository lifeEventRepository;
   private final PolicyRecommendationRepository policyRecommendationRepository;
   private final PolicyRecommendationMapper policyRecommendationMapper;
+  private final AuditService auditService;
 
   public UserService(
     UserRepository userRepository, 
@@ -41,13 +42,15 @@ public class UserService {
     PolicyRecommendationEngine recommendationEngine,
     LifeEventRepository lifeEventRepository,
     PolicyRecommendationRepository policyRecommendationRepository,
-    PolicyRecommendationMapper policyRecommendationMapper) {
+    PolicyRecommendationMapper policyRecommendationMapper,
+    AuditService auditService) {
     this.userRepository = userRepository;
     this.userMapper = userMapper;
     this.policyRecommendationMapper = policyRecommendationMapper;
     this.recommendationEngine = recommendationEngine;
     this.lifeEventRepository = lifeEventRepository;
     this.policyRecommendationRepository = policyRecommendationRepository;
+    this.auditService = auditService;
   }
 
   @Transactional
@@ -90,7 +93,25 @@ public class UserService {
           userRepository
               .findById(id)
               .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
-      return userMapper.toUserDTO(user);
+
+               // 1. Logg at selve brukerprofilen ble lest
+    auditService.logAccess("USER_READ", id);
+      
+
+      if (user.getLifeEvents() != null) {
+        user.getLifeEvents().forEach(le -> 
+            auditService.logAccess("LIFEEVENT_READ", le.getId().toString())
+        );
+    }
+
+     // 3. Logg innsyn i alle Policies
+    if (user.getPolicies() != null) {
+        user.getPolicies().forEach(p -> 
+            auditService.logAccess("POLICY_READ", p.getId().toString())
+        );
+    }
+
+    return userMapper.toUserDTO(user);
     } catch (EntityNotFoundException e) {
       throw new ResourceNotFoundException("User with id " + id + " not found");
     } catch (Exception e) {

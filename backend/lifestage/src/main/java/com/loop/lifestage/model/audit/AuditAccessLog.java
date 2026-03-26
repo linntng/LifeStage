@@ -19,7 +19,7 @@ public class AuditAccessLog {
 
     private String role;
 
-    private Instant timestamp;
+    private Instant createdAt;
 
     private String action;
 
@@ -27,10 +27,10 @@ public class AuditAccessLog {
 
     public AuditAccessLog(){}
 
-    public AuditAccessLog(String actorUserId, String role, Instant timestamp, String action, String entity) { 
+    public AuditAccessLog(String actorUserId, String role, Instant createdAt, String action, String entity) { 
         this.actorUserId = actorUserId;
         this.role = role;
-        this.timestamp = timestamp;
+        this.createdAt = createdAt;
         this.action = action;
         this.entity = entity;
     }
@@ -59,12 +59,12 @@ public class AuditAccessLog {
         this.role = role;
     }
 
-    public Instant getTimestamp() {
-        return timestamp;
+    public Instant getCreatedAt() {
+        return createdAt;
     }
 
-    public void setTimestamp(Instant timestamp) {
-        this.timestamp = timestamp;
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
     }
 
     public String getAction() {

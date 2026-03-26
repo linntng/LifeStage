@@ -44,7 +44,7 @@ public class AuditService {
         log.setRole(role);
         log.setAction(action);
         log.setEntity(entity);
-        log.setTimestamp(Instant.now());
+        log.setCreatedAt(Instant.now());
 
         auditAccessLogRepository.save(log);
     }

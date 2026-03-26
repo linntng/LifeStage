@@ -21,9 +21,9 @@ public class RequestFilter {
             auth ->
                 auth.requestMatchers(HttpMethod.OPTIONS, "/**")
                     .permitAll()
-                    .requestMatchers("/lifeevents", "/actuator/health")
+                    .requestMatchers("/lifeevents", "/actuator/health", "/internal/audit/access-log", "/internal/audit/policies")
                     .permitAll()
-                    .requestMatchers(HttpMethod.GET, "/policies")
+                    .requestMatchers(HttpMethod.GET, "/policies","/internal/audit/access-log", "/internal/audit/policies")
                     .permitAll()
                     .anyRequest()
                     .authenticated())

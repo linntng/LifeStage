@@ -26,6 +26,7 @@
 
 			@if (userStore.currentUser()?.role === 'ADMIN') {
 				<a routerLink="/admin">Admin</a>
+				<a routerLink="/auditing">Access logs</a>
 			}
 			@if (userStore.currentUser()?.role === 'POLICY_MANAGER') {
 				<a routerLink="/policy-manager">Policy management</a>
