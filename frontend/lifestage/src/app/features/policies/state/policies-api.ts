@@ -18,6 +18,12 @@ export interface PolicyRejection {
 	explanation: string | null;
 }
 
+export type PolicyAudit = {
+	policy: Policy;
+	action: string;
+	timestamp: string; // ISO string (from Instant)
+};
+
 @Injectable({
 	providedIn: 'root',
 })
@@ -43,5 +49,9 @@ export class PoliciesApi {
 
 	getRejectedPolicies() {
 		return this.http.get<PolicyRejection[]>(`${this.policiesUrl}/rejected`);
+	}
+
+	getPolicyAudit(): Observable<PolicyAudit[]> {
+		return this.http.get<PolicyAudit[]>(`${this.policiesUrl}/audit`);
 	}
 }

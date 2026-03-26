@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit, effect, ChangeDetectorRef } from '@angular/core';
+import { Component, inject, OnInit, effect, ChangeDetectorRef, computed } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { User } from '../user/user-state/user-api';
 import { Adminstore } from './state/adminstore';
+import { PoliciesStore } from '../policies/state/policies-store';
 
 export const UserRoles = {
 	ADMIN: 'ADMIN',
@@ -20,14 +21,26 @@ export type UserRoles = (typeof UserRoles)[keyof typeof UserRoles];
 	templateUrl: './admin.html',
 })
 export class Admin implements OnInit {
+	policiesStore = inject(PoliciesStore);
 	adminStore = inject(Adminstore);
 	cdr = inject(ChangeDetectorRef);
+	policyAudit = this.policiesStore.policyAudit;
+	auditLogs = computed(() => {
+		const logs = this.policiesStore.policyAudit() ?? [];
+
+		return [...logs].sort(
+			(a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
+		);
+	});
 
 	searchTerm = '';
 	filteredUsers: User[] = [];
 	editingUser: User | null = null;
 	userRoles: string[] = Object.values(UserRoles);
 	selectedRole: string | null = null;
+
+	activePage: 'users' | 'audit' = 'users';
+	auditTab: 'policy' | 'policyCase' | 'user' = 'policy';
 
 	constructor() {
 		effect(() => {
@@ -38,6 +51,7 @@ export class Admin implements OnInit {
 
 	ngOnInit(): void {
 		this.adminStore.getAllUsers();
+		this.policiesStore.loadPolicies();
 	}
 
 	filterUsers() {
